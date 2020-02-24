@@ -76,7 +76,11 @@ class Wp_Gallery_Tube {
 
 		$this->load_dependencies();
 		$this->set_locale();
-		$this->define_admin_hooks();
+
+		if (is_admin()) {
+			$this->define_admin_hooks();
+		}
+		
 		$this->define_public_hooks();
 
 	}
@@ -103,7 +107,7 @@ class Wp_Gallery_Tube {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-gallery-tube-loader.php';
+		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-gallery-tube-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
@@ -114,8 +118,9 @@ class Wp_Gallery_Tube {
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-gallery-tube-admin.php';
-
+		if (is_admin()) {
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-gallery-tube-admin.php';
+		}
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
@@ -139,7 +144,7 @@ class Wp_Gallery_Tube {
 
 		$plugin_i18n = new Wp_Gallery_Tube_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+		$this->loader->add_action( 'plugins_loaded', array($plugin_i18n, 'load_plugin_textdomain') );
 
 	}
 
@@ -154,8 +159,8 @@ class Wp_Gallery_Tube {
 
 		$plugin_admin = new Wp_Gallery_Tube_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_enqueue_scripts', array( $plugin_admin, 'enqueue_styles') );
+		$this->loader->add_action( 'admin_enqueue_scripts', array( $plugin_admin, 'enqueue_scripts') );
 
 	}
 
@@ -170,8 +175,8 @@ class Wp_Gallery_Tube {
 
 		$plugin_public = new Wp_Gallery_Tube_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'wp_enqueue_scripts', array($plugin_public, 'enqueue_styles') );
+		$this->loader->add_action( 'wp_enqueue_scripts', array($plugin_public, 'enqueue_scripts') );
 
 	}
 
