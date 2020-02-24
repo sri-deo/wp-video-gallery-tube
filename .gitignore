@@ -21,3 +21,12 @@ node_modules/
 *.log
 *.sql
 *.sqlite
+
+# ignore vscode extension
+.vscode
+
+# ignore .zip files
+wp-video-gallery-tube.zip
+
+# ignore sublimetext sftp config
+sftp-config.json
