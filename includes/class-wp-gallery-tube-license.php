@@ -22,6 +22,9 @@
  */
 class Wp_Gallery_Tube_License {
 
+	public function __construct( ) {
+
+	}
 	/**
 	 * Short Description. (use period)
 	 *
@@ -29,8 +32,8 @@ class Wp_Gallery_Tube_License {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate() {
-
+	public static function check() {
+		return true;
 	}
 
 }

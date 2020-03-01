@@ -99,5 +99,33 @@ class Wp_Gallery_Tube_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-gallery-tube-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
+	/**
+	 * wp_gallery_tube_add_plugin_admin_menu
+	 *
+	 * @return void
+	 */
+	public function wp_gallery_tube_add_plugin_admin_menu(){
+		add_menu_page(
+			__('G-Tube', 'pm_wdb'),
+			__('G-Tube', 'pm_wdb'),
+			'manage_options',
+			'wp_gallery_tube',
+			array(
+				$this,
+				'wp_gallery_tube_display_plugin_page'
+			),
+			dirname((plugin_dir_url( __FILE__ ))).'/admin/menu.png', 
+			25
+		);
+	}
+	/**
+	 * wp_gallery_tube_display_plugin_page
+	 *
+	 * @return void
+	 */
+	public function wp_gallery_tube_display_plugin_page(){
+		
+		include  'partials/' . $this->plugin_name . '-admin-display.php';
+	}
 
 }

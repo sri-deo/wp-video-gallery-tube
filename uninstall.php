@@ -29,3 +29,8 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
+
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-gallery-tube-database.php';
+$Wp_Gallery_Tube_Database = new Wp_Gallery_Tube_Database();
+$Wp_Gallery_Tube_Database->gallery_tube_db_uninstall();
+flush_rewrite_rules();

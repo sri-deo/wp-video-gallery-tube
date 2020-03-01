@@ -73,7 +73,18 @@ class Wp_Gallery_Tube_Public {
 		 * class.
 		 */
 
+		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) ) {
+
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/gallery-tube-bc.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/all.min.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/osahan.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/owl.carousel.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/owl.theme.css', array(), $this->version, 'all' );
+
+		}
+
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-gallery-tube-public.css', array(), $this->version, 'all' );
+		
 
 	}
 
@@ -96,8 +107,87 @@ class Wp_Gallery_Tube_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-gallery-tube-public.js', array( 'jquery' ), $this->version, false );
+		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) ) {
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/jquery.min.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/jquery.easing.min.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/owl.carousel.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/custom.js', array( 'jquery' ), $this->version, true );	
+		}
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-gallery-tube-public.js', array( 'jquery' ), $this->version, true );
 
+	}
+
+	/**
+	 * register page template 
+	 */
+	public function wp_gallery_tube_add_interface_page_filter($post_templates)
+	{
+		// Add custom template named template-custom.php to select dropdown 
+		$post_templates['wp-gallery-tube-main-page-template.php'] = __('WP Gallery Tube Template');		
+		$post_templates['wp-gallery-tube-category-page-template.php'] = __('Wp Gallery Tube Category Template');
+
+		return $post_templates;
+	}
+	/**
+	 * load page template
+	 */
+	public function wp_gallery_tube_load_interface_page_template($template)
+	{
+		$templates_dir = 'templates';
+		if (get_page_template_slug() === 'wp-gallery-tube-main-page-template.php') {
+
+			if ($theme_file = locate_template(array('wp-gallery-tube-main-page-template.php'))) {
+				$template = $theme_file;
+			} else {
+				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-main-page-template.php';
+			}
+		}
+		if (get_page_template_slug() === 'wp-gallery-tube-category-page-template.php') {
+
+			if ($theme_file = locate_template(array('wp-gallery-tube-category-page-template.php'))) {
+				$template = $theme_file;
+			} else {
+				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-category-page-template.php';
+			}
+		}
+		
+
+		if ($template == '') {
+			throw new \Exception('No template found');
+		}
+
+		return $template;
+	}
+	/**
+	 * wp_gallery_tube_rewrite_url_init : 
+	 *
+	 * @return void
+	 */
+	public function wp_gallery_tube_rewrite_url_init(){
+		add_rewrite_rule(
+			'studios/([a-zA-Z0-9]+)/?$',
+			'index.php?pagename=studios&studio_name=$matches[1]',
+			'top' );
+		
+		add_rewrite_rule(
+				'cats/([a-zA-Z0-9]+)/?$',
+				'index.php?pagename=cats&cat_name=$matches[1]',
+				'top' );
+	}
+	
+	/**
+	 * wp_gallery_tube_query_vars
+	 *
+	 * @param  mixed $query_vars
+	 *
+	 * @return void
+	 */
+	public function wp_gallery_tube_query_vars($query_vars){
+		$query_vars[] = 'studio_name';
+		$query_vars[] = 'cat_name';
+
+		return $query_vars;
 	}
 
 }

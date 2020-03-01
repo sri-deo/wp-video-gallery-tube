@@ -29,15 +29,7 @@
  */
 class Wp_Gallery_Tube {
 
-	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power
-	 * the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      Wp_Gallery_Tube_Loader    $loader    Maintains and registers all hooks for the plugin.
-	 */
-	protected $loader;
+	
 
 	/**
 	 * The unique identifier of this plugin.
@@ -90,12 +82,12 @@ class Wp_Gallery_Tube {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Wp_Gallery_Tube_Loader. Orchestrates the hooks of the plugin.
+	 * - 
 	 * - Wp_Gallery_Tube_i18n. Defines internationalization functionality.
 	 * - Wp_Gallery_Tube_Admin. Defines all hooks for the admin area.
 	 * - Wp_Gallery_Tube_Public. Defines all hooks for the public side of the site.
 	 *
-	 * Create an instance of the loader which will be used to register the hooks
+	 *
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -103,12 +95,7 @@ class Wp_Gallery_Tube {
 	 */
 	private function load_dependencies() {
 
-		/**
-		 * The class responsible for orchestrating the actions and filters of the
-		 * core plugin.
-		 */
-		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-gallery-tube-loader.php';
-
+		
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
@@ -127,7 +114,7 @@ class Wp_Gallery_Tube {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wp-gallery-tube-public.php';
 
-		$this->loader = new Wp_Gallery_Tube_Loader();
+		
 
 	}
 
@@ -144,7 +131,7 @@ class Wp_Gallery_Tube {
 
 		$plugin_i18n = new Wp_Gallery_Tube_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', array($plugin_i18n, 'load_plugin_textdomain') );
+		add_action( 'plugins_loaded', array($plugin_i18n, 'load_plugin_textdomain') );
 
 	}
 
@@ -159,8 +146,11 @@ class Wp_Gallery_Tube {
 
 		$plugin_admin = new Wp_Gallery_Tube_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', array( $plugin_admin, 'enqueue_styles') );
-		$this->loader->add_action( 'admin_enqueue_scripts', array( $plugin_admin, 'enqueue_scripts') );
+		add_action( 'admin_enqueue_scripts', array( $plugin_admin, 'enqueue_styles') );
+		add_action( 'admin_enqueue_scripts', array( $plugin_admin, 'enqueue_scripts') );
+
+		// Add menu item
+		$add_action('admin_menu', array( $plugin_admin, 'wp_gallery_tube_add_plugin_admin_menu') );
 
 	}
 
@@ -174,9 +164,17 @@ class Wp_Gallery_Tube {
 	private function define_public_hooks() {
 
 		$plugin_public = new Wp_Gallery_Tube_Public( $this->get_plugin_name(), $this->get_version() );
+		// enqueue style and scripts
+		add_action( 'wp_enqueue_scripts', array( $plugin_public, 'enqueue_styles') );
+		add_action( 'wp_enqueue_scripts', array( $plugin_public, 'enqueue_scripts') );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', array($plugin_public, 'enqueue_styles') );
-		$this->loader->add_action( 'wp_enqueue_scripts', array($plugin_public, 'enqueue_scripts') );
+		// rewrite url
+		add_action( 'init', array( $plugin_public, 'wp_gallery_tube_rewrite_url_init') );
+		add_filter( 'query_vars', array( $plugin_public, 'wp_gallery_tube_query_vars' ) );
+
+		// add page template for the plugin
+		add_filter('theme_page_templates', array( $plugin_public, 'wp_gallery_tube_add_interface_page_filter'), 10, 4);
+		add_filter('template_include', array( $plugin_public, 'wp_gallery_tube_load_interface_page_template') );
 
 	}
 
@@ -186,7 +184,7 @@ class Wp_Gallery_Tube {
 	 * @since    1.0.0
 	 */
 	public function run() {
-		$this->loader->run();
+		run();
 	}
 
 	/**
@@ -198,16 +196,6 @@ class Wp_Gallery_Tube {
 	 */
 	public function get_plugin_name() {
 		return $this->plugin_name;
-	}
-
-	/**
-	 * The reference to the class that orchestrates the hooks with the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    Wp_Gallery_Tube_Loader    Orchestrates the hooks of the plugin.
-	 */
-	public function get_loader() {
-		return $this->loader;
 	}
 
 	/**

@@ -54,9 +54,13 @@ function deactivate_wp_gallery_tube() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-gallery-tube-deactivator.php';
 	Wp_Gallery_Tube_Deactivator::deactivate();
 }
+function uninstall_wp_gallery_tube(){
+
+}
 
 register_activation_hook( __FILE__, 'activate_wp_gallery_tube' );
 register_deactivation_hook( __FILE__, 'deactivate_wp_gallery_tube' );
+
 
 /**
  * The core plugin class that is used to define internationalization,
