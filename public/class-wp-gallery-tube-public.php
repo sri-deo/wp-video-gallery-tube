@@ -75,11 +75,11 @@ class Wp_Gallery_Tube_Public {
 
 		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) ) {
 
-			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/gallery-tube-bc.css', array(), $this->version, 'all' );
-			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/all.min.css', array(), $this->version, 'all' );
-			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/osahan.css', array(), $this->version, 'all' );
-			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/owl.carousel.css', array(), $this->version, 'all' );
-			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/owl.theme.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_name.'-bs', plugin_dir_url( __FILE__ ) . 'css/gallery-tube-bs.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_name.'-fa', plugin_dir_url( __FILE__ ) . 'css/all.min.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_name.'-osahan', plugin_dir_url( __FILE__ ) . 'css/osahan.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_name.'-owl', plugin_dir_url( __FILE__ ) . 'css/owl.carousel.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_name.'-owl-theme', plugin_dir_url( __FILE__ ) . 'css/owl.theme.css', array(), $this->version, 'all' );
 
 		}
 
@@ -108,11 +108,11 @@ class Wp_Gallery_Tube_Public {
 		 */
 
 		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) ) {
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/jquery.min.js', array( 'jquery' ), $this->version, true );
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/jquery.easing.min.js', array( 'jquery' ), $this->version, true );
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/owl.carousel.js', array( 'jquery' ), $this->version, true );
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/custom.js', array( 'jquery' ), $this->version, true );	
+			wp_enqueue_script( $this->plugin_name.'-jquery', plugin_dir_url( __FILE__ ) . 'js/jquery.min.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_name.'-bs-js', plugin_dir_url( __FILE__ ) . 'js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_name.'-js-eas', plugin_dir_url( __FILE__ ) . 'js/jquery.easing.min.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_name.'-owl-js', plugin_dir_url( __FILE__ ) . 'js/owl.carousel.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_name.'-custom', plugin_dir_url( __FILE__ ) . 'js/custom.js', array( 'jquery' ), $this->version, true );	
 		}
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-gallery-tube-public.js', array( 'jquery' ), $this->version, true );
 
@@ -166,14 +166,21 @@ class Wp_Gallery_Tube_Public {
 	 */
 	public function wp_gallery_tube_rewrite_url_init(){
 		add_rewrite_rule(
+			'gallery/([0-9]+)/?$',
+			'/gallery?page_n=$matches[1]',
+			'top' );
+
+		add_rewrite_rule(
 			'studios/([a-zA-Z0-9]+)/?$',
-			'index.php?pagename=studios&studio_name=$matches[1]',
+			'/studios?studio_name=$matches[1]',
 			'top' );
 		
 		add_rewrite_rule(
 				'cats/([a-zA-Z0-9]+)/?$',
-				'index.php?pagename=cats&cat_name=$matches[1]',
+				'/cats?cat_name=$matches[1]',
 				'top' );
+
+				
 	}
 	
 	/**
@@ -184,6 +191,7 @@ class Wp_Gallery_Tube_Public {
 	 * @return void
 	 */
 	public function wp_gallery_tube_query_vars($query_vars){
+		$query_vars[] = 'page_n';
 		$query_vars[] = 'studio_name';
 		$query_vars[] = 'cat_name';
 

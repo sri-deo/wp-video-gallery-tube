@@ -80,7 +80,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wp-gallery-tube.php';
 function run_wp_gallery_tube() {
 
 	$plugin = new Wp_Gallery_Tube();
-	$plugin->run();
+	
 
 }
 run_wp_gallery_tube();

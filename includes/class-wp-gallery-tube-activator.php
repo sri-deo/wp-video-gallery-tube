@@ -44,32 +44,54 @@ class Wp_Gallery_Tube_Activator {
 	 * @return void
 	 */
 	public static function createPages(){
-		$post = array(
-			'ID' => [ <post id> ] //Are you updating an existing post?
-			'menu_order' => [ <order> ] //If new post is a page, sets the order should it appear in the tabs.
-			'page_template' => [ <template file> ] //Sets the template for the page.
-			'comment_status' => [ 'closed' | 'open' ] // 'closed' means no comments.
-			'ping_status' => [ ? ] //Ping status?
-			'pinged' => [ ? ] //?
-			'post_author' => [ <user ID> ] //The user ID number of the author.
-			'post_category' => [ array(<category id>, <...>) ] //Add some categories.
-			'post_content' => [ <the text of the post> ] //The full text of the post.
-			'post_date' => [ Y-m-d H:i:s ] //The time post was made.
-			'post_date_gmt' => [ Y-m-d H:i:s ] //The time post was made, in GMT.
-			'post_excerpt' => [ <an excerpt> ] //For all your post excerpt needs.
-			'post_name' => [ <the name> ] // The name (slug) for your post
-			'post_parent' => [ <post ID> ] //Sets the parent of the new post.
-			'post_password' => [ ? ] //password for post?
-			'post_status' => [ 'draft' | 'publish' | 'pending' ] //Set the status of the new post.
-			'post_title' => [ <the title> ] //The title of your post.
-			'post_type' => [ 'post' | 'page' ] //Sometimes you want to post a page.
-			'tags_input' => [ '<tag>, <tag>, <...>' ] //For tags.
-			'to_ping' => [ ? ] //?
-		  );
-		
+		$gallery_page = array(			
+			'page_template' => 'wp-gallery-tube-main-page-template.php', //Sets the template for the page.
+			'comment_status' => [ 'closed' ], // 'closed' means no comments.
+			'post_name' => 'gallery', // The name (slug) for your post
+			'post_status' => 'publish' , //Set the status of the new post.
+			'post_title' => 'Gallery Tube Page', //The title of your post.
+			'post_type' =>  'page' //Sometimes you want to post a page.					
+		);
+		$studio_page = array(			
+			'page_template' => 'wp-gallery-tube-studios-page-template.php', //Sets the template for the page.
+			'comment_status' => [ 'closed' ], // 'closed' means no comments.
+			'post_name' => 'studios', // The name (slug) for your post
+			'post_status' => 'publish' , //Set the status of the new post.
+			'post_title' => 'Gallery Tube Studios Page', //The title of your post.
+			'post_type' =>  'page' //Sometimes you want to post a page.					
+		);
+		$category_page = array(			
+			'page_template' => 'wp-gallery-tube-categories-page-template.php', //Sets the template for the page.
+			'comment_status' => [ 'closed' ], // 'closed' means no comments.
+			'post_name' => 'cat', // The name (slug) for your post
+			'post_status' => 'publish' , //Set the status of the new post.
+			'post_title' => 'Gallery Tube Categories Page', //The title of your post.
+			'post_type' =>  'page' //Sometimes you want to post a page.					
+		);
+		$single_studio_page = array(			
+			'page_template' => 'wp-gallery-tube-single-studio-page-template.php', //Sets the template for the page.
+			'comment_status' => [ 'closed' ], // 'closed' means no comments.
+			'post_name' => 'single_studio', // The name (slug) for your post
+			'post_status' => 'publish' , //Set the status of the new post.
+			'post_title' => 'Gallery Tube Single Studio Page', //The title of your post.
+			'post_type' =>  'page' //Sometimes you want to post a page.					
+		);
+		$single_category_page = array(			
+			'page_template' => 'wp-gallery-tube-single-category-page-template.php', //Sets the template for the page.
+			'comment_status' => [ 'closed' ], // 'closed' means no comments.
+			'post_name' => 'single_cat', // The name (slug) for your post
+			'post_status' => 'publish' , //Set the status of the new post.
+			'post_title' => 'Gallery Tube Single Category Page', //The title of your post.
+			'post_type' =>  'page' //Sometimes you want to post a page.					
+		);	
 		  
 		// Insert the post into the database
-		wp_insert_post( $post );
+		wp_insert_post( $gallery_page );	
+		wp_insert_post( $studio_page );	
+		wp_insert_post( $category_page );	
+		wp_insert_post( $single_studio_page );	
+		wp_insert_post( $single_category_page );	
+		
 	}
 
 

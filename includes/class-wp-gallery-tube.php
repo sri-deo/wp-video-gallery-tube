@@ -150,7 +150,7 @@ class Wp_Gallery_Tube {
 		add_action( 'admin_enqueue_scripts', array( $plugin_admin, 'enqueue_scripts') );
 
 		// Add menu item
-		$add_action('admin_menu', array( $plugin_admin, 'wp_gallery_tube_add_plugin_admin_menu') );
+		add_action('admin_menu', array( $plugin_admin, 'wp_gallery_tube_add_plugin_admin_menu') );
 
 	}
 
@@ -169,7 +169,7 @@ class Wp_Gallery_Tube {
 		add_action( 'wp_enqueue_scripts', array( $plugin_public, 'enqueue_scripts') );
 
 		// rewrite url
-		add_action( 'init', array( $plugin_public, 'wp_gallery_tube_rewrite_url_init') );
+		add_action( 'init', array( $plugin_public, 'wp_gallery_tube_rewrite_url_init'), 10,0 );
 		add_filter( 'query_vars', array( $plugin_public, 'wp_gallery_tube_query_vars' ) );
 
 		// add page template for the plugin
@@ -178,14 +178,7 @@ class Wp_Gallery_Tube {
 
 	}
 
-	/**
-	 * Run the loader to execute all of the hooks with WordPress.
-	 *
-	 * @since    1.0.0
-	 */
-	public function run() {
-		run();
-	}
+	
 
 	/**
 	 * The name of the plugin used to uniquely identify it within the context of

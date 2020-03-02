@@ -23,7 +23,7 @@
 class Wp_Gallery_Tube_Database {
 	protected $plugin_name;	
     protected $version;
-    private $db_version = 1.0.0;
+    private $db_version = '1.0.0';
     /**
      * install db
      */
@@ -36,12 +36,21 @@ class Wp_Gallery_Tube_Database {
 
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
             id  INT NOT NULL AUTO_INCREMENT,
-            fullname  TEXT NOT NULL ,
-            domain TEXT  NOT NULL,
-            email TEXT NOT NULL,
-            phonenumber TEXT  NOT NULL,
+            title  TEXT NOT NULL ,
+            video_length TEXT  NULL,
+            desc TEXT NULL,
+            releaseDate DATETIME NULL,
+            url TEXT NOT NULL,
+            fps INT NULL,
+            degrees INT NULL,
+            src_image TEXT NOT NULL,
+            tags TEXT ,
+            pornstars TEXT ,
+            site_src TEXT,
+            studio INT ,
+            
             datecreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            approved INT DEFAULT '0' NOT NULL,
+            
         
             PRIMARY KEY  (id)
             ) $charset_collate;       
