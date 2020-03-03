@@ -37,7 +37,18 @@ class Wp_Gallery_Tube_Activator {
 		flush_rewrite_rules();
 
 	}
+	
+	public function createSetings(){
 
+		update_option('blur',1);
+		update_option('czechvr',1);
+		update_option('naughtyamerica',1);
+		update_option('badoink',1);
+		update_option('vrbcash',1);
+
+		
+		
+	}
 	/**
 	 * createPages
 	 *

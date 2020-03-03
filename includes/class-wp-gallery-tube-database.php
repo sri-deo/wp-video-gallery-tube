@@ -24,6 +24,18 @@ class Wp_Gallery_Tube_Database {
 	protected $plugin_name;	
     protected $version;
     private $db_version = '1.0.0';
+
+    protected $tube_table;
+    protected $studio_table;
+    protected $category_table;
+
+    public function __construct(){
+        global $wpdb;
+        $this->tube_table = $wpdb->prefix . 'wp_gallery_tube';
+        $this->studio_table = $wpdb->prefix . 'wp_gallery_tube_studios';
+        $this->category_table = $wpdb->prefix . 'wp_gallery_tube_categories';
+    }
+
     /**
      * install db
      */
@@ -79,6 +91,42 @@ class Wp_Gallery_Tube_Database {
         $wpdb->query( $sql );     
 
         delete_option('wp_gallery_tube_db_version');
+    }
+
+
+
+    /**
+     * gallery_tube_insert
+     *
+     * @param  array $datas
+     *
+     * @return void
+     */
+    public function gallery_tube_insert_tubes($datas = array()){
+        global $wpdb;
+        return $wpdb->insert($this->tube_table, $datas);
+    }
+    /**
+     * gallery_tube_insert_studios
+     *
+     * @param  array $datas
+     *
+     * @return void
+     */
+    public function gallery_tube_insert_studios($datas = array()) {
+        global $wpdb;
+        return $wpdb->insert($this->studio_table, $datas);
+    }
+    /**
+     * gallery_tube_insert_categories
+     *
+     * @param  array $datas
+     *
+     * @return void
+     */
+    public function gallery_tube_insert_categories($datas = array()) {
+        global $wpdb;
+        return $wpdb->insert($this->category_table, $datas);
     }
 }
 
