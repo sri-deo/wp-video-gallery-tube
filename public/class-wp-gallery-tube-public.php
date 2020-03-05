@@ -73,7 +73,7 @@ class Wp_Gallery_Tube_Public {
 		 * class.
 		 */
 
-		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) ) {
+		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) || is_page_template( 'wp-gallery-tube-tags-page-template.php' ) ) {
 
 			wp_enqueue_style( $this->plugin_name.'-bs', plugin_dir_url( __FILE__ ) . 'css/gallery-tube-bs.css', array(), $this->version, 'all' );
 			wp_enqueue_style( $this->plugin_name.'-fa', plugin_dir_url( __FILE__ ) . 'css/all.min.css', array(), $this->version, 'all' );
@@ -107,7 +107,7 @@ class Wp_Gallery_Tube_Public {
 		 * class.
 		 */
 
-		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) ) {
+		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) || is_page_template( 'wp-gallery-tube-tags-page-template.php' ) ) {
 			wp_enqueue_script( $this->plugin_name.'-jquery', plugin_dir_url( __FILE__ ) . 'js/jquery.min.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_script( $this->plugin_name.'-bs-js', plugin_dir_url( __FILE__ ) . 'js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_script( $this->plugin_name.'-js-eas', plugin_dir_url( __FILE__ ) . 'js/jquery.easing.min.js', array( 'jquery' ), $this->version, true );
@@ -125,7 +125,7 @@ class Wp_Gallery_Tube_Public {
 	{
 		// Add custom template named template-custom.php to select dropdown 
 		$post_templates['wp-gallery-tube-main-page-template.php'] = __('WP Gallery Tube Template');		
-		$post_templates['wp-gallery-tube-category-page-template.php'] = __('Wp Gallery Tube Category Template');
+		$post_templates['wp-gallery-tube-tags-page-template.php'] = __('Wp Gallery Tube Tags Template');
 
 		return $post_templates;
 	}
@@ -143,12 +143,12 @@ class Wp_Gallery_Tube_Public {
 				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-main-page-template.php';
 			}
 		}
-		if (get_page_template_slug() === 'wp-gallery-tube-category-page-template.php') {
+		if (get_page_template_slug() === 'wp-gallery-tube-tags-page-template.php') {
 
-			if ($theme_file = locate_template(array('wp-gallery-tube-category-page-template.php'))) {
+			if ($theme_file = locate_template(array('wp-gallery-tube-tags-page-template.php'))) {
 				$template = $theme_file;
 			} else {
-				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-category-page-template.php';
+				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-tags-page-template.php';
 			}
 		}
 		

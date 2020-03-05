@@ -33,26 +33,37 @@ class Wp_Gallery_Tube_Database {
         global $wpdb;
         $this->tube_table = $wpdb->prefix . 'wp_gallery_tube';
         $this->studio_table = $wpdb->prefix . 'wp_gallery_tube_studios';
-        $this->category_table = $wpdb->prefix . 'wp_gallery_tube_categories';
+        
     }
 
     /**
      * install db
      */
     public function gallery_tube_db_install() {
-        global $wpdb;       
-
-        $table_name = $wpdb->prefix . 'wp_gallery_tube';
+        
 
         $charset_collate = $wpdb->get_charset_collate();
 
-        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        $studio_sql = "CREATE TABLE IF NOT EXISTS $this->studio_table (
+            id  INT NOT NULL AUTO_INCREMENT,
+            studio_name  TEXT NOT NULL ,            
+            description TEXT NULL,           
+            url TEXT NOT NULL,
+            favorites FLOAT,    
+            logo TEXT ,                   
+            datecreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,           
+            INDEX (studio_name),
+            PRIMARY KEY  (id)
+            ) $charset_collate;   ";
+
+        
+        $tube_sql = "CREATE TABLE IF NOT EXISTS $this->tube_table (
             id  INT NOT NULL AUTO_INCREMENT,
             title  TEXT NOT NULL ,
             video_length TEXT  NULL,
-            desc TEXT NULL,
+            description TEXT NULL,
             releaseDate DATETIME NULL,
-            url TEXT NOT NULL,
+            video_url TEXT NOT NULL,
             fps INT NULL,
             degrees INT NULL,
             src_image TEXT NOT NULL,
@@ -60,17 +71,22 @@ class Wp_Gallery_Tube_Database {
             pornstars TEXT ,
             site_src TEXT,
             studio INT ,
-            
+            scence_identity VARCHAR(50) NOT NULL,
             datecreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            
-        
+            INDEX (title),
+            INDEX (pornstars),           
+            INDEX (studio),
+            INDEX (scence_identity),
+            FOREIGN KEY(studio) REFERENCES         
+            $this->studio_table (id)
+            ON UPDATE CASCADE ON DELETE CASCADE, 
             PRIMARY KEY  (id)
-            ) $charset_collate;       
+            ) $charset_collate;  ";        
 
-        ";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );    
+        dbDelta( $studio_sql );
+        dbDelta( $tube_sql );    
         add_option( 'wp_gallery_tube_db_version', $this->db_version );
     }
 
@@ -82,19 +98,36 @@ class Wp_Gallery_Tube_Database {
 		
         global $wpdb;      
 
-        $table_name = $wpdb->prefix . 'wp_gallery_tube';
+        $sql_tube = "DROP TABLE IF EXISTS ".$this->tube_table ." ; " ;     
+        $sql__studio = "DROP TABLE IF EXISTS ".$this->studio_table ." ; " ;     
 
-        $charset_collate = $wpdb->get_charset_collate();
-
-        $sql = "DROP TABLE IF EXISTS ".$table_name ." ; " ;     
-
-        $wpdb->query( $sql );     
+        $wpdb->query( $sql_tube );     
+        $wpdb->query( $sql__studio );     
 
         delete_option('wp_gallery_tube_db_version');
     }
 
 
-
+    public function get_columntubes(){
+        return array(
+            'id' => '',
+            'title' => '',
+            'video_length' => '',
+            'description' => '',
+            'releaseDate' => '',
+            'video_url' => '',
+            'fps' => '',
+            'degrees' => '',
+            'src_image' => '',
+            'tags' => '',
+            'pornstars' => '',
+            'site_src' => '',
+            'studio' => '',
+            'scence_identity' => '',
+            'datecreated' => ''
+            
+        );
+    }
     /**
      * gallery_tube_insert
      *
@@ -106,6 +139,7 @@ class Wp_Gallery_Tube_Database {
         global $wpdb;
         return $wpdb->insert($this->tube_table, $datas);
     }
+    
     /**
      * gallery_tube_insert_studios
      *
@@ -117,16 +151,6 @@ class Wp_Gallery_Tube_Database {
         global $wpdb;
         return $wpdb->insert($this->studio_table, $datas);
     }
-    /**
-     * gallery_tube_insert_categories
-     *
-     * @param  array $datas
-     *
-     * @return void
-     */
-    public function gallery_tube_insert_categories($datas = array()) {
-        global $wpdb;
-        return $wpdb->insert($this->category_table, $datas);
-    }
+    
 }
 
