@@ -37,9 +37,9 @@ wp_head();
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
         <a class="navbar-brand mr-1" href="#"><img class="img-fluid" alt=""
-                src="<?=plugins_url('wp-gallery-tube')?>/public/img/logo.png"></a>
+                src="<?=the_custom_logo() ?>"></a>
         <!-- Navbar Search -->
-        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-5 my-2 my-md-0 osahan-navbar-search">
+        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
@@ -49,39 +49,7 @@ wp_head();
                 </div>
             </div>
         </form>
-        <!-- Navbar -->
-        <ul class="navbar-nav ml-auto ml-md-0 osahan-right-navbar">
-
-            <li class="nav-item dropdown no-arrow mx-1">
-                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-bell fa-fw"></i>
-                    <span class="badge badge-danger">9+</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-edit "></i> &nbsp; Action</a>
-                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-headphones-alt "></i> &nbsp; Another
-                        action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star "></i> &nbsp; Something else here</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown no-arrow mx-1">
-                <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user fa-fw"></i>
-                    <span class="badge badge-success">7</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
-                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-edit "></i> &nbsp; Action</a>
-                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-headphones-alt "></i> &nbsp; Another
-                        action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star "></i> &nbsp; Something else here</a>
-                </div>
-            </li>
-
-        </ul>
+       
     </nav>
     <div id="wrapper">
         <!-- Sidebar -->
@@ -484,7 +452,7 @@ wp_head();
     <!-- /#wrapper -->
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
+       ^
     </a>
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

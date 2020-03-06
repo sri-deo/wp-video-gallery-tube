@@ -41,7 +41,7 @@ class Wp_Gallery_Tube_Database {
      */
     public function gallery_tube_db_install() {
         
-
+        global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
 
         $studio_sql = "CREATE TABLE IF NOT EXISTS $this->studio_table (
@@ -123,11 +123,38 @@ class Wp_Gallery_Tube_Database {
             'pornstars' => '',
             'site_src' => '',
             'studio' => '',
-            'scence_identity' => '',
-            'datecreated' => ''
-            
+            'scence_identity' => ''      
         );
     }
+    public function get_columnstudios(){
+        return array(
+            'id' => '',
+            'studio_name' => '',
+            'description' => '',
+            'url' => '',
+            'logo' => ''
+        );
+    }
+    public function get_columnpornstars(){
+        return array(
+            'id' => '',
+            'name' => '',
+            'country' => '',
+            'birth' => '',
+            'bio' => '',
+            'height' => '',
+            'weight' => '',
+            'aliases' => ''            
+        );
+    }
+    public function get_columntags(){
+        return array(
+            'id' => '',
+            'name' => '',
+            'description' => ''
+        );
+    }
+
     /**
      * gallery_tube_insert
      *
@@ -137,20 +164,27 @@ class Wp_Gallery_Tube_Database {
      */
     public function gallery_tube_insert_tubes($datas = array()){
         global $wpdb;
+        $datas = array_intersect_key($datas, $this->get_columntubes());
         return $wpdb->insert($this->tube_table, $datas);
     }
-    
-    /**
-     * gallery_tube_insert_studios
-     *
-     * @param  array $datas
-     *
-     * @return void
-     */
     public function gallery_tube_insert_studios($datas = array()) {
         global $wpdb;
+        $datas = array_intersect_key($datas, $this->get_columnstudios());
         return $wpdb->insert($this->studio_table, $datas);
     }
+    public function gallery_tube_insert_tags($datas = array()) {
+        global $wpdb;
+        $datas = array_intersect_key($datas, $this->get_columntags());
+        return $wpdb->insert($this->studio_table, $datas);
+    }
+    public function gallery_tube_insert_pornstars($datas = array()){
+        global $wpdb;
+        $datas = array_intersect_key($datas, $this->get_columnpornstars());
+        return $wpdb->insert($this->studio_table, $datas);
+    }
+    
+
+
     
 }
 

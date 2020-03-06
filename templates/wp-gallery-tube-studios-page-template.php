@@ -5,12 +5,20 @@
 * email: yourmindhasgone@gmail.com
 */
 
+$plugin_name  = 'wp-gallery-tube';
+$studio_name = get_query_var('studio_name');
 
 wp_head();
 ?>
 
 
 
+<?php 
+
+
+if ($studio_name) {
+    include  $plugin_name . '-single-studio-page-template.php';
+} else { ?>
 
 <section id="page-top" class="gallery-tube-bs">
 <nav class="navbar navbar-expand navbar-light bg-dark static-top osahan-nav sticky-top">
@@ -537,4 +545,7 @@ wp_head();
     </div>
 
 </section>
+
+
+<?php }?>
 <?php  wp_footer();?>

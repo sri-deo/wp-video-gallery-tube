@@ -5,7 +5,7 @@
 * email: yourmindhasgone@gmail.com
 */
 
-wp_head();
+
 ?>
 
 
@@ -562,7 +562,3 @@ wp_head();
         </div>
     </div>
 </article>
-<?php 
-      
-      wp_footer();
-      ?>

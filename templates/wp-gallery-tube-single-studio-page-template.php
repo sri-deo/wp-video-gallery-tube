@@ -6,7 +6,6 @@
 * author: lampvu
 * email: yourmindhasgone@gmail.com
 */
-wp_head();
 
 ?>
    
@@ -18,7 +17,7 @@ wp_head();
          <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
          <i class="fas fa-bars"></i>
          </button> &nbsp;&nbsp;
-         <a class="navbar-brand mr-1" href="index-2.html"><img class="img-fluid" alt="" src="img/logo.png"></a>
+         <a class="navbar-brand mr-1" href="index-2.html"><img class="img-fluid" alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/logo.png"></a>
          <!-- Navbar Search -->
          <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-5 my-2 my-md-0 osahan-navbar-search">
             <div class="input-group">
@@ -64,7 +63,7 @@ wp_head();
             </li>
             <li class="nav-item dropdown no-arrow osahan-right-navbar-user">
                <a class="nav-link dropdown-toggle user-dropdown-link" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               <img alt="Avatar" src="img/user.png">
+               <img alt="Avatar" src="<?=plugins_url('wp-gallery-tube')?>/public/img/user.png">
                Osahan 
                </a>
                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
@@ -148,22 +147,22 @@ wp_head();
                <ul>
                   <li>
                      <a href="subscriptions.html">
-                     <img class="img-fluid" alt="" src="img/s1.png"> Your Life 
+                     <img class="img-fluid" alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/s1.png"> Your Life 
                      </a>
                   </li>
                   <li>
                      <a href="subscriptions.html">
-                     <img class="img-fluid" alt="" src="img/s2.png"> Unboxing  <span class="badge badge-warning">2</span>
+                     <img class="img-fluid" alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/s2.png"> Unboxing  <span class="badge badge-warning">2</span>
                      </a>
                   </li>
                   <li>
                      <a href="subscriptions.html">
-                     <img class="img-fluid" alt="" src="img/s3.png"> Product / Service  
+                     <img class="img-fluid" alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/s3.png"> Product / Service  
                      </a>
                   </li>
                   <li>
                      <a href="subscriptions.html">
-                     <img class="img-fluid" alt="" src="img/s4.png">  Gaming 
+                     <img class="img-fluid" alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/s4.png">  Gaming 
                      </a>
                   </li>
                </ul>
@@ -171,9 +170,9 @@ wp_head();
          </ul>
          <div class="single-channel-page" id="content-wrapper">
             <div class="single-channel-image">
-               <img class="img-fluid" alt="" src="img/channel-banner.png">
+               <img class="img-fluid" alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/channel-banner.png">
                <div class="channel-profile">
-                  <img class="channel-profile-img" alt="" src="img/s2.png">
+                  <img class="channel-profile-img" alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/s2.png">
                   <div class="social hidden-xs">
                      Social &nbsp;
                      <a class="fb" href="#">Facebook</a>
@@ -245,7 +244,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v1.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v1.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -265,7 +264,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v2.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v2.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -285,7 +284,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v3.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v3.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -305,7 +304,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v4.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v4.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -325,7 +324,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v5.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v5.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -345,7 +344,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v6.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v6.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -365,7 +364,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v7.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v7.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -385,7 +384,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v8.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v8.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -405,7 +404,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v1.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v1.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -425,7 +424,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v2.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v2.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -445,7 +444,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v3.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v3.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -465,7 +464,7 @@ wp_head();
                         <div class="video-card">
                            <div class="video-card-image">
                               <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                              <a href="#"><img class="img-fluid" src="img/v4.png" alt=""></a>
+                              <a href="#"><img class="img-fluid" src="<?=plugins_url('wp-gallery-tube')?>/public/img/v4.png" alt=""></a>
                               <div class="time">3:50</div>
                            </div>
                            <div class="video-card-body">
@@ -510,8 +509,8 @@ wp_head();
                      </div>
                      <div class="col-lg-6 col-sm-6 text-right">
                         <div class="app">
-                           <a href="#"><img alt="" src="img/google.png"></a>
-                           <a href="#"><img alt="" src="img/apple.png"></a>
+                           <a href="#"><img alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/google.png"></a>
+                           <a href="#"><img alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/apple.png"></a>
                         </div>
                      </div>
                   </div>
@@ -545,7 +544,3 @@ wp_head();
       </div>
       
 </article>
-<?php
-
-wp_footer();
-?>

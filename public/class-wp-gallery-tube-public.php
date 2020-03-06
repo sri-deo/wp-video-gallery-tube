@@ -73,7 +73,10 @@ class Wp_Gallery_Tube_Public {
 		 * class.
 		 */
 
-		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) || is_page_template( 'wp-gallery-tube-tags-page-template.php' ) ) {
+		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) || is_page_template( 'wp-gallery-tube-tags-page-template.php' ) ||
+		is_page_template('wp-gallery-tube-pornstars-page-template.php') || is_page_template('wp-gallery-tube-studios-page-template.php') || 
+		is_page_template('wp-gallery-tube-single-studio-page-template.php') || is_page_template('wp-gallery-tube-single-pornstar-page-template.php') ||
+		 is_page_template('wp-gallery-tube-single-tag-page-template.php') ||  is_page_template('wp-gallery-tube-single-page-template.php') ) {
 
 			wp_enqueue_style( $this->plugin_name.'-bs', plugin_dir_url( __FILE__ ) . 'css/gallery-tube-bs.css', array(), $this->version, 'all' );
 			wp_enqueue_style( $this->plugin_name.'-fa', plugin_dir_url( __FILE__ ) . 'css/all.min.css', array(), $this->version, 'all' );
@@ -107,7 +110,13 @@ class Wp_Gallery_Tube_Public {
 		 * class.
 		 */
 
-		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) || is_page_template( 'wp-gallery-tube-tags-page-template.php' ) ) {
+		if ( is_page_template( 'wp-gallery-tube-main-page-template.php' ) || is_page_template( 'wp-gallery-tube-tags-page-template.php' ) ||
+		 is_page_template('wp-gallery-tube-pornstars-page-template.php') || is_page_template('wp-gallery-tube-studios-page-template.php') || 
+		 is_page_template('wp-gallery-tube-single-studio-page-template.php') || is_page_template('wp-gallery-tube-single-pornstar-page-template.php') ||
+		  is_page_template('wp-gallery-tube-single-tag-page-template.php')||  is_page_template('wp-gallery-tube-single-page-template.php') 
+		 
+		 
+		 ) {
 			wp_enqueue_script( $this->plugin_name.'-jquery', plugin_dir_url( __FILE__ ) . 'js/jquery.min.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_script( $this->plugin_name.'-bs-js', plugin_dir_url( __FILE__ ) . 'js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_script( $this->plugin_name.'-js-eas', plugin_dir_url( __FILE__ ) . 'js/jquery.easing.min.js', array( 'jquery' ), $this->version, true );
@@ -125,7 +134,13 @@ class Wp_Gallery_Tube_Public {
 	{
 		// Add custom template named template-custom.php to select dropdown 
 		$post_templates['wp-gallery-tube-main-page-template.php'] = __('WP Gallery Tube Template');		
+		$post_templates['wp-gallery-tube-pornstars-page-template.php'] = __('Wp Gallery Tube Pornstars Template');
+		$post_templates['wp-gallery-tube-studios-page-template.php'] = __('Wp Gallery Tube Studios Template');
 		$post_templates['wp-gallery-tube-tags-page-template.php'] = __('Wp Gallery Tube Tags Template');
+		$post_templates['wp-gallery-tube-single-studio-page-template.php'] = __('Wp Gallery Tube Single Studio Template');
+		$post_templates['wp-gallery-tube-single-pornstar-page-template.php'] = __('Wp Gallery Tube Single Pornstar Template');
+		$post_templates['wp-gallery-tube-single-tag-page-template.php'] = __('Wp Gallery Tube Single Tag Template');
+		$post_templates['wp-gallery-tube-single-page-template.php'] = __('Wp Gallery Tube Single Template');
 
 		return $post_templates;
 	}
@@ -151,6 +166,55 @@ class Wp_Gallery_Tube_Public {
 				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-tags-page-template.php';
 			}
 		}
+		if (get_page_template_slug() === 'wp-gallery-tube-pornstars-page-template.php') {
+
+			if ($theme_file = locate_template(array('wp-gallery-tube-pornstars-page-template.php'))) {
+				$template = $theme_file;
+			} else {
+				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-pornstars-page-template.php';
+			}
+		}
+
+		if (get_page_template_slug() === 'wp-gallery-tube-studios-page-template.php') {
+
+			if ($theme_file = locate_template(array('wp-gallery-tube-studios-page-template.php'))) {
+				$template = $theme_file;
+			} else {
+				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-studios-page-template.php';
+			}
+		}
+		if (get_page_template_slug() === 'wp-gallery-tube-single-page-template.php') {
+
+			if ($theme_file = locate_template(array('wp-gallery-tube-single-page-template.php'))) {
+				$template = $theme_file;
+			} else {
+				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-single-page-template.php';
+			}
+		}
+		if (get_page_template_slug() === 'wp-gallery-tube-single-studio-page-template.php') {
+
+			if ($theme_file = locate_template(array('wp-gallery-tube-single-studio-page-template.php'))) {
+				$template = $theme_file;
+			} else {
+				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-single-studio-page-template.php';
+			}
+		}
+		if (get_page_template_slug() === 'wp-gallery-tube-single-pornstar-page-template.php') {
+
+			if ($theme_file = locate_template(array('wp-gallery-tube-single-pornstar-page-template.php'))) {
+				$template = $theme_file;
+			} else {
+				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-single-pornstar-page-template.php';
+			}
+		}
+		if (get_page_template_slug() === 'wp-gallery-tube-single-tag-page-template.php') {
+
+			if ($theme_file = locate_template(array('wp-gallery-tube-single-tag-page-template.php'))) {
+				$template = $theme_file;
+			} else {
+				$template = WP_PLUGIN_DIR . '/' . $this->plugin_name . '/' . $templates_dir . '/wp-gallery-tube-single-tag-page-template.php';
+			}
+		}
 		
 
 		if ($template == '') {
@@ -165,22 +229,35 @@ class Wp_Gallery_Tube_Public {
 	 * @return void
 	 */
 	public function wp_gallery_tube_rewrite_url_init(){
+		
+		
+			
 		add_rewrite_rule(
-			'gallery/([0-9]+)/?$',
-			'/gallery?page_n=$matches[1]',
-			'top' );
-
-		add_rewrite_rule(
-			'studios/([a-zA-Z0-9]+)/?$',
-			'/studios?studio_name=$matches[1]',
-			'top' );
+			'^tags/([^/]+)/?',
+			'index.php?pagename=tags&tag=$matches[1]',
+			'top'
+		);
 		
 		add_rewrite_rule(
-				'cats/([a-zA-Z0-9]+)/?$',
-				'/cats?cat_name=$matches[1]',
-				'top' );
+			'^pornstars/([^/]+)/?',
+			'index.php?pagename=pornstars&star=$matches[1]',
+			'top'
+		);
 
-				
+		add_rewrite_rule(
+			'^scene/([^/]+)/?',
+			'index.php?pagename=scene&scene_identity=$matches[1]',
+			'top'
+		);
+			
+		add_rewrite_rule(
+			'^studios/([^/]+)/?',
+			'index.php?pagename=studios&studio_name=$matches[1]',
+			'top'
+		);
+
+		//flush_rewrite_rules();
+		
 	}
 	
 	/**
@@ -191,9 +268,11 @@ class Wp_Gallery_Tube_Public {
 	 * @return void
 	 */
 	public function wp_gallery_tube_query_vars($query_vars){
-		$query_vars[] = 'page_n';
+		
+		$query_vars[] = 'tag';
+		$query_vars[] = 'star';
+		$query_vars[] = 'scene_identity';
 		$query_vars[] = 'studio_name';
-		$query_vars[] = 'cat_name';
 
 		return $query_vars;
 	}

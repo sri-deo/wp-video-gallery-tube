@@ -117,6 +117,43 @@ class Wp_Gallery_Tube_Admin {
 			dirname((plugin_dir_url( __FILE__ ))).'/admin/menu.png', 
 			25
 		);
+
+		add_submenu_page(
+			'wp_gallery_tube',
+			__('Studios'),
+			__('Studios'), 
+			'manage_options', 
+			'studios', 
+			array(
+				$this,
+				'wp_gallery_tube_studios_page'
+			) 
+		);
+		add_submenu_page(
+			'wp_gallery_tube',
+			__('Porn Stars'),
+			__('Porn Stars'), 
+			'manage_options', 
+			'pornstars', 
+			array(
+				$this,
+				'wp_gallery_tube_pornstars_page'
+			) 
+		);
+		add_submenu_page(
+			'wp_gallery_tube',
+			__('Tags'),
+			__('Tags'), 
+			'manage_options', 
+			'scene_tags', 
+			array(
+				$this,
+				'wp_gallery_tube_scene_tags_page'
+			) 
+		);
+
+		
+
 	}
 	/**
 	 * wp_gallery_tube_display_plugin_page
@@ -126,6 +163,18 @@ class Wp_Gallery_Tube_Admin {
 	public function wp_gallery_tube_display_plugin_page(){
 		
 		include  'partials/' . $this->plugin_name . '-admin-display.php';
+	}
+	public function wp_gallery_tube_studios_page(){
+
+		include  'partials/' . $this->plugin_name . '-studios-display.php';
+	}
+	public function wp_gallery_tube_pornstars_page(){
+
+		include  'partials/' . $this->plugin_name . '-pornstars-display.php';
+	}
+	public function wp_gallery_tube_scene_tags_page(){
+		
+		include  'partials/' . $this->plugin_name . '-tags-display.php';
 	}
 
 }
