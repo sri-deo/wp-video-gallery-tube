@@ -40,6 +40,17 @@ class Wp_Gallery_Tube_Admin {
 	 */
 	private $version;
 
+	protected $dataConverter;
+	protected $dataImporter;
+
+	private $json_data_path_badoink;
+	private $json_data_path_vrbanger;
+	private $csv_data_path;
+	private $xml_data_path;
+
+	private $studios_lists;
+	private $studios_map = array();
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -52,6 +63,34 @@ class Wp_Gallery_Tube_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		$this->get_list_import_data();
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-gallery-tube-database.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-gallery-tube-convert.php';
+
+		$this->studios_lists = array(
+			'18vr',
+			'babevr',
+			'bcvr',
+			'kinkvr',
+			'vrcx',
+			'rjvr',
+			
+			'vrbanger',
+
+			'sexbabesvr',    // csv
+			'stasyqvr',		 // csv
+			'vrconk',		 //csv
+
+			'naughtyamerica' // xml
+
+		);
+		
+		$this->dataConverter = new Wp_Gallery_Tube_Convert();
+		$this->dataImporter = new Wp_Gallery_Tube_Database();
+
+
+		$this->get_list_studios();
 	}
 
 	/**
@@ -105,6 +144,7 @@ class Wp_Gallery_Tube_Admin {
 	 * @return void
 	 */
 	public function wp_gallery_tube_add_plugin_admin_menu(){
+
 		add_menu_page(
 			__('G-Tube', 'pm_wdb'),
 			__('G-Tube', 'pm_wdb'),
@@ -162,6 +202,15 @@ class Wp_Gallery_Tube_Admin {
 	 */
 	public function wp_gallery_tube_display_plugin_page(){
 		
+
+		if (isset($_POST['sub'])) {
+			$start = microtime(TRUE);
+			file_put_contents(plugin_dir_path( dirname( __FILE__ ) ).'log.log',date("Y-m-d H:m:s").' start :'.time().'-'.'');
+			$this->wp_gallery_tube_start_insert_data();
+			$end = microtime(TRUE);
+			file_put_contents(plugin_dir_path( dirname( __FILE__ ) ).'log.log','end: '.time(). '|total time :' . ($end - $start) . " seconds to complete.", FILE_APPEND);
+		}
+
 		include  'partials/' . $this->plugin_name . '-admin-display.php';
 	}
 	public function wp_gallery_tube_studios_page(){
@@ -176,5 +225,158 @@ class Wp_Gallery_Tube_Admin {
 		
 		include  'partials/' . $this->plugin_name . '-tags-display.php';
 	}
+
+
+	private function get_list_import_data(){
+
+		$this->json_data_path_badoink = array(
+			'18vr',
+			'babevr',
+			'bcvr',
+			'kinkvr',
+			'vrcx'
+		);
+		
+		$this->json_data_path_vrbanger = array(
+			'vrbanger-straight',
+			'vrbanger-trans',
+			'vrbanger-gay'
+		);
+
+		$this->csv_data_path = array(
+
+			'rjvr',
+			'sexbabesvr',
+			'stasyqvr',
+			'vrconk'
+
+		);
+
+		$this->xml_data_path = array(
+			'naughtyamerica'
+		);
+
+	}
+	private function get_list_studios(){
+
+		foreach ($this->studios_lists  as $key => $value) {
+			$this->studios_map[$value] = $this->dataImporter->gallery_tube_insert_studios(array('studio_name' => $value));
+		}
+	}
+	
+	/**
+	 * wp_gallery_tube_get_data_latest
+	 *
+	 * @return void
+	 */
+	public function wp_gallery_tube_get_data_latest(){
+		
+
+
+	}	
+	public function wp_gallery_tube_get_studios(){
+
+	}
+
+	private function loopInsertData($converted_data){
+		foreach ($converted_data as $key => $datas_import) {
+			
+			
+			$datas_import['studio'] = $this->studios_map[$datas_import['studio']];
+
+			$tube_id = $this->dataImporter->gallery_tube_insert_tubes($datas_import);
+
+			if ($tube_id ) {
+
+				$this->loopInsertScenePornstar($tube_id, $datas_import['pornstar']);
+	
+				$this->loopInsertSceneTag($tube_id, $datas_import['tags']);
+
+			}
+
+		}
+	}
+	private function loopInsertScenePornstar($tube_id, $pornstars){
+		if ($pornstars && count($pornstars)) {
+
+			foreach ($pornstars as $key => $value) {
+	
+				$pornstar_id = $this->dataImporter->gallery_tube_insert_pornstars(array(
+					'name' => $value,
+					'slug' => sanitize_title($value)
+				));
+				$this->dataImporter->gallery_tube_insert_scene_pornstar(array(
+					'tube_id' 		=>  $tube_id,
+					'pornstar_id' 	=> $pornstar_id
+				));
+			}
+		}
+	}
+
+	private function loopInsertSceneTag($tube_id, $tags){
+		if ($tags && count($tags)) {
+
+			foreach ($tags as $key => $value) {
+	
+				$tag_id = $this->dataImporter->gallery_tube_insert_tags(array(
+					'name' => $value
+				));
+				$this->dataImporter->gallery_tube_insert_scene_tag(array(
+					'tube_id' 		=>  $tube_id,
+					'tag_id' 		=> $tag_id
+				));
+			}
+		}
+	}
+	/**
+	 * wp_gallery_tube_start_insert_data
+	 *
+	 * @return void
+	 */
+	public function wp_gallery_tube_start_insert_data(){
+
+		foreach ($this->json_data_path_badoink as $key => $json_file) {
+			$data_from_json_badoink = $this->dataConverter->read_JSON($json_file);
+			$brand_name = $json_file;
+			$converted_json_badoink = $this->dataConverter->JsonConvert_badoink($data_from_json_badoink, $brand_name);
+		
+			$this->loopInsertData($converted_json_badoink);
+		}
+		
+		
+
+		
+		foreach ($this->json_data_path_vrbanger as $key => $json_file) {			
+			$data_from_json_vrbanger = $this->dataConverter->read_JSON($json_file);	
+
+			$converted_json_vrbanger = $this->dataConverter->JsonConvert_vrbanger($data_from_json_vrbanger, 'vrbanger');
+			
+			$this->loopInsertData($converted_json_vrbanger);
+		}
+		
+		foreach ($this->csv_data_path as $key => $csv_file) {
+			
+			$data_from_csv = $this->dataConverter->read_CSV($csv_file);
+			
+			$brand_name = $csv_file;
+			$converted_csv= $this->dataConverter->CSVConvert_hightech($data_from_csv, $brand_name);
+			
+			$this->loopInsertData($converted_csv);
+		} 
+		
+		/* foreach ($this->xml_data_path as $key => $xml_file) {
+			$data_from_xml = $this->dataConverter->readXML($xml_file);
+			$brand_name = $json_file;
+		}
+
+		$data_from_xml = $data_from_xml->entry;
+		
+		$converted_xml = $this->dataConverter->XMLConvert_Naughty($data_from_xml, $brand_name); */
+
+
+		
+
+	}
+
 
 }

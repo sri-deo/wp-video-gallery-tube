@@ -42,9 +42,58 @@ class Wp_Gallery_Tube_Convert {
         $this->data_path_xml =  plugin_dir_path( dirname( __FILE__ ) ).'datas/xml/';
 
     }
+    public function read_JSON($filename){
+        $path = $this->data_path_json.$filename.'.json';
+        if (file_exists($path)) {
+            $data = file_get_contents($path);
+            if ($data) {
+                return json_decode($data, true);
+            }
+        }
+        return array();
+    }
+
+    public function read_CSV($filename){
+        $path = $this->data_path_csv.$filename.'.csv';
+        
+        $arr = array();
+
+        $file = fopen($path, 'r');
+
+        // Headers
+        $headers = fgetcsv($file);
+
+        // Rows
+        $data = [];
+        while (($row = fgetcsv($file)) !== false)
+        {
+            $item = [];
+            foreach ($row as $key => $value)
+                $item[$headers[$key]] = $value ?: null;
+            $data[] = $item;
+        }
+
+        // Close file
+        fclose($file);
+        return $data;
+
+    }
+
+    public function readXML($filename){
+        $path = $this->data_path_xml.$filename.'.xml';
+        if (file_exists($path)) {
+            $data = file_get_contents($path);
+            if ($data) {
+               // $safestring = $this->characterToHTMLEntity($data);
+                $safestring = str_replace("&", "&amp;", $data);
+                $xml = simplexml_load_string($safestring, "SimpleXMLElement", LIBXML_NOCDATA);
+                return $xml;
+            }
+        }
+        return array();
+    }
     
-    
-    public function JsonConvert_badoinkJ($json_data, $brand){
+    public function JsonConvert_badoink($json_data, $brand){
         $results = array();
         foreach ($json_data as $key => $scene) {
 
@@ -59,15 +108,16 @@ class Wp_Gallery_Tube_Convert {
                 'src_image'     => isset($scene['posterImage'])?($scene['posterImage']?$scene['posterImage']:''):'',
 
                 'studio'        => $brand,
-                'pornstar'      => json_encode(is_array($scene['pornStars'])?$scene['pornStars']:explode(',',$scene['pornStars']) ),
-                'tags'          => json_encode(is_array($scene['tags'])?$scene['tags']:explode(',',$scene['tags'])),
+                'pornstar'      => (is_array($scene['pornStars'])?$scene['pornStars']:explode(',',$scene['pornStars']) ),
+                'tags'          => (is_array($scene['tags'])?$scene['tags']:explode(',',$scene['tags'])),
 
-                'scence_identity' => $brand.'-'.$scene['sceneId']   
+                'scene_identity' => $brand.'-'.$scene['sceneId']   
             ); 
         }
         return $results;
     }
-    public function JsonConvert_vrbanger($json_data, $type) {
+
+    public function JsonConvert_vrbanger($json_data, $brand) {
         $results = array();
         foreach ($json_data as $key => $scene) {
             $results[] = array(
@@ -81,78 +131,66 @@ class Wp_Gallery_Tube_Convert {
                 'degrees'       => $scene['FOV']?$scene['FOV'][0]:'',
 
                 'studio'        => 'vrbanger',
-                'pornstar'      => json_encode($scene['Pornstars']),
-                'tags'          => json_encode($scene['Tags']),
+                'pornstar'      => ($scene['Pornstars']),
+                'tags'          => ($scene['Tags']),
 
-                'scence_identity' => $brand.'-'.$scene['Scene_ID']   
+                'scene_identity' => $brand.'-'.$scene['Scene_ID']   
             ); 
         }
         return $results;
     }
-    private function read_JSON($path){
-        if (file_exists($path)) {
-            $data = file_get_contents($path);
-            if ($data) {
-                return json_decode($data);
-            }
-        }
-        return array();
-    }
-    private function read_CSV($path){
-        $arr = array();
-        if (($handle = fopen($path, 'r')) !== FALSE) {
-            $i = 0;
-            $headers = array();
-            while (($lineArray = fgetcsv($handle, 40000, $delimiter, '"')) !== FALSE) {
-                for ($j = 0; $j < count($lineArray); $j++) {
-                    if($i == 0){
-                        $headers[$j] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '',htmlspecialchars($lineArray[$j]) );
-                    }else{
-                        $arr[$i - 1][$headers[$j]] = $lineArray[$j];
-                    }
-
-                }
-                $i++;
-            }
-            fclose($handle);
-        }
-        return $arr;
-    }
-    private function readXML($path){
-        if (file_exists($path)) {
-            $data = file_get_contents($path);
-            if ($data) {
-                $safestring = $this->characterToHTMLEntity($data);
-                $safestring = str_replace("&", "&amp;", $safestring);
-                $xml = simplexml_load_string($safestring, "SimpleXMLElement", LIBXML_NOCDATA);
-                return $xml;
-            }
-        }
-        return array();
-    }
-
-
+    
     public function CSVConvert_hightech($csv_data, $brand){
         $results = array();
         foreach ($csv_data as $key => $scene) {
-
+            $tokens = explode('/', $scene['SceneURL']);
+            $t = explode('?', $tokens[count($tokens)-1])[0];
             $results[] = array(
-                'title'         => $scene['title'],
-                'video_length'  => $scene['duration'],
+                'title'         => $scene['Title'],
+                'video_length'  => $scene['Duration (sec)'],
                 'description'   => isset($scene['description'])?($scene['description']?$scene['description']:''):'',
                 'releaseDate'   => isset($scene['releaseDate'])?($scene['releaseDate']?$scene['releaseDate']:''):'',
-                'video_url'     => isset($scene['scene_url'])?($scene['scene_url']?$scene['scene_url']:''):'',
+                'video_url'     => isset($scene['SceneURL'])?($scene['SceneURL']?$scene['SceneURL']:''):'',
                 'fps'           => isset($scene['fps'])?($scene['fps']?$scene['fps']:''):'',
                 'degrees'       => isset($scene['degrees'])?($scene['degrees']?$scene['degrees']:''):'',
-                'src_image'     => isset($scene['thumb_url'])?($scene['thumb_url']?$scene['thumb_url']:''):'',
+                'src_image'     => isset($scene['ThumbURL'])?($scene['ThumbURL']?$scene['ThumbURL']:''):'',
 
                 'studio'        => $brand,
-                'pornstar'      => json_encode(is_array($scene['pornStars'])?$scene['pornStars']:explode(',',$scene['pornStars']) ),
-                'tags'          => json_encode(is_array($scene['tags'])?$scene['tags']:explode(',',$scene['tags'])),
+                'pornstar'      => (is_array($scene['Pornstars'])?$scene['Pornstars']:explode(',',$scene['Pornstars']) ),
+                'tags'          => (is_array($scene['Tags'])?$scene['Tags']:explode(',',$scene['Tags'])),
 
-                'scence_identity' => $brand.'-'.$scene['sceneId']   
+                'scene_identity' => $brand.'-'.$t  
             ); 
         }
+        return $results;
+    }
+
+    public function CSVConvert_sexlikereal($csv_data) {
+        $results = array();
+        foreach ($csv_data as $key => $scene) {
+            
+            $brand = $scene['Studio'];
+            $tokens = explode('/', $scene['SceneURL']);
+            $t = explode('?', $tokens[count($tokens)-1])[0];
+            $t = explode('-',$t)[0];
+            $results[] = array(
+                'title'         => $scene['Title'],
+                'video_length'  => $scene['Duration (sec)'],
+                'description'   => isset($scene['Description'])?($scene['Description']?$scene['Description']:''):'',
+                'releaseDate'   => isset($scene['Release date'])?($scene['Release date']?$scene['Release date']:''):'',
+                'video_url'     => isset($scene['SceneURL'])?($scene['SceneURL']?$scene['SceneURL']:''):'',
+                'fps'           => isset($scene['fps'])?($scene['fps']?$scene['fps']:''):'',
+                'degrees'       => isset($scene['degrees'])?($scene['degrees']?$scene['degrees']:''):'',
+                'src_image'     => isset($scene['ThumbURL'])?($scene['ThumbURL']?$scene['ThumbURL']:''):'',
+
+                'studio'        => $brand,
+                'pornstar'      => (is_array($scene['Pornstars'])?$scene['Pornstars']:explode(',',$scene['Pornstars']) ),
+                'tags'          => (is_array($scene['Tags'])?$scene['Tags']:explode(',',$scene['Tags'])),
+
+                'scene_identity' => $brand.'-'.$t  
+            ); 
+        }
+        
         return $results;
     }
 
@@ -161,25 +199,23 @@ class Wp_Gallery_Tube_Convert {
         foreach ($csv_data as $key => $scene) {
 
             $results[] = array(
-                'title'         => $scene['title'],
+                'title'         => $scene->title,
                 'video_length'  => $scene['duration'],
                 'description'   => isset($scene['description'])?($scene['description']?$scene['description']:''):'',
-                'releaseDate'   => isset($scene['releaseDate'])?($scene['releaseDate']?$scene['releaseDate']:''):'',
-                'video_url'     => isset($scene['scene_url'])?($scene['scene_url']?$scene['scene_url']:''):'',
+                'releaseDate'   => isset($scene['published_date_nice'])?($scene['published_date_nice']?$scene['published_date_nice']:''):'',
+                'video_url'     => isset($scene['url'])?($scene['url']?('https://www.naughtyamerica.com/'.$scene['url']):''):'',
                 'fps'           => isset($scene['fps'])?($scene['fps']?$scene['fps']:''):'',
                 'degrees'       => isset($scene['degrees'])?($scene['degrees']?$scene['degrees']:''):'',
-                'src_image'     => isset($scene['thumb_url'])?($scene['thumb_url']?$scene['thumb_url']:''):'',
+                'src_image'     => isset($scene['thumbnail'])?($scene['thumbnail']?$scene['thumbnail']:''):'',
 
                 'studio'        => $brand,
-                'pornstar'      => json_encode(is_array($scene['pornStars'])?$scene['pornStars']:explode(',',$scene['pornStars']) ),
-                'tags'          => json_encode(is_array($scene['tags'])?$scene['tags']:explode(',',$scene['tags'])),
+                'pornstar'      => (is_array($scene['pornStars'])?$scene['pornStars']:explode(',',$scene['pornStars']) ),
+                'tags'          => (is_array($scene['tags'])?$scene['tags']:explode(',',$scene['tags'])),
 
-                'scence_identity' => $brand.'-'.$scene['sceneId']   
+                'scene_identity' => $brand.'-'.$scene['sceneId']   
             ); 
         }
         return $results;
     }
     
-
-
 }

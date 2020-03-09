@@ -26,6 +26,46 @@ if (isset($_GET) && isset($_GET['page_n'])) {
     }
 }
 
+function getStudios(){
+    global $wpdb;
+    return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_studios ;");
+}
+function getPornstars(){
+    global $wpdb;
+    return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_pornstars LIMIT 12;");
+}
+function getTotalScenes(){
+    global $wpdb;
+    return $wpdb->get_var("SELECT COUNT(*) FROM ".$wpdb->prefix."gallery_tube ;");
+}
+function getSceneHome(){
+    global $wpdb;
+    $res = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
+                                FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
+                                 ORDER BY A.id ASC LIMIT 12
+                                " );
+    if ($res && count($res)) {
+        foreach ($res as $key => $tube) {
+            
+            //$res[$key]->tags = $wpdb->get_results("SELECT A.name FROM ".$wpdb->prefix."gallery_tube_tags A JOIN ".$wpdb->prefix."gallery_tube_scene_tag B ON A.id=B.tag_id WHERE A.tube_id=".$tube->id );
+            $t   = $wpdb->get_results("SELECT A.name, A.slug FROM ".$wpdb->prefix."gallery_tube_pornstars A JOIN ".$wpdb->prefix."gallery_tube_scene_star B ON A.id=B.pornstar_id WHERE B.tube_id=".$tube->id );
+            $res[$key]->pornstars  = $t;
+            
+
+        }
+    }
+    return $res;
+
+
+}
+$studios = getStudios();
+
+$pornstars = getPornstars();
+
+
+
+$total_scenes = getTotalScenes();
+$sceneHome = getSceneHome();
 
 wp_head();
 ?>
@@ -39,11 +79,11 @@ wp_head();
         <a class="navbar-brand mr-1" href="#"><img class="img-fluid" alt=""
                 src="<?=the_custom_logo() ?>"></a>
         <!-- Navbar Search -->
-        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search">
+        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
+                <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
-                    <button class="btn btn-light" type="button">
+                    <button class="btn btn-light" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -55,25 +95,25 @@ wp_head();
         <!-- Sidebar -->
         <ul class="sidebar navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="<?=home_url('gallery')?>">
                     <i class="fas fa-vr-cardboard"></i>
                     <span>VR Videos</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="<?=home_url('studios')?>">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Studios</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="<?=home_url('pornstars')?>">
                     <i class="fas fa-fw fa-user-alt"></i>
                     <span>Porn Stars</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="<?=home_url('tags')?>">
                     <i class="fas fa-fw fa-list-alt"></i>
                     <span>Categories</span>
                 </a>
@@ -121,126 +161,25 @@ wp_head();
                         </div>
                         <div class="col-md-12">
                             <div class="owl-carousel owl-carousel-category">
+                                <?php   if ($studios && count($studios)) { 
+                                foreach ($studios as $key => $studio) {                                  
+                                
+                                ?>
+                                <div class="item">
+                                    <div class="category-item">
+                                        <a href="<?= home_url('studios/'.$studio->studio_name) ?>">
+                                            <img class="img-fluid"
+                                                src="<?= $studio->logo? $studio->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>" alt="">
+                                            <h6><?=$studio->studio_nicename ? $studio->studio_nicename : $studio->studio_name ?> <span title="" data-placement="top" data-toggle="tooltip"
+                                                    data-original-title="Verified"><i
+                                                        class="fas fa-check-circle text-success"></i></span></h6>
+                                            
+                                        </a>
+                                    </div>
+                                </div>
 
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/sexbabesvr.png"
-                                                alt="">
-                                            <h6>SexBabesVR</h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/vrconk.svg" alt="">
-                                            <h6>VRConk</h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/jvrporn.jpg" alt="">
-                                            <h6>JVRPorn <span title="" data-placement="top" data-toggle="tooltip"
-                                                    data-original-title="Verified"><i
-                                                        class="fas fa-check-circle text-success"></i></span></h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/sinsvr.png" alt="">
-                                            <h6>SinsVR</h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/s6.png" alt="">
-                                            <h6>VR3000</h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/vrteenrs.png"
-                                                alt="">
-                                            <h6>VRTeenrs</h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/yanksvr.jpg" alt="">
-                                            <h6>YanksVR</h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/s1.png" alt="">
-                                            <h6>MiluVR</h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/realhotvr.jpg"
-                                                alt="">
-                                            <h6>RealHotVR</h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/virtualpee.png"
-                                                alt="">
-                                            <h6>VIrtualPee <span title="" data-placement="top" data-toggle="tooltip"
-                                                    data-original-title="Verified"><i
-                                                        class="fas fa-check-circle text-success"></i></span></h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="category-item">
-                                        <a href="#">
-                                            <img class="img-fluid"
-                                                src="<?=plugins_url('wp-gallery-tube')?>/public/img/vranimeted.png"
-                                                alt="">
-                                            <h6>VRAnimeTed</h6>
-                                            <p>74,853 views</p>
-                                        </a>
-                                    </div>
-                                </div>
+                                <?php }} ?>
+                                
                             </div>
                         </div>
                     </div>
@@ -250,7 +189,7 @@ wp_head();
                     <div class="row">
                         <div class="col-md-12">
                             <div class="main-title">
-                                <div class="btn-group float-right right-action">
+                                <!-- <div class="btn-group float-right right-action">
                                     <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
                                         Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
@@ -263,50 +202,52 @@ wp_head();
                                         <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
                                             &nbsp; Close</a>
                                     </div>
-                                </div>
+                                </div> -->
                                 <h6>Featured Videos</h6>
                             </div>
                         </div>
 
-                        <?php if ($data && count($data)) { 
-                        for ($i= ($page-1)*12; $i < $page*12; $i++) { 
-                            $value = $data[$i];
-                            if ($value) {
+                        <?php if ($sceneHome && count($sceneHome)) { 
+                       foreach ($sceneHome as $key => $scene) {
+                        
 
                      ?>
                         <div class="col-xl-3 col-sm-6 mb-3">
                             <div class="video-card preview-video">
                                 <div class="video-card-image">
-                                    <a class="view-lightbox" href="https://<?=$value->url?>"><b>VIEW</b></a>
+                                    <a class="view-lightbox" href="<?=home_url('scene/'.$scene->scene_identity)?>"><b>VIEW</b></a>
                                     <a href="#"><img class="img-fluid"
-                                            src="<?=($value->posterImage?$value->posterImage:(plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg'))?>"
+                                            src="<?=($scene->src_image?$scene->src_image:(plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg'))?>"
                                             alt="previewimg"></a>
-                                    <div class="time"><?=hoursandmins($value->length, '%02d:%02d')?></div>
+                                    <div class="time"><?=hoursandmins($scene->video_length, '%02d:%02d')?></div>
                                 </div>
                                 <div class="video-card-body">
                                     <div class="video-title">
                                         <a href="#"
-                                            class="ellipsis"><?=(strlen($value->description) > 50 ? substr($value->description,0,50)."..." : $value->description )?></a>
+                                            class="ellipsis"><?=(strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title )?></a>
                                     </div>
                                     <div class="video-page text-success">
                                         <a href="#" style="    color: #4eda92;">
-                                            18VR <a title="" data-placement="top" data-toggle="tooltip" href="#"
+                                            <?=$scene->studio_nicename? $scene->studio_nicename: $scene->studio_name ?> <a title="" data-placement="top" data-toggle="tooltip" href="#"
                                                 data-original-title="Verified"><i
                                                     class="fas fa-check-circle text-success"></i></a>
                                         </a>
                                     </div>
                                     <div class="video-view">
-                                        <?=$value->degrees? ($value->degrees. '&deg;') : ""?>
-                                        <?=$value->fps? ($value->fps." FPS"):""?>
-                                        <a class="float-right" href="#"><?=$value->pornStars?></a>
+                                        <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>
+                                        <?=$scene->fps? ($scene->fps." FPS"):""?>
+                                        
                                         <span class="float-right">
                                             <?php 
-                                            $p_s = explode(",", $video_preview->pornStars);                                        
-                                            $p_s_view = array();
-                                            for ($k=0; $k < count($p_s); $k++) {                                             
-                                                $p_s_view[] = '<a  href="#">'.$p_s[$k].'</a>';
+                                           
+                                            $pornstars_view = array();
+                                            if ($scene->pornstars && count($scene->pornstars)) {
+                                                foreach ($scene->pornstars as $key => $pornstar) {
+                                                   $pornstars_view[] = '<a href="/pornstars/'.$pornstar->slug.'">'.$pornstar->name.'</a>';
+                                                }
                                             }
-                                            echo implode(",", $p_s_view);
+                                            echo implode(",", $pornstars_view);
+
                                             ?>
                                         </span>
                                     </div>
@@ -314,7 +255,7 @@ wp_head();
                             </div>
                         </div>
 
-                        <?php } } } ?>
+                        <?php } }  ?>
 
 
                     </div>
@@ -323,13 +264,11 @@ wp_head();
                             <!-- <li class="page-item disabled">
                            <a class="page-link" href="#" tabindex="-1">Previous</a>
                         </li> -->
-                            <?php for ($i=1; $i <= $max_page; $i++) { 
                             
-                         ?>
-                            <li class="page-item <?=$i==$page ? "active" :""?>"><a class="page-link"
-                                    href="./?page_n=<?=$i?>"><?=$i?></a></li>
+                            <li class="page-item active"><a class="page-link"
+                                    href="">1</a></li>
 
-                            <?php } ?>
+                           
                             <!-- <li class="page-item">
                            <a class="page-link" href="#">Next</a>
                         </li> -->
@@ -341,7 +280,7 @@ wp_head();
                     <div class="row">
                         <div class="col-md-12">
                             <div class="main-title">
-                                <div class="btn-group float-right right-action">
+                                <!-- <div class="btn-group float-right right-action">
                                     <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
                                         Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
@@ -354,88 +293,40 @@ wp_head();
                                         <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
                                             &nbsp; Close</a>
                                     </div>
-                                </div>
-                                <h6>Popular Channels</h6>
+                                </div> -->
+                                <h6>Popular Porn Stars</h6>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 mb-3">
+
+                        <?php  if ($pornstars  && count($pornstars) ) {
+                            
+                            foreach ($pornstars as $key => $pornstar) {
+                                # code...
+                            
+                            ?>
+
+                        <div class="col-xl-3 col-sm-4 mb-3">
                             <div class="channels-card">
                                 <div class="channels-card-image">
-                                    <a href="#"><img class="img-fluid"
-                                            src="<?=plugins_url('wp-gallery-tube')?>/public/img/s1.png" alt=""></a>
+                                    <a href="<?= home_url('pornstars/'.$pornstar->slug) ?>"><img class="img-fluid"
+                                            src="<?=$pornstar->photo?$pornstar->photo:(plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>" alt=""></a>
                                     <div class="channels-card-image-btn"><button type="button"
-                                            class="btn btn-outline-danger btn-sm">Subscribe
-                                            <strong>1.4M</strong></button></div>
+                                            class="btn btn-outline-danger btn-sm">View
+                                            </button></div>
                                 </div>
                                 <div class="channels-card-body">
                                     <div class="channels-title">
-                                        <a href="#">Channels Name</a>
+                                        <a href="/pornstars/<?=$pornstar->slug?>"><?=$pornstar->name?></a>
                                     </div>
                                     <div class="channels-view">
-                                        382,323 subscribers
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 mb-3">
-                            <div class="channels-card">
-                                <div class="channels-card-image">
-                                    <a href="#"><img class="img-fluid"
-                                            src="<?=plugins_url('wp-gallery-tube')?>/public/img/s2.png" alt=""></a>
-                                    <div class="channels-card-image-btn"><button type="button"
-                                            class="btn btn-outline-danger btn-sm">Subscribe
-                                            <strong>1.4M</strong></button></div>
-                                </div>
-                                <div class="channels-card-body">
-                                    <div class="channels-title">
-                                        <a href="#">Channels Name</a>
-                                    </div>
-                                    <div class="channels-view">
-                                        382,323 subscribers
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-sm-6 mb-3">
-                            <div class="channels-card">
-                                <div class="channels-card-image">
-                                    <a href="#"><img class="img-fluid"
-                                            src="<?=plugins_url('wp-gallery-tube')?>/public/img/s3.png" alt=""></a>
-                                    <div class="channels-card-image-btn"><button type="button"
-                                            class="btn btn-outline-secondary btn-sm">Subscribed
-                                            <strong>1.4M</strong></button></div>
-                                </div>
-                                <div class="channels-card-body">
-                                    <div class="channels-title">
-                                        <a href="#">Channels Name <span title="" data-placement="top"
-                                                data-toggle="tooltip" data-original-title="Verified"><i
-                                                    class="fas fa-check-circle"></i></span></a>
-                                    </div>
-                                    <div class="channels-view">
-                                        382,323 subscribers
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-sm-6 mb-3">
-                            <div class="channels-card">
-                                <div class="channels-card-image">
-                                    <a href="#"><img class="img-fluid"
-                                            src="<?=plugins_url('wp-gallery-tube')?>/public/img/s4.png" alt=""></a>
-                                    <div class="channels-card-image-btn"><button type="button"
-                                            class="btn btn-outline-danger btn-sm">Subscribe
-                                            <strong>1.4M</strong></button></div>
-                                </div>
-                                <div class="channels-card-body">
-                                    <div class="channels-title">
-                                        <a href="#">Channels Name</a>
-                                    </div>
-                                    <div class="channels-view">
-                                        382,323 subscribers
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+                        <?php  }} ?>
+                        
                     </div>
                 </div>
             </div>

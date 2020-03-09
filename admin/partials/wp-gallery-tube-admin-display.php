@@ -38,5 +38,8 @@ $vrbcash = get_option('vrbcash');
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
+<form action="" method="post">
 
+<input type="submit" value="Start Raw Insert" name="sub">
+</form>
 
