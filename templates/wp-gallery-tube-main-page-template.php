@@ -45,19 +45,26 @@ function getSceneHome(){
                                  ORDER BY A.id ASC LIMIT 12
                                 " );
     if ($res && count($res)) {
-        foreach ($res as $key => $tube) {
-            
+        foreach ($res as $key => $tube) {            
             //$res[$key]->tags = $wpdb->get_results("SELECT A.name FROM ".$wpdb->prefix."gallery_tube_tags A JOIN ".$wpdb->prefix."gallery_tube_scene_tag B ON A.id=B.tag_id WHERE A.tube_id=".$tube->id );
-            $t   = $wpdb->get_results("SELECT A.name, A.slug FROM ".$wpdb->prefix."gallery_tube_pornstars A JOIN ".$wpdb->prefix."gallery_tube_scene_star B ON A.id=B.pornstar_id WHERE B.tube_id=".$tube->id );
-            $res[$key]->pornstars  = $t;
-            
+            $t   = $wpdb->get_results("SELECT A.name, A.slug FROM ".$wpdb->prefix."gallery_tube_pornstars A LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_star B ON A.id=B.pornstar_id WHERE B.tube_id=".$tube->id );
+            $res[$key]->pornstars  = $t;            
 
         }
     }
+
     return $res;
-
-
 }
+
+function searchScene($searchString){
+    $searchString = "%".$wpdb->esc_like(strtoupper ($searchString))."%";
+    $tag_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."gallery_tube_tags WHERE UPPER(name) LIKE %s ", array($searchString) ) );
+    $pornstar_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."gallery_tube_pornstars WHERE UPPER(name) LIKE %s  OR UPPER(aliasses) LIKE %s ;", array($searchString, $searchString)  ));
+
+    $tube_results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM ".$wpdb->prefix."gallery_tube WHERE UPPER(title) LIKE %s OR UPPER(description) LIKE %s OR UPPER(releaseDate) LIKE %s" , array($searchString, $searchString, $searchString) ) );
+}
+
+
 $studios = getStudios();
 
 $pornstars = getPornstars();
@@ -67,17 +74,26 @@ $pornstars = getPornstars();
 $total_scenes = getTotalScenes();
 $sceneHome = getSceneHome();
 
+
+print_r($_GET['q']);
+
+if (isset($_GET['q']) && $_GET['q']) {
+    $searchString = trim($_GET['q']);
+
+}
+
 wp_head();
+
 ?>
 
 <article id="page-top" class="gallery-tube-bs">
-    <nav class="navbar navbar-expand navbar-light bg-dark static-top osahan-nav sticky-top">
+    <nav class="navbar navbar-expand navbar-light bg-white static-top osahan-nav sticky-top">
         &nbsp;&nbsp;
         <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
         <a class="navbar-brand mr-1" href="#"><img class="img-fluid" alt=""
-                src="<?=the_custom_logo() ?>"></a>
+                src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="">
             <div class="input-group">
@@ -216,14 +232,14 @@ wp_head();
                             <div class="video-card preview-video">
                                 <div class="video-card-image">
                                     <a class="view-lightbox" href="<?=home_url('scene/'.$scene->scene_identity)?>"><b>VIEW</b></a>
-                                    <a href="#"><img class="img-fluid"
+                                    <a href="<?=home_url('scene/'.$scene->scene_identity)?>"><img class="img-fluid"
                                             src="<?=($scene->src_image?$scene->src_image:(plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg'))?>"
                                             alt="previewimg"></a>
                                     <div class="time"><?=hoursandmins($scene->video_length, '%02d:%02d')?></div>
                                 </div>
                                 <div class="video-card-body">
                                     <div class="video-title">
-                                        <a href="#"
+                                        <a href="<?=home_url('scene/'.$scene->scene_identity)?>"
                                             class="ellipsis"><?=(strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title )?></a>
                                     </div>
                                     <div class="video-page text-success">
@@ -234,9 +250,10 @@ wp_head();
                                         </a>
                                     </div>
                                     <div class="video-view">
+                                        
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>
                                         <?=$scene->fps? ($scene->fps." FPS"):""?>
-                                        
+                                        &nbsp;
                                         <span class="float-right">
                                             <?php 
                                            
@@ -345,25 +362,7 @@ wp_head();
     <a class="scroll-to-top rounded" href="#page-top">
        ^
     </a>
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="#">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </article>
 <?php
 

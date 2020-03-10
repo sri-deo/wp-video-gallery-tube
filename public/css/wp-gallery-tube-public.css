@@ -9,11 +9,11 @@
      margin: 0;
  }
  #page-top {
-     background: #121212!important;
+     background: #fafafa!important;
      font-size: 13px;
  }
  .video-card {
-    background: #1c1c1c none repeat scroll 0 0;
+    /* background: #1c1c1c none repeat scroll 0 0; */
     box-shadow: none;
  }
  .video-card-image {
@@ -28,8 +28,18 @@
     white-space: nowrap;
     text-overflow: ellipsis;
  }
- #page-top .preview-video img.img-fluid {
-    filter: blur(5px);
+ #page-top .preview-video img.img-fluid, #page-top .related-scene img.img-fluid {
+     height: 200px;
+    filter: blur(9px);
+ }
+ #page-top .preview-img img {
+    filter: blur(15px);
+    max-height: 315px;
+    margin: 0 auto;
+ }
+ #page-top .single-video.preview-img {
+     background: #fff;
+     padding: 30px;
  }
  .gallery-tube-bs .video-page {
      font-size: 12px;
@@ -42,7 +52,7 @@
     position: absolute;
  }
  .video-card:hover .view-lightbox {
-    background: #000 none repeat scroll 0 0;
+    /* background: #000 none repeat scroll 0 0; */
     border-radius: 2px;
     bottom: 0;
     color: #fff;

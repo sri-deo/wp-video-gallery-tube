@@ -8,15 +8,53 @@
 $plugin_name  = 'wp-gallery-tube';
 $studio_name = get_query_var('studio_name');
 
-
+function hoursandmins($time, $format = '%02d:%02d'){
+    if ($time < 1) {
+        return;
+    }
+    $hours = floor($time / 60);
+    $minutes = ($time % 60);
+    return sprintf($format, $hours, $minutes);
+}
 function getStudios(){
     global $wpdb;
     return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_studios ;");
 }
+
+function getStudio($studio_name) {
+    global $wpdb;
+    $studio =  $wpdb->get_row($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."gallery_tube_studios WHERE studio_name=%s   ;" , array($studio_name)));
+
+    if ($studio) {
+
+        $studio->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
+                                        FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
+                                        WHERE A.studio = ".$studio->id."
+                                        ORDER BY A.id ASC LIMIT 12");
+    
+        if ($studio->scenes && count($studio->scenes)) {
+            foreach ($studio->scenes as $key => $tube) {            
+                
+                $t   = $wpdb->get_results("SELECT A.name, A.slug FROM ".$wpdb->prefix."gallery_tube_pornstars A JOIN ".$wpdb->prefix."gallery_tube_scene_star B ON A.id=B.pornstar_id WHERE B.tube_id=".$tube->id );
+                $studio->scenes[$key]->pornstars  = $t;            
+        
+            }
+        } 
+        return $studio;                               
+    }
+    else return 0;
+
+}
+
 $allStudios = getStudios();
 $totalStudios = count($allStudios);
 
-
+if ($studio_name) {
+    $studio = getStudio($studio_name);
+    if (!$studio){
+        wp_redirect(home_url("studios"));
+    }
+}
 
 wp_head();
 ?>
@@ -31,15 +69,15 @@ if ($studio_name) {
 } else { ?>
 
 <article id="page-top" class="gallery-tube-bs">
-    <nav class="navbar navbar-expand navbar-light bg-dark static-top osahan-nav sticky-top">
+    <nav class="navbar navbar-expand navbar-light bg-white static-top osahan-nav sticky-top">
         &nbsp;&nbsp;
         <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
         <a class="navbar-brand mr-1" href="#"><img class="img-fluid" alt=""
-                src="<?=the_custom_logo() ?>"></a>
+                src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
-        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="">
+        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('gallery')?>">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
@@ -113,13 +151,15 @@ if ($studio_name) {
                             
                             ?>
                         <div class="col-xl-3 col-sm-6 mb-3">
+                                
                             <div class="channels-card">
                                 <div class="channels-card-image">
                                     <a href="<?= home_url('studios/'.$studio->studio_name) ?>"><img class="img-fluid"
                                             src="<?= $studio->logo? $studio->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>" alt="<?=$studio->studio_name?>"></a>
-                                    <div class="channels-card-image-btn"><button type="button"
+                                    <div class="channels-card-image-btn">
+                                    <a href="<?= home_url('studios/'.$studio->studio_name) ?>"
                                             class="btn btn-outline-danger btn-sm">View Studio
-                                            </button></div>
+                                            </a></div>
                                 </div>
                                 <div class="channels-card-body">
                                     <div class="channels-title">
@@ -128,6 +168,7 @@ if ($studio_name) {
                                     
                                 </div>
                             </div>
+                            
                         </div>
                         <?php }} ?>
                         
@@ -173,25 +214,7 @@ if ($studio_name) {
     <a class="scroll-to-top rounded" href="#page-top">
         ^
     </a>
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+   
 
 </section>
 

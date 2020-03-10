@@ -30,7 +30,8 @@ class Wp_Gallery_Tube_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-
+		flush_rewrite_rules();
+		delete_option('plugin_permalinks_flushed');
 	}
 
 }

@@ -35,7 +35,7 @@ class Wp_Gallery_Tube_Activator {
 		
 		// flush rewrite rules only one time when active plugin
 		flush_rewrite_rules();
-
+		update_option('plugin_permalinks_flushed', 0);
 	}
 	
 	public function createSetings(){

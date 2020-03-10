@@ -256,7 +256,14 @@ class Wp_Gallery_Tube_Public {
 			'top'
 		);
 
-		//flush_rewrite_rules();
+		
+		if( !get_option('plugin_permalinks_flushed') ) {
+ 
+			flush_rewrite_rules(false);
+			update_option('plugin_permalinks_flushed', 1);
+	 
+		}
+		
 		
 	}
 	

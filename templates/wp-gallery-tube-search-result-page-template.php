@@ -1,81 +1,8 @@
-<?php 
-/**
-* Template name : WP Gallery Tube Template
-* author: lampvu
-* email: yourmindhasgone@gmail.com
-*/
-
-$plugin_name  = 'wp-gallery-tube';
-$pornstar_slug = get_query_var('star');
-
-
-function hoursandmins($time, $format = '%02d:%02d'){
-    if ($time < 1) {
-        return;
-    }
-    $hours = floor($time / 60);
-    $minutes = ($time % 60);
-    return sprintf($format, $hours, $minutes);
-}
-function getPornstars(){
-    global $wpdb;
-    return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_pornstars ;");
-}
-
-function getPornstar($slug) {
-    global $wpdb;
-    $pornstar =  $wpdb->get_row($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."gallery_tube_pornstars WHERE slug=%s   ;" , array($slug) ) );
-
-    if ($pornstar) {
-
-        
-        $pornstar->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
-                                        FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id
-                                        JOIN ".$wpdb->prefix."gallery_tube_scene_star C ON C.tube_id = A.id
-                                        
-                                        WHERE  C.pornstar_id = ".$pornstar->id." 
-                                        ORDER BY A.id ASC LIMIT 12");
-        if ($pornstar->scenes && count($pornstar->scenes))         {
-            foreach ($pornstar->scenes as $key => $scene   ) {
-                $pornstar->scenes[$key]->tags = $wpdb->get_results("SELECT A.name FROM ".$wpdb->prefix."gallery_tube_tags A 
-                                                                JOIN ".$wpdb->prefix."gallery_tube_scene_tag B ON B.tag_id = A.id 
-                                                                WHERE B.tube_id= ".$scene->id."  ORDER BY A.name ASC LIMIT 3 ; " );
-            }
-            
-        }
-        
-        return $pornstar;                               
-    }
-    else return 0;
-
-}
-$pornstars = getPornstars();
-
-$pornstar=null;
-if ($pornstar_slug){
-    $pornstar = getPornstar($pornstar_slug);
-}
-if ($pornstar !==null){
-
-    if (!$pornstar) {
-        wp_redirect(home_url('pornstars'));
-    }
-}
 
 
 
-wp_head();
-
-?>
 
 
-
-<?php 
-
-
-if ($star) {
-    include  $plugin_name . '-single-pornstar-page-template.php';
-} else { ?>
 
 <article id="page-top" class="gallery-tube-bs">
     <nav class="navbar navbar-expand navbar-light bg-white static-top osahan-nav sticky-top">
@@ -237,7 +164,3 @@ if ($star) {
    
 
 </section>
-
-
-<?php }?>
-<?php  wp_footer();?>
