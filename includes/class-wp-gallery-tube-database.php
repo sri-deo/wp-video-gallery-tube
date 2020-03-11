@@ -61,9 +61,10 @@ class Wp_Gallery_Tube_Database {
             `description` text NULL ,
             `url`         text NOT NULL ,
             `logo`        text NULL ,
-            `datecreated` timestamp NOT NULL ,
+            `date_created` timestamp NOT NULL ,
 
-            PRIMARY KEY (`id`)
+            PRIMARY KEY (`id`),
+            INDEX( `studio_name`)
             ) $charset_collate;   ";
 
         $tag_sql = "CREATE TABLE IF NOT EXISTS $this->tags_table (
@@ -73,6 +74,7 @@ class Wp_Gallery_Tube_Database {
             `description` text NULL ,
 
             PRIMARY KEY (`id`)
+            
 
         ) $charset_collate;";
 
@@ -90,7 +92,8 @@ class Wp_Gallery_Tube_Database {
             `aliases`      text NULL ,
             `date_created` timestamp NOT NULL ,
 
-            PRIMARY KEY (`id`)
+            PRIMARY KEY (`id`),
+            INDEX (`slug`)
         ) $charset_collate; ";
 
 
@@ -109,7 +112,8 @@ class Wp_Gallery_Tube_Database {
             `date_created`    timestamp NOT NULL ,
             `studio`          int NOT NULL ,
 
-            PRIMARY KEY (`id`),
+            PRIMARY KEY (`id`),            
+            
             KEY `fk_studio` (`studio`),
             CONSTRAINT `FK_studio` FOREIGN KEY `fk_studio` (`studio`) REFERENCES `wp_gallery_tube_studios` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
@@ -318,7 +322,132 @@ class Wp_Gallery_Tube_Database {
         return $wpdb->get_row($wpdb->prepare( 'SELECT * FROM '.$this->tags_table.' WHERE UPPER(name) LIKE %s ;',  '%' . $wpdb->esc_like(strtoupper ($name)) . '%')  );
     }
 
+    public function gallery_tube_get($post_data, $type) {
 
+		global $wpdb;
+		
+		$user = wp_get_current_user();
+		
+		switch ($type) {
+			case 'tubes':
+				$aColumns = array('id', 'src_image', 'scene_identity',  'releaseDate',  'video_length', 'date_created');
+				break;
+			case 'pornstars':
+				$aColumns = array('id','photo', 'name',   'date_created' ,'slug');
+				break;
+			case 'studios':
+				$aColumns = array('id', 'logo', 'studio_name',    'date_created', 'url');
+				break;
+			case 'tags':
+				$aColumns = array('id', 'name');
+				break;
+			
+			default:
+				$aColumns = array('id', 'scene_identity',  'releaseDate', 'src_image', 'video_length', 'date_created');
+				break;
+		}
+		
+		
+		$aasort = array('asc', 'desc');
+		$sIndexColumn = "id";
+
+		$sLimit = "";
+		if (isset($post_data['start']) && $post_data['length'] != '-1') {
+			$sLimit = " LIMIT " . intval($post_data['start']) . ", " . intval($post_data['length']);
+		}
+		$sOrder = "";
+		if (isset($post_data['order'][0]['column'])) {
+
+			$sOrder = " ORDER BY  ";
+			if ( $aColumns[intval($post_data['order'][0]['column'])]   ) {
+				$sOrder .= $aColumns[intval($post_data['order'][0]['column'])];
+			} 
+			if (isset($post_data['order'][0]['dir'])) {
+				if (in_array(trim($post_data['order'][0]['dir']), $aasort)) {
+					$sOrder .= (' '.  trim($post_data['order'][0]['dir']) );
+				}
+			}
+		}
+		
+		$sWhere = ' WHERE 1  ';
+		
+		if (isset($post_data['search']['value']) && $post_data['search']['value'] != "") {
+			$sWhere .= " AND (";
+			for ($i = 0; $i < count($aColumns); $i++) {
+				$sWhere .= "`" . $aColumns[$i] . "` LIKE '%" . esc_sql($post_data['search']['value']) . "%' OR ";
+			}
+			$sWhere = substr_replace($sWhere, "", -3);
+			$sWhere .= ') ';
+		}
+		switch ($type) {
+			case 'tubes':
+				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->tubes_table $sWhere $sOrder $sLimit ";
+				break;
+			case 'pornstars':
+				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->pornstars_table $sWhere $sOrder $sLimit ";
+				break;
+			case 'studios':
+				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->studios_table $sWhere $sOrder $sLimit ";
+				break;
+			case 'tags':
+				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->tags_table $sWhere $sOrder $sLimit ";
+				break;			
+			default:
+				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->tubes_table $sWhere $sOrder $sLimit ";
+				break;
+		}
+		
+		$rResult = $wpdb->get_results($sQuery, ARRAY_A);
+        
+		$sQuery = " SELECT FOUND_ROWS()  ";
+
+		$rResultFilterTotal = $wpdb->get_results($sQuery, ARRAY_N);
+		$iFilteredTotal = intval($rResultFilterTotal[0][0]);
+		
+		switch ($type) {
+			case 'tubes':
+				$sQuery = " SELECT COUNT(`" . $sIndexColumn . "`) FROM $this->tubes_table ";
+				break;
+			case 'pornstars':
+				$sQuery = " SELECT COUNT(`" . $sIndexColumn . "`) FROM $this->pornstars_table ";				
+				break;
+			case 'studios':
+				$sQuery = " SELECT COUNT(`" . $sIndexColumn . "`) FROM $this->studios_table ";				
+				break;
+			case 'tags':
+				$sQuery = " SELECT COUNT(`" . $sIndexColumn . "`) FROM $this->tags_table ";				
+				break;			
+			default:
+				$sQuery = " SELECT COUNT(`" . $sIndexColumn . "`) FROM $this->tubes_table ";
+				break;
+		}
+
+		
+		
+		$rResultTotal = $wpdb->get_results($sQuery, ARRAY_N);
+		$iTotal = intval($rResultTotal[0][0]);
+
+		$outdata = array();
+		if (count($rResult)) {
+			foreach ($rResult as  $result) {
+				$row = array();
+				for ($i = 0; $i < count($aColumns); $i++) {	
+
+					$row[] = $result[$aColumns[$i]];					
+                }
+                $row[] = '<a class="btn btn-info btn-sm view " data-id="'.$result[$aColumns[0]].'" >View</a> <a class="btn btn-danger btn-sm delete " data-id="'.$result[$aColumns[0]].'" >Delete</a>';					
+				$outdata[] = $row;
+			}
+		}
+        
+		$output = array(
+			"draw" => intval($post_data['draw']),
+			"recordsTotal" => $iTotal,
+			"recordsFiltered" => $iFilteredTotal,
+			"data" => $outdata
+		);
+		return ($output);		
+	}
     
 }
 

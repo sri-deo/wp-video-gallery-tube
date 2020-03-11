@@ -274,9 +274,7 @@ class Wp_Gallery_Tube_Admin {
 
 
 	}	
-	public function wp_gallery_tube_get_studios(){
-
-	}
+	
 
 	private function loopInsertData($converted_data){
 		foreach ($converted_data as $key => $datas_import) {
@@ -376,6 +374,24 @@ class Wp_Gallery_Tube_Admin {
 
 		
 
+	}
+
+
+	public function wp_gallery_tube_get_tubes(){
+		echo json_encode($this->dataImporter->gallery_tube_get($_POST, "tubes"));
+		die();
+	}
+	public function wp_gallery_tube_get_studios(){
+		echo json_encode($this->dataImporter->gallery_tube_get($_POST, "studios"));
+		die();
+	}
+	public function wp_gallery_tube_get_pornstars(){
+		echo json_encode($this->dataImporter->gallery_tube_get($_POST, "pornstars"));
+		die();
+	}
+	public function wp_gallery_tube_get_tags(){
+		echo json_encode($this->dataImporter->gallery_tube_get($_POST, "tags"));
+		die();
 	}
 
 

@@ -68,7 +68,7 @@ wp_head();
         <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
-        <a class="navbar-brand mr-1" href="#"><img class="img-fluid" alt=""
+        <a class="navbar-brand mr-1" href="<?=home_url('gallery')?>"><img class="img-fluid" alt=""
                 src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('gallery')?>">
@@ -123,8 +123,11 @@ wp_head();
                                     
                                 </div>
                                 <div class="single-video-title box mb-3" style="margin-top:30px;">
-                                    <h2><a href="<?= home_url('studios/'.$tube->studio_name) ?>"><?=esc_html($tube->title)?></a></h2>
-                                    
+                                    <h2>
+                                        <a href="<?= home_url('studios/'.$tube->studio_name) ?>"><?=esc_html($tube->title)?></a>
+                                    <a href="https://<?=$tube->video_url?><?=get_option('affiliate_code')?("?af_code=".get_option('affiliate_code')):""  ?>" class="float-right badge badge-info">Video Scene in Original Site</a>
+                                </h2>
+                                  
                                 </div>
                                 <div class="single-video-author box mb-3">
                                     <div class="float-right">

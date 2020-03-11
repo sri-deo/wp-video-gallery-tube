@@ -4,6 +4,10 @@
 * author: lampvu
 * email: yourmindhasgone@gmail.com
 */
+
+$plugin_name  = 'wp-gallery-tube';
+
+/** functions */
 function hoursandmins($time, $format = '%02d:%02d'){
     if ($time < 1) {
         return;
@@ -12,20 +16,6 @@ function hoursandmins($time, $format = '%02d:%02d'){
     $minutes = ($time % 60);
     return sprintf($format, $hours, $minutes);
 }
-$data = file_get_contents(plugin_dir_url( __FILE__ ).'/data.json');
-$data = json_decode($data);
-$max_page = (count($data)/12 )+1;
-$page=1;
-if (isset($_GET) && isset($_GET['page_n'])) {
-    $page = intval($_GET['page_n']);
-    if ($page >$max_page) {
-        $page = $max_page;
-    }
-    if (!$page) {
-        $page =1;
-    }
-}
-
 function getStudios(){
     global $wpdb;
     return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_studios ;");
@@ -56,35 +46,63 @@ function getSceneHome(){
     return $res;
 }
 
-function searchScene($searchString){
+function searchSceneTags($searchString){
+    global $wpdb;
     $searchString = "%".$wpdb->esc_like(strtoupper ($searchString))."%";
-    $tag_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."gallery_tube_tags WHERE UPPER(name) LIKE %s ", array($searchString) ) );
-    $pornstar_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."gallery_tube_pornstars WHERE UPPER(name) LIKE %s  OR UPPER(aliasses) LIKE %s ;", array($searchString, $searchString)  ));
-
-    $tube_results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM ".$wpdb->prefix."gallery_tube WHERE UPPER(title) LIKE %s OR UPPER(description) LIKE %s OR UPPER(releaseDate) LIKE %s" , array($searchString, $searchString, $searchString) ) );
+    return $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."gallery_tube_tags WHERE (name) LIKE %s LIMIT 12;", array($searchString) ) );    
+}
+function searchScenePornstar($searchString){
+    global $wpdb;
+    $searchString = "%".$wpdb->esc_like(strtoupper ($searchString))."%";
+    return  $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."gallery_tube_pornstars WHERE (name) LIKE %s  OR (aliases) LIKE %s LIMIT 12;", array($searchString, $searchString)  ));       
+}
+function searchScene($searchString){
+    global $wpdb;
+    $searchString = "%".$wpdb->esc_like(strtoupper ($searchString))."%";
+    $searchStringStudio = $wpdb->esc_like(strtoupper ($searchString))."%";
+    return  $wpdb->get_results( $wpdb->prepare( "SELECT A.id, A.title, A.video_length, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
+                                                FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
+                                                WHERE (A.title) LIKE %s OR (A.description) LIKE %s OR (A.releaseDate) LIKE %s OR (B.studio_name) LIKE %s     LIMIT 12; " ,
+                                                array($searchString, $searchString, $searchString, $searchStringStudio) 
+                                            ) );   
 }
 
-
-$studios = getStudios();
-
-$pornstars = getPornstars();
-
-
-
-$total_scenes = getTotalScenes();
-$sceneHome = getSceneHome();
-
-
-print_r($_GET['q']);
-
+$sceneHome_results = null;
+$searchString="";
 if (isset($_GET['q']) && $_GET['q']) {
     $searchString = trim($_GET['q']);
+    if ($searchString) {
+    
+        $searchedTags = searchSceneTags($searchString);
+        $searchedPornstar = searchScenePornstar($searchString);
+        $searchedScene = searchScene($searchString);
+
+    }
 
 }
 
 wp_head();
 
+if ($searchString) {
+    
+    include  $plugin_name . '-search-result-page-template.php';
+}
+else {
+
+
+$studios = getStudios();
+$pornstars = getPornstars();
+$total_scenes = getTotalScenes();
+
+if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results' ) ) ) {
+    // It wasn't there, so regenerate the data and save the transient
+     $sceneHome_results = getSceneHome();
+     set_transient( 'sceneHome_results', $sceneHome_results, WEEK_IN_SECONDS );
+}
+
 ?>
+
+
 
 <article id="page-top" class="gallery-tube-bs">
     <nav class="navbar navbar-expand navbar-light bg-white static-top osahan-nav sticky-top">
@@ -92,12 +110,12 @@ wp_head();
         <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
-        <a class="navbar-brand mr-1" href="#"><img class="img-fluid" alt=""
+        <a class="navbar-brand mr-1" href="<?=home_url('gallery')?>"><img class="img-fluid" alt=""
                 src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="">
             <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
+                <input type="text" name="q" class="form-control" value="" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
                     <button class="btn btn-light" type="submit">
                         <i class="fas fa-search"></i>
@@ -223,8 +241,8 @@ wp_head();
                             </div>
                         </div>
 
-                        <?php if ($sceneHome && count($sceneHome)) { 
-                       foreach ($sceneHome as $key => $scene) {
+                        <?php if ($sceneHome_results && count($sceneHome_results)) { 
+                       foreach ($sceneHome_results as $key => $scene) {
                         
 
                      ?>
@@ -364,6 +382,9 @@ wp_head();
     </a>
     
 </article>
+
+<?php } ?>
+
 <?php
 
 wp_footer();

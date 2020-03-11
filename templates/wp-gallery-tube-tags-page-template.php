@@ -17,7 +17,7 @@ function hoursandmins($time, $format = '%02d:%02d'){
     $minutes = ($time % 60);
     return sprintf($format, $hours, $minutes);
 }
-function getTags(){
+function getTags($page=null, $sort=null){
     global $wpdb;
     return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_tags ;");
 }
@@ -52,8 +52,10 @@ function getTag($tag) {
     else return 0;
 
 }
+$page=0;
+$sort=0;
 
-$tags = getTags();
+$tags = getTags($page, $sort);
 
 $tag=null;
 if ($tag_name){
@@ -87,7 +89,7 @@ if ($tag) {
         <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
-        <a class="navbar-brand mr-1" href="#"><img class="img-fluid" alt=""
+        <a class="navbar-brand mr-1" href="<?=home_url('gallery')?>"><img class="img-fluid" alt=""
                 src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('gallery')?>">
@@ -117,13 +119,13 @@ if ($tag) {
                     <span>Studios</span>
                 </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item ">
                 <a class="nav-link" href="<?=home_url('pornstars')?>">
                     <i class="fas fa-fw fa-user-alt"></i>
                     <span>Porn Stars</span>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="<?=home_url('tags')?>">
                     <i class="fas fa-fw fa-list-alt"></i>
                     <span>Categories</span>
