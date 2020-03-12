@@ -81,7 +81,7 @@ if (isset($_GET['q']) && $_GET['q']) {
     }
 
 }
-$page_num=0;
+$page_num=1;
 if (isset($_GET['page_n']) && intval($_GET['page_n'])) {
     $page_num = intval($_GET['page_n']);
     
@@ -109,6 +109,11 @@ if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results'.$page_n
      set_transient( 'sceneHome_results'.$page_num, $sceneHome_results, WEEK_IN_SECONDS );
 }
 
+$custom_logo_id = get_theme_mod( 'custom_logo' );
+$site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+
+
+
 ?>
 
 
@@ -119,8 +124,9 @@ if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results'.$page_n
         <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
-        <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
-                src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
+        <a class="navbar-brand mr-1" href="/">
+            <img class="img-fluid" alt="" src="<?=$site_logo[0]? $site_logo[0]: (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>">
+            </a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="">
             <div class="input-group">

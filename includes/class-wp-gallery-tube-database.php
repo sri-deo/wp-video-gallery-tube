@@ -112,33 +112,24 @@ class Wp_Gallery_Tube_Database {
             `date_created`    timestamp NOT NULL ,
             `studio`          int NOT NULL ,
 
-            PRIMARY KEY (`id`),            
+            PRIMARY KEY (`id`) 
             
-            KEY `fk_studio` (`studio`),
-            CONSTRAINT `FK_studio` FOREIGN KEY `fk_studio` (`studio`) REFERENCES `wp_gallery_tube_studios` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-
             ) $charset_collate;  ";        
 
         $tube_tag_sql = "CREATE TABLE IF NOT EXISTS $this->scene_tag_table (
-            `tube_id` int NOT NULL ,
+            `tube_id` int NOT NULL  ,
             `tag_id`  int NOT NULL ,
 
-            PRIMARY KEY (`tube_id`, `tag_id`),
-            KEY `fkIdx_218` (`tube_id`),
-            CONSTRAINT `FK_tube_tag` FOREIGN KEY `fkIdx_218` (`tube_id`) REFERENCES `wp_gallery_tube` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-            KEY `fkIdx_235` (`tag_id`),
-            CONSTRAINT `FK_tag` FOREIGN KEY `fkIdx_235` (`tag_id`) REFERENCES `wp_gallery_tube_tags` (`id`)
+            INDEX (`tube_id`, `tag_id`)
+           
         ) $charset_collate; ";
 
         $tube_star_sql = "CREATE TABLE IF NOT EXISTS $this->scene_star_table (
-            `tube_id`     int NOT NULL ,
+            `tube_id`     int NOT NULL    ,
             `pornstar_id` int NOT NULL ,
 
-            PRIMARY KEY (`tube_id`, `pornstar_id`),
-            KEY `fkIdx_242` (`pornstar_id`),
-            CONSTRAINT `FK_star` FOREIGN KEY `fkIdx_242` (`pornstar_id`) REFERENCES `wp_gallery_tube_pornstars` (`id`),
-            KEY `fkIdx_247` (`tube_id`),
-            CONSTRAINT `FK_tube_star` FOREIGN KEY `fkIdx_247` (`tube_id`) REFERENCES `wp_gallery_tube` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+            INDEX (`tube_id`, `pornstar_id`)
+            
         ) $charset_collate; ";
 
 
@@ -163,6 +154,7 @@ class Wp_Gallery_Tube_Database {
 		
         global $wpdb;      
 
+        
         $sql_tube = "DROP TABLE IF EXISTS ".$this->tubes_table ." ; " ;
 
         $sql_studio = "DROP TABLE IF EXISTS ".$this->studios_table ." ; " ; 
@@ -180,7 +172,7 @@ class Wp_Gallery_Tube_Database {
         $wpdb->query( $sql_pornstars_table ); 
         $wpdb->query( $sql_scene_tag_table ); 
         $wpdb->query( $sql_scene_star_table ); 
-
+      
         delete_option('wp_gallery_tube_db_version');
     }
 

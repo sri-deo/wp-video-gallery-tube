@@ -66,6 +66,10 @@ function wp_gallery_tube_dynamic_title() {
 }
 add_action( 'pre_get_document_title', 'wp_gallery_tube_dynamic_title');
 
+
+$custom_logo_id = get_theme_mod( 'custom_logo' );
+$site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+
 wp_head();
 
 
@@ -78,7 +82,7 @@ wp_head();
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
         <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
-                src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
+                src="<?=$site_logo[0]? $site_logo[0]: (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('gallery')?>">
             <div class="input-group">

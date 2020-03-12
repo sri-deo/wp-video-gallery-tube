@@ -69,7 +69,7 @@ if (isset($_POST['update_pornstar']) && isset($_POST['pornstar_id'])) {
 <!--  CSS for Demo Purpose, don't include it in your project     -->
 <link href="<?=plugin_dir_url( dirname( __FILE__ ) )?>/css/demo.css" rel="stylesheet" />
 <!--     Fonts and icons     -->
-<link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"
     href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

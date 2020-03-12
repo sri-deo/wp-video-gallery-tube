@@ -65,6 +65,8 @@ if ($pornstar !==null){
 }
 
 
+$custom_logo_id = get_theme_mod( 'custom_logo' );
+$site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
 
 wp_head();
 
@@ -86,7 +88,7 @@ if ($pornstar) {
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
         <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
-                src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
+                src="<?=$site_logo[0]? $site_logo[0]: (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('gallery')?>">
             <div class="input-group">
@@ -209,18 +211,13 @@ if ($pornstar) {
                 <div class="container">
                     <div class="row no-gutters">
                         <div class="col-lg-6 col-sm-6">
-                            <p class="mt-1 mb-0"><strong class="text-dark">Vidoe</strong>.
-                                <small class="mt-0 mb-0"><a class="text-primary" target="_blank"
-                                        href="https://templatespoint.net/">TemplatesPoint</a>
-                                </small>
+                            <p class="mt-1 mb-0"><strong class="text-dark"></strong>.
+                               
                             </p>
                         </div>
                         <div class="col-lg-6 col-sm-6 text-right">
                             <div class="app">
-                                <a href="#"><img alt=""
-                                        src="<?=plugins_url('wp-gallery-tube')?>/public/img/google.png"></a>
-                                <a href="#"><img alt=""
-                                        src="<?=plugins_url('wp-gallery-tube')?>/public/img/apple.png"></a>
+                                
                             </div>
                         </div>
                     </div>

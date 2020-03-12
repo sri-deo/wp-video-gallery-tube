@@ -90,7 +90,7 @@ class Wp_Gallery_Tube_Admin {
 		$this->dataImporter = new Wp_Gallery_Tube_Database();
 
 
-		$this->get_list_studios();
+		//$this->get_list_studios();
 	}
 
 	/**
@@ -206,7 +206,11 @@ class Wp_Gallery_Tube_Admin {
 
 		if (isset($_POST['sub'])) {
 			$start = microtime(TRUE);
+
 			file_put_contents(plugin_dir_path( dirname( __FILE__ ) ).'log.log',date("Y-m-d H:m:s").' start :'.time().'-'.'');
+
+			$this->get_list_studios();
+			ini_set('max_execution_time', '300');
 			$this->wp_gallery_tube_start_insert_data();
 			$end = microtime(TRUE);
 			update_option("first_insert", 1);
