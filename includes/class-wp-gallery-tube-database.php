@@ -55,6 +55,7 @@ class Wp_Gallery_Tube_Database {
         $charset_collate = $wpdb->get_charset_collate();
 
         $studio_sql = "CREATE TABLE IF NOT EXISTS $this->studios_table (
+            
             `id`          int NOT NULL AUTO_INCREMENT ,
             `studio_nicename` varchar(500)  NULL ,
             `studio_name` varchar(500) NOT NULL ,
@@ -73,8 +74,7 @@ class Wp_Gallery_Tube_Database {
             `name`        text NOT NULL ,
             `description` text NULL ,
 
-            PRIMARY KEY (`id`)
-            
+            PRIMARY KEY (`id`)            
 
         ) $charset_collate;";
 

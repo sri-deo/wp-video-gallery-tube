@@ -14,8 +14,8 @@
  *
  * @wordpress-plugin
  * Plugin Name:       WP Video Gallery Tube
- * Plugin URI:        https://wordpress.org
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Plugin URI:        https://www.freelancer.com/u/nddungha
+ * Description:       This plugin create Gallery, Studios, Pornstars, Tags Page for Adult Tube Scenes And imports from serveral Data Sources
  * Version:           1.0.0
  * Author:            yourmindhasgone
  * Author URI:        https://github.com/9kmmr
