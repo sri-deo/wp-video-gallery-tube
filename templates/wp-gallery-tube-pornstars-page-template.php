@@ -75,7 +75,7 @@ wp_head();
 <?php 
 
 
-if ($star) {
+if ($pornstar) {
     include  $plugin_name . '-single-pornstar-page-template.php';
 } else { ?>
 
@@ -85,7 +85,7 @@ if ($star) {
         <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
-        <a class="navbar-brand mr-1" href="<?=home_url('gallery')?>"><img class="img-fluid" alt=""
+        <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
                 src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('gallery')?>">
@@ -146,9 +146,7 @@ if ($star) {
                                             Rated</a>
                                         <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
                                             Viewed</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
-                                            &nbsp;
-                                            Close</a>
+                                       
                                     </div>
                                 </div>
                                 <h6>Pornstars</h6>

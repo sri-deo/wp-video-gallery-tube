@@ -333,7 +333,7 @@ class Wp_Gallery_Tube_Database {
 				$aColumns = array('id', 'src_image', 'scene_identity',  'releaseDate',  'video_length', 'date_created');
 				break;
 			case 'pornstars':
-				$aColumns = array('id','photo', 'name',   'date_created' ,'slug');
+				$aColumns = array('id','photo', 'name', 'bio','country','birth','height','weight','aliases', 'date_created' ,'slug');
 				break;
 			case 'studios':
 				$aColumns = array('id', 'logo', 'studio_name',    'date_created', 'url');

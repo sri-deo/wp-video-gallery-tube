@@ -7,6 +7,13 @@ function deletePornstar($id) {
     }
 }
 
+function updatePornstar($id, $data) {
+    global $wpdb;
+    if ( $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."gallery_tube_pornstars  where id= ".$id." ;")) {        
+        return $wpdb->update($wpdb->prefix."gallery_tube_pornstars", $data , array("id" => $id) );
+    } else return false;
+}
+
 $success="";
 $error="";
 
@@ -19,6 +26,39 @@ if (isset($_POST['delete_pornstar']) && isset($_POST['pornstar_id'])) {
     }
 }
 
+
+if (isset($_POST['update_pornstar']) && isset($_POST['pornstar_id'])) {
+    $pornstar_id =   intval($_POST['pornstar_id']);
+    
+    $pornstar_name = trim($_POST['pornstar_name']);
+    $pornstar_bio = trim($_POST['pornstar_bio']);
+    $pornstar_country = trim($_POST['pornstar_country']);
+    $pornstar_height = trim($_POST['pornstar_height']);
+    $pornstar_weight = trim($_POST['pornstar_weight']);
+    $pornstar_aliases = trim($_POST['pornstar_aliases']);
+
+    $pornstar_logo = trim($_POST['pornstar_logo']);
+
+    if ($pornstar_id && $pornstar_name) {
+        $res = updatePornstar($pornstar_id, array( 'name' => $pornstar_name, 
+                                                'photo' => $pornstar_logo , 
+                                                'country' => $pornstar_country, 
+                                                'bio' => $pornstar_bio, 
+                                                'height' => $pornstar_height,
+                                                'weight' => $pornstar_weight,
+                                                'aliases' => $pornstar_aliases
+
+                                 ) );
+        if ($res) {
+            $success="Updated Pornstar Successfully !";
+        } else {
+            $error = "Failed to Update Pornstar";
+        }
+    } else {
+        $error = "You must specific the Pornstar Name";
+    }
+
+}
 ?>
 
 
@@ -34,6 +74,67 @@ if (isset($_POST['delete_pornstar']) && isset($_POST['pornstar_id'])) {
     href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+
+<!-- Classic Modal -->
+<div class="modal fade" id="pornStarDetail" tabindex="-1" role="dialog" aria-labelledby="pornStarDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action=""  id="pornstar-form" onsubmit="return confirm('Update Pornstar?');">
+
+                <input type="hidden" name="pornstar_id" id="pornstar_id" class="form-control" value="">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Pornstar</h4>
+                    
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Pornstar Name: </label>
+                        <input type="text" name="pornstar_name" id="pornstar_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Bio: </label>
+                        <input type="text" name="pornstar_bio" id="pornstar_bio" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Birth: </label>
+                        <input type="text" name="pornstar_birth" id="pornstar_birth" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Height: </label>
+                        <input type="text" name="pornstar_height" id="pornstar_height" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Weight: </label>
+                        <input type="text" name="pornstar_weight" id="pornstar_weight" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Country: </label>
+                        <input type="text" name="pornstar_country" id="pornstar_country" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Aliases: </label>
+                        <input type="text" name="pornstar_aliases" id="pornstar_aliases" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Photo: </label>
+                        <img src="" alt="Preview Image" style="height:80px;width:auto;" id="preview-image-upload">
+                        <p>
+                        <input id="pornstar_photo" type="hidden" name="pornstar_photo" value=""  />
+                        <input id="wp_gallery_upload_image_btn" type="button" class="button-primary" value="Insert Image" />
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Update Pornstar" name="update_pornstar" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="container-fluid row">
     <div class="col-md-12">
@@ -52,6 +153,12 @@ if (isset($_POST['delete_pornstar']) && isset($_POST['pornstar_id'])) {
                                 <th>ID</th>
                                 <th class="disabled-sorting">Photo</th>
                                 <th>Name</th>
+                                <th>Bio</th>
+                                <th>Country</th>
+                                <th>Birth</th>
+                                <th>Height</th>
+                                <th>Weight</th>
+                                <th>Aliases</th>
                                 <th>Date Created</th>
                                 <th class="disabled-sorting text-left">Actions</th>
                             </tr>
@@ -61,6 +168,12 @@ if (isset($_POST['delete_pornstar']) && isset($_POST['pornstar_id'])) {
                                 <th>ID</th>
                                 <th class="disabled-sorting">Photo</th>
                                 <th>Name</th>
+                                <th>Bio</th>
+                                <th>Country</th>
+                                <th>Birth</th>
+                                <th>Height</th>
+                                <th>Weight</th>
+                                <th>Aliases</th>
                                 <th>Date Created</th>
                                 <th class="disabled-sorting text-left">Actions</th>
                             </tr>
@@ -105,12 +218,45 @@ if (isset($_POST['delete_pornstar']) && isset($_POST['pornstar_id'])) {
 <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
 <script src="<?=plugin_dir_url( dirname( __FILE__ ) )?>/js/jasny-bootstrap.min.js"></script>
 
+<script>
+    <?php if ($error) { ?>
+
+        $.notify({
+            icon: "error",
+            message: "<?= $error ?>"
+
+        }, {
+            type: "danger",
+            timer: 10000,
+            placement: {
+                from: "top",
+                align: "center"
+            }
+        });
+
+    <?php } ?>
+    <?php if ($success) { ?>
+        $.notify({
+            icon: "check_circle",
+            message: "<?= $success ?>"
+
+        }, {
+            type: "success",
+            timer:5000,
+            placement: {
+                from: "top",
+                align: "center"
+            }
+        });
+    <?php } ?>
+</script>
 
 
 <script type="text/javascript">
+    var ktable;
     $(document).ready(function () {
         buttons = '';
-        $('#datatables').DataTable({
+        ktable = $('#datatables').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": {
@@ -147,9 +293,33 @@ if (isset($_POST['delete_pornstar']) && isset($_POST['pornstar_id'])) {
                 "targets": [3],
                 "searchable": true,
 
+            },{
+                "targets": [4],
+                "searchable": true,
+
+            },{
+                "targets": [5],
+                "searchable": true,
+
+            },{
+                "targets": [6],
+                "searchable": true,
+
+            },{
+                "targets": [7],
+                "searchable": true,
+
             }, {
+                "targets": [8],
+                "searchable": true,
+
+            },{
+                "targets": [9],
+                "searchable": true,
+
+            },{
                 "targets": -1,
-                "data": [5]
+                "data": [11]
             }],
             "pagingType": "full_numbers",
             "lengthMenu": [
@@ -185,6 +355,31 @@ if (isset($_POST['delete_pornstar']) && isset($_POST['pornstar_id'])) {
             swal({
                 title: 'error!',
                 text: 'Failed to delete Pornstar ',
+                type: 'error',
+                confirmButtonClass: "btn btn-success btn-fill",
+                buttonsStyling: false
+            })
+        }
+    })
+
+    $(document).on('click', '.view', function(){
+        let pornstar_id = $(this).data('id')
+        if (pornstar_id) {
+            $('#pornstar_id').val(pornstar_id);             
+            
+            pornstar_name = (ktable.row($(this).closest('tr')).data()[2]) ;
+            pornstar_photo = (ktable.row($(this).closest('tr')).data()[1]) ;
+            
+            $('#preview-image-upload').attr("src",$.parseHTML(pornstar_photo)[0].src)
+            $('#pornstar_photo').val($.parseHTML(pornstar_photo)[0].src)
+            $('#pornstar_name').val(pornstar_name);            
+
+            $('#pornStarDetail').modal();
+
+        } else {
+            swal({
+                title: 'error!',
+                text: 'Failed to update Pornstar ',
                 type: 'error',
                 confirmButtonClass: "btn btn-success btn-fill",
                 buttonsStyling: false

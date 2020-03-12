@@ -79,6 +79,9 @@
     border: 1px solid #aaa;
     border-radius: 0px;    
  }
+ .gallery-tube-bs .tags span a {
+     margin-bottom: 5px;
+ }
 
  
    

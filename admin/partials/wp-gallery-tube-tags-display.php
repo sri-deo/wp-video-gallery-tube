@@ -3,9 +3,16 @@
 
 function deleteTag($id) {
     global $wpdb;
-    if ($wpdb->get_row("SELECT * FROM ".$wpdb->prefix."gallery_tags  where id= ".$id." ;")) {
-        return $wpdb->query("DELETE FROM ".$wpdb->prefix."gallery_tags WHERE id=".$id." ;");
-    }
+    if ($wpdb->get_row("SELECT * FROM ".$wpdb->prefix."gallery_tube_tags  where id= ".$id." ;")) {
+        return $wpdb->delete($wpdb->prefix."gallery_tube_tags", array("id" => $id));
+    } else return false;
+}
+function updateTag($id, $data) {
+    global $wpdb;
+    if ( $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."gallery_tube_tags  where id= ".$id." ;")) {
+        
+        return $wpdb->update($wpdb->prefix."gallery_tube_tags", $data , array("id" => $id) );
+    } else return false;
 }
 
 $success="";
@@ -18,6 +25,25 @@ if (isset($_POST['delete_tag']) && isset($_POST['tag_id'])) {
     } else {
         $error = "Failed to delete Tag";
     }
+}
+
+
+if (isset($_POST['update_tag']) && isset($_POST['tag_id'])) {
+    $tag_id =   intval($_POST['tag_id']);
+    $tag_name = trim($_POST['tag_name']);
+    
+
+    if ($tag_id && $tag_name) {
+        $res = updateTag($tag_id, array('name' => $tag_name) );
+        if ($res) {
+            $success="Updated Tag Successfully !";
+        } else {
+            $error = "Failed to Update Tag";
+        }
+    } else {
+        $error = "You must specific the tag name";
+    }
+
 }
 
 ?>
@@ -35,7 +61,35 @@ if (isset($_POST['delete_tag']) && isset($_POST['tag_id'])) {
     href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+<!-- Classic Modal -->
+<div class="modal fade" id="tagDetail" tabindex="-1" role="dialog" aria-labelledby="tagDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action=""  id="tag-form" onsubmit="return confirm('Update Tag?');">
 
+                <input type="hidden" name="tag_id" id="tag_id" class="form-control" value="">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Tag</h4>
+                    
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Tag Name: </label>
+                        <input type="text" name="tag_name" id="tag_name" class="form-control" required>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Update Tag" name="update_tag" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="container-fluid row">
     <div class="col-md-12">
         <div class="card" style="max-width: 100%;">
@@ -102,12 +156,44 @@ if (isset($_POST['delete_tag']) && isset($_POST['tag_id'])) {
 <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
 <script src="<?=plugin_dir_url( dirname( __FILE__ ) )?>/js/jasny-bootstrap.min.js"></script>
 
+<script>
+    <?php if ($error) { ?>
 
+        $.notify({
+            icon: "error",
+            message: "<?= $error ?>"
+
+        }, {
+            type: "danger",
+            timer: 10000,
+            placement: {
+                from: "top",
+                align: "center"
+            }
+        });
+
+    <?php } ?>
+    <?php if ($success) { ?>
+        $.notify({
+            icon: "check_circle",
+            message: "<?= $success ?>"
+
+        }, {
+            type: "success",
+            timer:5000,
+            placement: {
+                from: "top",
+                align: "center"
+            }
+        });
+    <?php } ?>
+</script>
 
 <script type="text/javascript">
+    var ktable;
     $(document).ready(function () {
         buttons = '';
-        $('#datatables').DataTable({
+        ktable = $('#datatables').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": {
@@ -161,6 +247,29 @@ if (isset($_POST['delete_tag']) && isset($_POST['tag_id'])) {
             swal({
                 title: 'error!',
                 text: 'Failed to delete Tag ',
+                type: 'error',
+                confirmButtonClass: "btn btn-success btn-fill",
+                buttonsStyling: false
+            })
+        }
+    })
+
+
+    $(document).on('click', '.view', function(){
+        let tag_id = $(this).data('id')
+        if (tag_id) {
+            $('#tag_id').val(tag_id);
+             
+            tag_name = (ktable.row($(this).closest('tr')).data()[1]) ;
+            
+            $('#tag_name').val(tag_name);            
+
+            $('#tagDetail').modal();
+
+        } else {
+            swal({
+                title: 'error!',
+                text: 'Failed to update Tag ',
                 type: 'error',
                 confirmButtonClass: "btn btn-success btn-fill",
                 buttonsStyling: false

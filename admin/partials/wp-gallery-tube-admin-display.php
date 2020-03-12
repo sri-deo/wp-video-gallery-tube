@@ -66,8 +66,9 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
         <div class="col-md-12">
             <div class="card" style="max-width:100%;">
                 <form action="" method="post">
-
-                    <input type="submit" value="Start Raw Insert" name="sub">
+                    <?php  if (!get_option("first_insert")) {  ?>
+                    <input type="submit" value="Start First Raw Insert" name="sub" class="btn btn-warning">
+                    <?php } ?>
                 </form>
                 <div></div>
                 <form action="">
@@ -81,6 +82,17 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
                         <input type="submit" value="Save" class="btn btn-success" name="save_affiliate">
                     </div>
 
+                </form>
+                <form action="" method="post">
+                    <input type="submit" value="Update JSON Data " name="update_json" class="btn btn-primary" >
+                </form>
+
+                <form action="" method="post">
+                    <div class="form-group">
+                      <label for="">Csv File Data Import</label>
+                      <input type="file" name="csv_file_import" id="csv_file_import" class="form-control" placeholder="Csv File" aria-describedby="csv_help">
+                      
+                    </div>
                 </form>
             </div>
         </div>

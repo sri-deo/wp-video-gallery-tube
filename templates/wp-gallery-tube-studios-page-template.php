@@ -55,8 +55,17 @@ if ($studio_name) {
     $studio = getStudio($studio_name);
     if (!$studio){
         wp_redirect(home_url("studios"));
+    } else {
+        function wp_gallery_tube_dynamic_titlestudio() {
+            global $studio;
+            return "Studio: ".$studio->studio_name." - ".get_bloginfo('name'); // add dynamic content to this title (if needed)
+        }
+        add_action( 'pre_get_document_title', 'wp_gallery_tube_dynamic_titlestudio');
     }
 }
+
+
+
 
 wp_head();
 ?>
@@ -76,7 +85,7 @@ if ($studio_name) {
         <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
-        <a class="navbar-brand mr-1" href="<?=home_url('gallery')?>"><img class="img-fluid" alt=""
+        <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
                 src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('gallery')?>">
@@ -137,9 +146,7 @@ if ($studio_name) {
                                             Rated</a>
                                         <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
                                             Viewed</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
-                                            &nbsp;
-                                            Close</a>
+                                        
                                     </div>
                                 </div>
                                 <h6>Channels</h6>
@@ -175,19 +182,7 @@ if ($studio_name) {
                         <?php }} ?>
                         
                     </div>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center pagination-sm mb-4">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
+                    
                 </div>
                 <hr>
                 

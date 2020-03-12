@@ -134,7 +134,8 @@ class Wp_Gallery_Tube_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
+		wp_enqueue_media();
+    			
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-gallery-tube-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
@@ -208,6 +209,7 @@ class Wp_Gallery_Tube_Admin {
 			file_put_contents(plugin_dir_path( dirname( __FILE__ ) ).'log.log',date("Y-m-d H:m:s").' start :'.time().'-'.'');
 			$this->wp_gallery_tube_start_insert_data();
 			$end = microtime(TRUE);
+			update_option("first_insert", 1);
 			file_put_contents(plugin_dir_path( dirname( __FILE__ ) ).'log.log','end: '.time(). '|total time :' . ($end - $start) . " seconds to complete.", FILE_APPEND);
 		}
 

@@ -28,11 +28,12 @@ function getTotalScenes(){
     global $wpdb;
     return $wpdb->get_var("SELECT COUNT(*) FROM ".$wpdb->prefix."gallery_tube ;");
 }
-function getSceneHome(){
+function getSceneHome($page){
+    $page = $page-1;
     global $wpdb;
     $res = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
                                 FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
-                                 ORDER BY A.id ASC LIMIT 12
+                                 ORDER BY A.id ASC LIMIT ".($page*12)." , 12 
                                 " );
     if ($res && count($res)) {
         foreach ($res as $key => $tube) {            
@@ -80,6 +81,12 @@ if (isset($_GET['q']) && $_GET['q']) {
     }
 
 }
+$page_num=0;
+if (isset($_GET['page_n']) && intval($_GET['page_n'])) {
+    $page_num = intval($_GET['page_n']);
+    
+}
+
 
 wp_head();
 
@@ -93,11 +100,13 @@ else {
 $studios = getStudios();
 $pornstars = getPornstars();
 $total_scenes = getTotalScenes();
+$max_page_num = $total_scenes/12 +1;
 
-if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results' ) ) ) {
+if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results'.$page_num ) ) ) {
     // It wasn't there, so regenerate the data and save the transient
-     $sceneHome_results = getSceneHome();
-     set_transient( 'sceneHome_results', $sceneHome_results, WEEK_IN_SECONDS );
+
+     $sceneHome_results = getSceneHome($page_num);
+     set_transient( 'sceneHome_results'.$page_num, $sceneHome_results, WEEK_IN_SECONDS );
 }
 
 ?>
@@ -110,7 +119,7 @@ if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results' ) ) ) {
         <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
-        <a class="navbar-brand mr-1" href="<?=home_url('gallery')?>"><img class="img-fluid" alt=""
+        <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
                 src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="">
@@ -182,12 +191,11 @@ if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results' ) ) ) {
                                         <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
+                                        <a class="dropdown-item" href="<?=home_url('studios')?>"><i class="fas fa-fw fa-star"></i> &nbsp; Top
                                             Rated</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                        <a class="dropdown-item" href="<?=home_url('studios')?>"><i class="fas fa-fw fa-signal"></i> &nbsp;
                                             Viewed</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
-                                            &nbsp; Close</a>
+                                       
                                     </div>
                                 </div>
                                 <h6>Studios</h6>
@@ -258,7 +266,7 @@ if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results' ) ) ) {
                                 <div class="video-card-body">
                                     <div class="video-title">
                                         <a href="<?=home_url('scene/'.$scene->scene_identity)?>"
-                                            class="ellipsis"><?=(strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title )?></a>
+                                            class="ellipsis"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , (strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title  ) ) ?></a>
                                     </div>
                                     <div class="video-page text-success">
                                         <a href="#" style="    color: #4eda92;">
@@ -296,17 +304,27 @@ if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results' ) ) ) {
                     </div>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center pagination-sm mb-0">
-                            <!-- <li class="page-item disabled">
-                           <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li> -->
+                            <?php
                             
-                            <li class="page-item active"><a class="page-link"
-                                    href="">1</a></li>
-
+                            
+                            ?>
+                            <li class="page-item <?=($page_num<2)?"disabled":""?>">
+                                <a class="page-link" href="<?=($page_num >=2)? ("?page_n=".($page_num-1 )) :"?page_n=1" ?>" tabindex="-1">Previous</a>
+                            </li>
+                            
+                            <li class="page-item <?=($page_num<2)?"active disabled" :""?>">
+                                <a class="page-link" href="<?=($page_num >=2 )? "?page_n=".($page_num-1)   : home_url('gallery')   ?>"><?=($page_num >=2 )? ($page_num-1):1   ?></a>
+                            </li>
+                            <li class="page-item <?=($page_num>=2)?"active disabled" :""  ?>">
+                                <a class="page-link" href="?page_n=<?=($page_num>2)? ($page_num):2?>"><?=($page_num>2)? ($page_num):2?></a>
+                            </li>
+                            <li class="page-item ">
+                                <a class="page-link" href="?page_n=<?=($page_num>2)?($page_num+1):3  ?>"><?=($page_num>2)?($page_num+1):3  ?></a>
+                            </li>
                            
-                            <!-- <li class="page-item">
-                           <a class="page-link" href="#">Next</a>
-                        </li> -->
+                            <li class="page-item  <?=($page_num>=$max_page_num)?"disabled":""?>">
+                                <a class="page-link" href="<?=("?page_n=".($page_num+1)) ?>">Next</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>

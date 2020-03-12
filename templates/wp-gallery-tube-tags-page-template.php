@@ -65,6 +65,12 @@ if ($tag !==null){
 
     if (!$tag) {
         wp_redirect(home_url('tags'));
+    } else {
+        function wp_gallery_tube_dynamic_titletag() {
+            global $tag;
+            return "Tag: ".$tag->name." - ".get_bloginfo('name');; // add dynamic content to this title (if needed)
+        }
+        add_action( 'pre_get_document_title', 'wp_gallery_tube_dynamic_titletag');
     }
 }
 
@@ -89,7 +95,7 @@ if ($tag) {
         <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
-        <a class="navbar-brand mr-1" href="<?=home_url('gallery')?>"><img class="img-fluid" alt=""
+        <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
                 src="<?=the_custom_logo()? the_custom_logo(): (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('gallery')?>">
@@ -150,9 +156,7 @@ if ($tag) {
                                             Rated</a>
                                         <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
                                             Viewed</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
-                                            &nbsp;
-                                            Close</a>
+                                        
                                     </div>
                                 </div>
                                 <h6>Pornstars</h6>

@@ -7,7 +7,13 @@ function deleteStudio($id) {
         return $wpdb->query("DELETE FROM ".$wpdb->prefix."gallery_studios WHERE id=".$id." ;");
     }
 }
-
+function updateStudio($id, $data) {
+    global $wpdb;
+    if ( $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."gallery_tube_studios  where id= ".$id." ;")) {
+        
+        return $wpdb->update($wpdb->prefix."gallery_tube_studios", $data , array("id" => $id) );
+    } else return false;
+}
 $success="";
 $error="";
 
@@ -18,6 +24,27 @@ if (isset($_POST['delete_studio']) && isset($_POST['studio_id'])) {
     } else {
         $error = "Failed to delete Studio";
     }
+}
+
+
+if (isset($_POST['update_studio']) && isset($_POST['studio_id'])) {
+    $studio_id =   intval($_POST['studio_id']);
+    
+    $studio_nicename = trim($_POST['studio_nicename']);
+
+    $studio_logo = trim($_POST['studio_logo']);
+
+    if ($studio_id && $studio_nicename) {
+        $res = updateStudio($studio_id, array( 'studio_nicename' => $studio_nicename, 'logo' => $studio_logo  ) );
+        if ($res) {
+            $success="Updated Studio Successfully !";
+        } else {
+            $error = "Failed to Update Studio";
+        }
+    } else {
+        $error = "You must specific the Studio name";
+    }
+
 }
 
 ?>
@@ -35,6 +62,44 @@ if (isset($_POST['delete_studio']) && isset($_POST['studio_id'])) {
     href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+
+<!-- Classic Modal -->
+<div class="modal fade" id="studioDetail" tabindex="-1" role="dialog" aria-labelledby="studioDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action=""  id="studio-form" onsubmit="return confirm('Update Studio?');">
+
+                <input type="hidden" name="studio_id" id="studio_id" class="form-control" value="">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Studio</h4>
+                    
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Studio Nice Name: </label>
+                        <input type="text" name="studio_nicename" id="studio_nicename" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="">Studio Logo: </label>
+                        <img src="" alt="Preview Image" style="height:80px;width:auto;" id="preview-image-upload">
+                        <p>
+                        <input id="studio_logo" type="hidden" name="studio_logo" value=""  />
+                        <input id="wp_gallery_upload_image_btn" type="button" class="button-primary" value="Insert Image" />
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Update studio" name="update_studio" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="container-fluid row">
     <div class="col-md-12">
@@ -109,12 +174,44 @@ if (isset($_POST['delete_studio']) && isset($_POST['studio_id'])) {
 <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
 <script src="<?=plugin_dir_url( dirname( __FILE__ ) )?>/js/jasny-bootstrap.min.js"></script>
 
+<script>
+    <?php if ($error) { ?>
 
+        $.notify({
+            icon: "error",
+            message: "<?= $error ?>"
+
+        }, {
+            type: "danger",
+            timer: 10000,
+            placement: {
+                from: "top",
+                align: "center"
+            }
+        });
+
+    <?php } ?>
+    <?php if ($success) { ?>
+        $.notify({
+            icon: "check_circle",
+            message: "<?= $success ?>"
+
+        }, {
+            type: "success",
+            timer:5000,
+            placement: {
+                from: "top",
+                align: "center"
+            }
+        });
+    <?php } ?>
+</script>
 
 <script type="text/javascript">
+    var ktable;
     $(document).ready(function () {
         buttons = '';
-        $('#datatables').DataTable({
+        ktable = $('#datatables').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": {
@@ -189,6 +286,31 @@ if (isset($_POST['delete_studio']) && isset($_POST['studio_id'])) {
             swal({
                 title: 'error!',
                 text: 'Failed to delete Studio ',
+                type: 'error',
+                confirmButtonClass: "btn btn-success btn-fill",
+                buttonsStyling: false
+            })
+        }
+    })
+
+    $(document).on('click', '.view', function(){
+        let studio_id = $(this).data('id')
+        if (studio_id) {
+            $('#studio_id').val(studio_id);             
+            
+            studio_nicename = (ktable.row($(this).closest('tr')).data()[2]) ;
+            studio_logo = (ktable.row($(this).closest('tr')).data()[1]) ;
+            
+            $('#preview-image-upload').attr("src",$.parseHTML(studio_logo)[0].src)
+            $('#studio_logo').val($.parseHTML(studio_logo)[0].src)
+            $('#studio_nicename').val(studio_nicename);            
+
+            $('#studioDetail').modal();
+
+        } else {
+            swal({
+                title: 'error!',
+                text: 'Failed to update Studio ',
                 type: 'error',
                 confirmButtonClass: "btn btn-success btn-fill",
                 buttonsStyling: false
