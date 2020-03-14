@@ -34,8 +34,12 @@ class Wp_Gallery_Tube_Activator {
 		$Wp_Gallery_Tube_Database->gallery_tube_db_install();
 		
 		// flush rewrite rules only one time when active plugin
-		flush_rewrite_rules();
 		update_option('plugin_permalinks_flushed', 0);
+		if (!get_option("is_pages_created")){
+			Wp_Gallery_Tube_Activator::createPages();
+			update_option("is_pages_created", 1);
+		}
+		flush_rewrite_rules();
 	}
 	
 	public function createSetings(){
@@ -63,7 +67,7 @@ class Wp_Gallery_Tube_Activator {
 			'post_title' => 'Gallery Tube Page', //The title of your post.
 			'post_type' =>  'page' //Sometimes you want to post a page.					
 		);
-		$studio_page = array(			
+		$studios_page = array(			
 			'page_template' => 'wp-gallery-tube-studios-page-template.php', //Sets the template for the page.
 			'comment_status' => [ 'closed' ], // 'closed' means no comments.
 			'post_name' => 'studios', // The name (slug) for your post
@@ -71,37 +75,53 @@ class Wp_Gallery_Tube_Activator {
 			'post_title' => 'Gallery Tube Studios Page', //The title of your post.
 			'post_type' =>  'page' //Sometimes you want to post a page.					
 		);
-		$category_page = array(			
-			'page_template' => 'wp-gallery-tube-categories-page-template.php', //Sets the template for the page.
+		$tags_page = array(			
+			'page_template' => 'wp-gallery-tube-tags-page-template.php', //Sets the template for the page.
 			'comment_status' => [ 'closed' ], // 'closed' means no comments.
-			'post_name' => 'cat', // The name (slug) for your post
+			'post_name' => 'tags', // The name (slug) for your post
 			'post_status' => 'publish' , //Set the status of the new post.
-			'post_title' => 'Gallery Tube Categories Page', //The title of your post.
+			'post_title' => 'Gallery Tube tags Page', //The title of your post.
 			'post_type' =>  'page' //Sometimes you want to post a page.					
 		);
-		$single_studio_page = array(			
-			'page_template' => 'wp-gallery-tube-single-studio-page-template.php', //Sets the template for the page.
+		$pornstars_page = array(			
+			'page_template' => 'wp-gallery-tube-pornstars-page-template.php', //Sets the template for the page.
 			'comment_status' => [ 'closed' ], // 'closed' means no comments.
-			'post_name' => 'single_studio', // The name (slug) for your post
+			'post_name' => 'pornstars', // The name (slug) for your post
 			'post_status' => 'publish' , //Set the status of the new post.
-			'post_title' => 'Gallery Tube Single Studio Page', //The title of your post.
+			'post_title' => 'Gallery Tube Pornstars Page', //The title of your post.
 			'post_type' =>  'page' //Sometimes you want to post a page.					
 		);
-		$single_category_page = array(			
-			'page_template' => 'wp-gallery-tube-single-category-page-template.php', //Sets the template for the page.
+		$single_scene_page = array(			
+			'page_template' => 'wp-gallery-tube-single-page-template.php', //Sets the template for the page.
 			'comment_status' => [ 'closed' ], // 'closed' means no comments.
-			'post_name' => 'single_cat', // The name (slug) for your post
+			'post_name' => 'scene', // The name (slug) for your post
 			'post_status' => 'publish' , //Set the status of the new post.
-			'post_title' => 'Gallery Tube Single Category Page', //The title of your post.
+			'post_title' => 'Gallery Tube Single Scene Page', //The title of your post.
 			'post_type' =>  'page' //Sometimes you want to post a page.					
 		);	
 		  
 		// Insert the post into the database
-		wp_insert_post( $gallery_page );	
-		wp_insert_post( $studio_page );	
-		wp_insert_post( $category_page );	
-		wp_insert_post( $single_studio_page );	
-		wp_insert_post( $single_category_page );	
+		$gallery_page = wp_insert_post( $gallery_page );	
+		$studio_page = wp_insert_post( $studios_page );	
+		$tag_page = wp_insert_post( $tags_page );	
+		$pornstar_page = wp_insert_post( $pornstars_page );	
+		$scene_page = wp_insert_post( $single_scene_page );	
+
+		if ($gallery_page) {
+			update_option('wp_gallery_tube_gallery_page', $gallery_page);
+		}
+		if ($studio_page) {
+			update_option('wp_gallery_tube_studio_page', $studio_page);
+		}
+		if ($tag_page) {
+			update_option('wp_gallery_tube_tag_page', $tag_page);
+		}
+		if ($pornstar_page) {
+			update_option('wp_gallery_tube_pornstar_page', $pornstar_page);
+		}
+		if ($scene_page) {
+			update_option('wp_gallery_tube_scene_page', $scene_page);
+		}
 		
 	}
 

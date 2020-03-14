@@ -39,7 +39,22 @@ $Wp_Gallery_Tube_Database->gallery_tube_db_uninstall();
 /** delete options */
 delete_option('first_insert');
 delete_option('plugin_permalinks_flushed');
+delete_option("is_pages_created");
 
 
+delete_option('wp_gallery_tube_gallery_page');
+delete_option('wp_gallery_tube_studio_page');
+delete_option('wp_gallery_tube_tag_page');
+delete_option('wp_gallery_tube_pornstar_page');
+delete_option('wp_gallery_tube_scene_page');
 
+
+wp_delete_post(get_option('wp_gallery_tube_gallery_page'));
+wp_delete_post(get_option('wp_gallery_tube_studio_page'));
+wp_delete_post(get_option('wp_gallery_tube_tag_page'));
+wp_delete_post(get_option('wp_gallery_tube_pornstar_page'));
+wp_delete_post(get_option('wp_gallery_tube_scene_page'));
+
+
+// flush rewrite rules after added 4 custom routes
 flush_rewrite_rules();

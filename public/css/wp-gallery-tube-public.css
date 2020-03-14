@@ -16,6 +16,9 @@
  #page-top nav.navbar.navbar-expand.navbar-light.bg-white.static-top.osahan-nav.sticky-top {
     background: linear-gradient(135deg, #ff516b 0%, #826cfd 100%);
 }
+#page-top .gallery-tube-bs .row {
+    max-width:100%;
+}
  .video-card {
     /* background: #1c1c1c none repeat scroll 0 0; */
     box-shadow: none;

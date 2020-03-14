@@ -102,11 +102,11 @@ $pornstars = getPornstars();
 $total_scenes = getTotalScenes();
 $max_page_num = $total_scenes/12 +1;
 
-if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results'.$page_num ) ) ) {
+if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results_'.$page_num ) ) ) {
     // It wasn't there, so regenerate the data and save the transient
 
      $sceneHome_results = getSceneHome($page_num);
-     set_transient( 'sceneHome_results'.$page_num, $sceneHome_results, WEEK_IN_SECONDS );
+     set_transient( 'sceneHome_results_'.$page_num, $sceneHome_results, WEEK_IN_SECONDS );
 }
 
 $custom_logo_id = get_theme_mod( 'custom_logo' );
@@ -219,7 +219,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                                             <img class="img-fluid"
                                                 src="<?= $studio->logo? $studio->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>" alt="">
                                             <h6><?=$studio->studio_nicename ? $studio->studio_nicename : $studio->studio_name ?> <span title="" data-placement="top" data-toggle="tooltip"
-                                                    data-original-title="Verified"><i
+                                                    data-original-title=""><i
                                                         class="fas fa-check-circle text-success"></i></span></h6>
                                             
                                         </a>
@@ -275,9 +275,9 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                                             class="ellipsis"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , (strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title  ) ) ?></a>
                                     </div>
                                     <div class="video-page text-success">
-                                        <a href="#" style="    color: #4eda92;">
+                                        <a href="<?=home_url('scene/'.$scene->studio_name)?>" style="    color: #4eda92;">
                                             <?=$scene->studio_nicename? $scene->studio_nicename: $scene->studio_name ?> <a title="" data-placement="top" data-toggle="tooltip" href="#"
-                                                data-original-title="Verified"><i
+                                                data-original-title=""><i
                                                     class="fas fa-check-circle text-success"></i></a>
                                         </a>
                                     </div>
@@ -375,7 +375,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                                 </div>
                                 <div class="channels-card-body">
                                     <div class="channels-title">
-                                        <a href="/pornstars/<?=$pornstar->slug?>"><?=$pornstar->name?></a>
+                                        <a href="<?=home_url('/pornstars/'.$pornstar->slug) ?>"><?=$pornstar->name?></a>
                                     </div>
                                     <div class="channels-view">
                                         

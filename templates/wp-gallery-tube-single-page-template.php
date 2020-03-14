@@ -131,15 +131,16 @@ wp_head();
                     <div class="row">
                         <div class="col-md-8">
                             <div class="single-video-left">
+                                <div class="single-video-title box mb-3" style="margin-top:30px;">
+                                    <h2>
+                                        <a href="<?= home_url('studios/'.$tube->studio_name) ?>"><?=esc_html($tube->title)?></a>
+                                    <a  rel="noreferrer nofollow sponsored "  href="https://<?=$tube->video_url?><?=get_option('affiliate_code')?("?af_code=".get_option('affiliate_code')):""  ?>" class="float-right badge badge-info">VIEW UNCENSORED VIDEO</a>
+                                </h2>
                                 <div class="single-video preview-img">
                                     <img src="<?=esc_url($tube->src_image? $tube->src_image : "")    ?>" alt="thumbnail-image" srcset="" height="315">
                                     
                                 </div>
-                                <div class="single-video-title box mb-3" style="margin-top:30px;">
-                                    <h2>
-                                        <a href="<?= home_url('studios/'.$tube->studio_name) ?>"><?=esc_html($tube->title)?></a>
-                                    <a href="https://<?=$tube->video_url?><?=get_option('affiliate_code')?("?af_code=".get_option('affiliate_code')):""  ?>" class="float-right badge badge-info">Video Scene in Original Site</a>
-                                </h2>
+                                
                                   
                                 </div>
                                 <div class="single-video-author box mb-3">

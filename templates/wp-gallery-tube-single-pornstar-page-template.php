@@ -150,12 +150,12 @@
                                     <div class="video-title">
                                         <a href="<?=home_url('scene/'.$scene->scene_identity)?>" class="ellipsis"><?=(strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title )?></a>
                                     </div>
-                                    <div class="video-page text-success">
+                                    <a class="video-page text-success" href="<?=home_url('studios/'.$scene->studio_name)?>">
                                     <?=$scene->studio_nicename ? $scene->studio_nicename : $scene->studio_name ?> 
                                     <a title="" data-placement="top" data-toggle="tooltip" href="#"
                                             data-original-title=""><i
                                                 class="fas fa-check-circle text-success"></i></a>
-                                    </div>
+                                    </a>
                                     <div class="video-view">
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>
                                         <?=$scene->fps? ($scene->fps." FPS"):""?>
