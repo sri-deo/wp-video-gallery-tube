@@ -70,14 +70,14 @@ class Wp_Gallery_Tube_Admin {
 
 		$this->studios_lists = array(
 			'18vr',
+			'bdvr',
 			'babevr',
-			'bcvr',
 			'kinkvr',
 			'vrcx',
-			'rjvr',
 			
 			'vrbanger',
-
+			
+			'rjvr',   		// csv
 			'sexbabesvr',    // csv
 			'stasyqvr',		 // csv
 			'vrconk',		 //csv
@@ -381,6 +381,7 @@ class Wp_Gallery_Tube_Admin {
 		
 
 	}
+	
 
 
 	public function wp_gallery_tube_get_tubes(){
@@ -397,6 +398,12 @@ class Wp_Gallery_Tube_Admin {
 	}
 	public function wp_gallery_tube_get_tags(){
 		echo json_encode($this->dataImporter->gallery_tube_get($_POST, "tags"));
+		die();
+	}
+
+
+	public function get_tube_by_id(){
+		echo json_encode($this->dataImporter->gallery_tube_get_tube_by_id($_POST['id']));
 		die();
 	}
 

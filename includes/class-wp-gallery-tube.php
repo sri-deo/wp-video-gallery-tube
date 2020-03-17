@@ -152,12 +152,15 @@ class Wp_Gallery_Tube {
 		// Add menu item
 		add_action('admin_menu', array( $plugin_admin, 'wp_gallery_tube_add_plugin_admin_menu') );
 
-
-
+		
+		// register ajax actions
 		add_action('wp_ajax_gallery_tube_get_tubes', array(  $plugin_admin, 'wp_gallery_tube_get_tubes'  ));
 		add_action('wp_ajax_gallery_tube_get_studios', array(  $plugin_admin, 'wp_gallery_tube_get_studios'  ));
 		add_action('wp_ajax_gallery_tube_get_pornstars', array(  $plugin_admin, 'wp_gallery_tube_get_pornstars'  ));
 		add_action('wp_ajax_gallery_tube_get_tags', array(  $plugin_admin, 'wp_gallery_tube_get_tags'  ));
+
+		add_action('wp_ajax_gallery_tube_get_tube_by_id', array( $plugin_admin, 'get_tube_by_id' ) );
+
 
 	}
 

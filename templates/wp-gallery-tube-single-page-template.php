@@ -133,8 +133,8 @@ wp_head();
                             <div class="single-video-left">
                                 <div class="single-video-title box mb-3" style="margin-top:30px;">
                                     <h2>
-                                        <a href="<?= home_url('studios/'.$tube->studio_name) ?>"><?=esc_html($tube->title)?></a>
-                                    <a  rel="noreferrer nofollow sponsored "  href="https://<?=$tube->video_url?><?=get_option('affiliate_code')?("?af_code=".get_option('affiliate_code')):""  ?>" class="float-right badge badge-info">VIEW UNCENSORED VIDEO</a>
+                                        <a href="<?= home_url('studios/'.$tube->studio_name) ?>"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , $tube->title ) ?></a>
+                                    <a  rel="noreferrer nofollow sponsored " target="_blank"  href="https://<?=$tube->video_url?><?=get_option('affiliate_code')?("?af_code=".get_option('affiliate_code')):""  ?>" class="float-right badge badge-info">VIEW UNCENSORED VIDEO</a>
                                 </h2>
                                 <div class="single-video preview-img">
                                     <img src="<?=esc_url($tube->src_image? $tube->src_image : "")    ?>" alt="thumbnail-image" srcset="" height="315">

@@ -19,7 +19,11 @@ function hoursandmins($time, $format = '%02d:%02d'){
 }
 function getTags($page=null, $sort=null){
     global $wpdb;
-    return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_tags ;");
+    if ($sort==0) {
+        return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_tags ORDER BY name ASC;");
+    } else if ($sort == 1) {
+        return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_tags ORDER BY name ASC;");
+    }
 }
 
 function getTag($tag) {
@@ -29,7 +33,7 @@ function getTag($tag) {
     if ($tag) {
 
         
-        $tag->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
+        $tag->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.video_url, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
                                         FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id
                                         JOIN ".$wpdb->prefix."gallery_tube_scene_tag C ON C.tube_id = A.id
                                         

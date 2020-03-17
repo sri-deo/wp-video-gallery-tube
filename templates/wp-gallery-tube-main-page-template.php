@@ -31,7 +31,7 @@ function getTotalScenes(){
 function getSceneHome($page){
     $page = $page-1;
     global $wpdb;
-    $res = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
+    $res = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.video_url, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
                                 FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
                                  ORDER BY A.id ASC LIMIT ".($page*12)." , 12 
                                 " );
@@ -61,7 +61,7 @@ function searchScene($searchString){
     global $wpdb;
     $searchString = "%".$wpdb->esc_like(strtoupper ($searchString))."%";
     $searchStringStudio = $wpdb->esc_like(strtoupper ($searchString))."%";
-    return  $wpdb->get_results( $wpdb->prepare( "SELECT A.id, A.title, A.video_length, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
+    return  $wpdb->get_results( $wpdb->prepare( "SELECT A.id, A.title, A.video_length, A.video_url,A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
                                                 FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
                                                 WHERE (A.title) LIKE %s OR (A.description) LIKE %s OR (A.releaseDate) LIKE %s OR (B.studio_name) LIKE %s     LIMIT 12; " ,
                                                 array($searchString, $searchString, $searchString, $searchStringStudio) 
@@ -102,11 +102,11 @@ $pornstars = getPornstars();
 $total_scenes = getTotalScenes();
 $max_page_num = $total_scenes/12 +1;
 
-if ( false === ( $sceneHome_results = get_transient( 'sceneHome_results_'.$page_num ) ) ) {
+if ( false === ( $sceneHome_results = get_transient( 'SceneHome_results_'.$page_num ) ) ) {
     // It wasn't there, so regenerate the data and save the transient
 
      $sceneHome_results = getSceneHome($page_num);
-     set_transient( 'sceneHome_results_'.$page_num, $sceneHome_results, WEEK_IN_SECONDS );
+     set_transient( 'SceneHome_results_'.$page_num, $sceneHome_results, WEEK_IN_SECONDS );
 }
 
 $custom_logo_id = get_theme_mod( 'custom_logo' );
@@ -191,19 +191,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                     <div class="row">
                         <div class="col-md-12">
                             <div class="main-title">
-                                <div class="btn-group float-right right-action">
-                                    <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="<?=home_url('studios')?>"><i class="fas fa-fw fa-star"></i> &nbsp; Top
-                                            Rated</a>
-                                        <a class="dropdown-item" href="<?=home_url('studios')?>"><i class="fas fa-fw fa-signal"></i> &nbsp;
-                                            Viewed</a>
-                                       
-                                    </div>
-                                </div>
+                                
                                 <h6>Studios</h6>
                             </div>
                         </div>
@@ -274,12 +262,14 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                                         <a href="<?=home_url('scene/'.$scene->scene_identity)?>"
                                             class="ellipsis"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , (strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title  ) ) ?></a>
                                     </div>
-                                    <div class="video-page text-success">
-                                        <a href="<?=home_url('scene/'.$scene->studio_name)?>" style="    color: #4eda92;">
-                                            <?=$scene->studio_nicename? $scene->studio_nicename: $scene->studio_name ?> <a title="" data-placement="top" data-toggle="tooltip" href="#"
-                                                data-original-title=""><i
-                                                    class="fas fa-check-circle text-success"></i></a>
-                                        </a>
+                                    
+                                    <div class="" style="display:flex;justify-content: space-between;">
+                                        <a  href="<?=home_url('scene/'.$scene->studio_name)?>" style="color: #4eda92;">
+                                            <?=$scene->studio_nicename ? $scene->studio_nicename : $scene->studio_name ?> 
+                                            <span title="" data-placement="top" data-toggle="tooltip" href="#"   data-original-title="">
+                                                <i  class="fas fa-check-circle text-success"></i></span>
+                                        </a> 
+                                        <a   rel="noreferrer nofollow sponsored " target="_blank" href="https://<?=$scene->video_url?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
                                     </div>
                                     <div class="video-view">
                                         

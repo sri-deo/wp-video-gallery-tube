@@ -16,21 +16,33 @@ function hoursandmins($time, $format = '%02d:%02d'){
     $minutes = ($time % 60);
     return sprintf($format, $hours, $minutes);
 }
-function getStudios($page=null, $sort=null){
+function getStudios($page=null, $sort=0){
     global $wpdb;
-    return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_studios ;");
+    if ($sort==0) {
+        return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON b.studio=A.id GROUP BY A.id ORDER BY studio_nicename ASC ;");
+    } else if ($sort==1) {
+        return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON b.studio=A.id GROUP BY A.id ORDER BY count_scene DESC ;");
+    }
 }
 
-function getStudio($studio_name) {
+function getStudio($studio_name,$page=0, $sort=0) {
+
+    $page = $page-1;
+
     global $wpdb;
     $studio =  $wpdb->get_row($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."gallery_tube_studios WHERE studio_name=%s   ;" , array($studio_name)));
 
     if ($studio) {
+        if ($sort==0) {
+            $sort=" A.title ";
+        } else if ($sort==1) {
+            $sort = "A.video_length ";
+        }
 
-        $studio->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
+        $studio->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length,A.video_url, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
                                         FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
                                         WHERE A.studio = ".$studio->id."
-                                        ORDER BY A.id ASC LIMIT 12");
+                                        ORDER BY $sort ASC LIMIT ".($page*12)." , 12 ");
     
         if ($studio->scenes && count($studio->scenes)) {
             foreach ($studio->scenes as $key => $tube) {            
@@ -47,15 +59,40 @@ function getStudio($studio_name) {
 }
 $page=0;
 $sort=0;
+if (isset($_GET['sort'])) {
+    $sort = trim($_GET['sort']);
+}
 
-$allStudios = getStudios($page, $sort);
-$totalStudios = count($allStudios);
 
 if ($studio_name) {
-    $studio = getStudio($studio_name);
+    switch ($sort) {
+        case 'title':
+            $sort=0;
+            break;
+        case 'length':
+            $sort=1;
+            break;
+        
+        default:
+            $sort=0;
+            break;
+    }
+    $page_num=1;
+    if (isset($_GET['page_n']) && intval($_GET['page_n'])) {
+        $page_num = intval($_GET['page_n']);
+        
+    }
+    
+    $total_scenes = count($studio->scenes);
+    $max_page_num = $total_scenes/12 +1;
+
+    $studio = getStudio($studio_name, $page_num, $sort);
+
+
     if (!$studio){
         wp_redirect(home_url("studios"));
     } else {
+
         function wp_gallery_tube_dynamic_titlestudio() {
             global $studio;
             return "Studio: ".$studio->studio_name." - ".get_bloginfo('name'); // add dynamic content to this title (if needed)
@@ -64,6 +101,20 @@ if ($studio_name) {
     }
 }
 
+switch ($sort) {
+    case 'name':
+        $sort = 0;
+        break;
+    case 'scenes':
+        $sort = 1;
+        break;
+    
+    default:
+        $sort = 0;
+        break;
+}
+$allStudios = getStudios($page, $sort);
+$totalStudios = count($allStudios);
 
 
 $custom_logo_id = get_theme_mod( 'custom_logo' );
@@ -144,10 +195,10 @@ if ($studio_name) {
                                         Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
-                                            Rated</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
-                                            Viewed</a>
+                                        <a class="dropdown-item" href="?sort=name"><i class="fas fa-fw fa-star"></i> &nbsp; 
+                                            Name A-Z</a>
+                                        <a class="dropdown-item" href="?sort=scenes"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                            Total Scenes</a>
                                         
                                     </div>
                                 </div>
@@ -163,9 +214,10 @@ if ($studio_name) {
                             ?>
                         <div class="col-xl-3 col-sm-6 mb-3">
                                 
-                            <div class="channels-card">
+                            <div class="channels-card" style="padding:12px;">
                                 <div class="channels-card-image">
-                                    <a href="<?= home_url('studios/'.$studio->studio_name) ?>"><img class="img-fluid"
+                                    <a href="<?= home_url('studios/'.$studio->studio_name) ?>">
+                                    <img class="img-fluid" style="width:120px;height:120px;border-radius:50%;"
                                             src="<?= $studio->logo? $studio->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>" alt="<?=$studio->studio_name?>"></a>
                                     <div class="channels-card-image-btn">
                                     <a href="<?= home_url('studios/'.$studio->studio_name) ?>"
@@ -173,8 +225,11 @@ if ($studio_name) {
                                             </a></div>
                                 </div>
                                 <div class="channels-card-body">
-                                    <div class="channels-title">
+                                    <div class="channels-title" style="font-size: 1.5rem;">
                                         <a href="<?= home_url('studios/'.$studio->studio_name) ?>"><?=$studio->studio_nicename ? $studio->studio_nicename : $studio->studio_name ?> </a>
+                                    </div>
+                                    <div>
+                                        <?=$studio->count_scene?> Scenes
                                     </div>
                                     
                                 </div>

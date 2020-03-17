@@ -120,12 +120,10 @@
                                         Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
-                                            Rated</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
-                                            Viewed</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
-                                            &nbsp; Close</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace("#&sort=.*#", '&sort=title', $_SERVER['REQUEST_URI'])):  $_SERVER['REQUEST_URI'].('&sort=title') ?>"><i class="fas fa-fw fa-star"></i> &nbsp; Title</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace("#&sort=.*#", '&sort=length', $_SERVER['REQUEST_URI'])): $_SERVER['REQUEST_URI'].('&sort=length') ?>"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                            View Length</a>
+                                        
                                     </div>
                                 </div>
                                 <h6>Videos</h6>
@@ -148,14 +146,17 @@
                                 </div>
                                 <div class="video-card-body">
                                     <div class="video-title">
-                                        <a href="<?=home_url('scene/'.$scene->scene_identity)?>" class="ellipsis"><?=(strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title )?></a>
+                                        <a href="<?=home_url('scene/'.$scene->scene_identity)?>" class="ellipsis"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , (strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title  ) ) ?></a>
                                     </div>
-                                    <a class="video-page text-success" href="<?=home_url('studios/'.$scene->studio_name)?>">
-                                    <?=$scene->studio_nicename ? $scene->studio_nicename : $scene->studio_name ?> 
-                                    <a title="" data-placement="top" data-toggle="tooltip" href="#"
-                                            data-original-title=""><i
-                                                class="fas fa-check-circle text-success"></i></a>
-                                    </a>
+                                    <div class="" style="display:flex;justify-content: space-between;">
+                                        <a  href="<?=home_url('studios/'.$scene->studio_name)?>" style="color: #4eda92;">
+                                            <?=$scene->studio_nicename ? $scene->studio_nicename : $scene->studio_name ?> 
+                                            <span title="" data-placement="top" data-toggle="tooltip" href="#"   data-original-title="">
+                                                <i  class="fas fa-check-circle text-success"></i>
+                                            </span>
+                                        </a> 
+                                        <a   rel="noreferrer nofollow sponsored " target="_blank" href="https://<?=$scene->video_url?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
+                                    </div>
                                     <div class="video-view">
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>
                                         <?=$scene->fps? ($scene->fps." FPS"):""?>
@@ -180,14 +181,24 @@
                     </div>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center pagination-sm mb-0">
-                            <li class="page-item disabled">
-                                <a tabindex="-1" href="#" class="page-link">Previous</a>
+                            <?php
+                            ?>
+                            <li class="page-item <?=($page_num<2)?"disabled":""?>">
+                                <a class="page-link" href="<?=($page_num >=2)? ("?page_n=".($page_num-1 )) :"?page_n=1" ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?> " tabindex="-1">Previous</a>
                             </li>
-                            <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">Next</a>
+                            
+                            <li class="page-item <?=($page_num<2)?"active disabled" :""?>">
+                                <a class="page-link" href="<?=($page_num >=2 )? "?page_n=".($page_num-1)   : '?page_n=1'   ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num >=2 )? ($page_num-1):1   ?></a>
+                            </li>
+                            <li class="page-item <?=($page_num>=2)?"active disabled" :""  ?>">
+                                <a class="page-link" href="?page_n=<?=($page_num>2)? ($page_num):2?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num>2)? ($page_num):2?></a>
+                            </li>
+                            <li class="page-item ">
+                                <a class="page-link" href="?page_n=<?=($page_num>2)?($page_num+1):3  ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num>2)?($page_num+1):3  ?></a>
+                            </li>
+                           
+                            <li class="page-item  <?=($page_num>=$max_page_num)?"disabled":""?>">
+                                <a class="page-link" href="<?=("?page_n=".($page_num+1)) ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>">Next</a>
                             </li>
                         </ul>
                     </nav>

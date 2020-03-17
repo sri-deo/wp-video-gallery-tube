@@ -110,14 +110,18 @@
                                 </div>
                                 <div class="video-card-body">
                                     <div class="video-title">
-                                        <a href="<?=home_url('scene/'.$scene->scene_identity)?>" class="ellipsis"><?=(strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title )?></a>
+                                        <a href="<?=home_url('scene/'.$scene->scene_identity)?>" class="ellipsis"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , (strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title  ) ) ?></a>
                                     </div>
-                                    <a class="video-page text-success" href="<?=home_url('studios/'.$scene->studio_name)?>">
-                                    <?=$scene->studio_nicename ? $scene->studio_nicename : $scene->studio_name ?> 
-                                    <a title="" data-placement="top" data-toggle="tooltip" href="#"
-                                            data-original-title=""><i
-                                                class="fas fa-check-circle text-success"></i></a>
-                                    </a>
+                                    
+                                    <div class="" style="display:flex;justify-content: space-between;">
+                                        <a  href="<?=home_url('studios/'.$scene->studio_name)?>" style="color: #4eda92;">
+                                            <?=$scene->studio_nicename ? $scene->studio_nicename : $scene->studio_name ?> 
+                                            <span title="" data-placement="top" data-toggle="tooltip" href="#"   data-original-title="">
+                                                <i  class="fas fa-check-circle text-success"></i>
+                                            </span>
+                                        </a> 
+                                        <a  rel="noreferrer nofollow sponsored " target="_blank" href="https://<?=$scene->video_url?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
+                                    </div>
                                     <div class="video-view">
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>
                                         <?=$scene->fps? ($scene->fps." FPS"):""?>

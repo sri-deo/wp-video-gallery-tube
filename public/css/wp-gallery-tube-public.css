@@ -13,7 +13,7 @@
      font-size: 13px;
  }
 
- #page-top nav.navbar.navbar-expand.navbar-light.bg-white.static-top.osahan-nav.sticky-top {
+ #page-top nav.navbar.navbar-expand.navbar-light.bg-white.static-top.osahan-nav.sticky-top, #page-top nav.navbar.navbar-expand.navbar-light.bg-light.static-top.osahan-nav.sticky-top {
     background: linear-gradient(135deg, #ff516b 0%, #826cfd 100%);
 }
 #page-top .gallery-tube-bs .row {

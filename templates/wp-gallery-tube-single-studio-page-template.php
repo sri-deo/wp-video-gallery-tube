@@ -59,18 +59,12 @@
 
         </ul>
         <div class="single-channel-page" id="content-wrapper">
-            <div class="single-channel-image">
-                <img class="img-fluid" alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/channel-banner.png" style="max-height:200px;">
-                <div class="channel-profile">
-                    <img class="channel-profile-img" alt="studio logo" src="<?= $studio->logo ? $studio->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>">
-                    
-                </div>
-            </div>
-            <p style="padding:10px;">
-                <?=$studio->description?>
-            </p>
+            
+            <p style="padding:10px;"></p>
             <div class="single-channel-nav">
                 <nav class="navbar navbar-expand-lg navbar-light">
+                    <img class="channel-profile-img" alt="studio logo" src="<?= $studio->logo ? $studio->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>">
+                    
                     <a class="channel-brand" href="<?= home_url('studios/'.$studio->studio_name) ?>">
                     <?=$studio->studio_nicename ? $studio->studio_nicename : $studio->studio_name ?>
                     <span title="" data-placement="top"
@@ -81,17 +75,12 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto">
-
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Videos <span class="sr-only">(current)</span></a>
-                            </li>                           
-                                                      
-                        </ul>                        
-                    </div>
+                   
                 </nav>
             </div>
+            <p style="padding:10px;">
+                <?=$studio->description?>
+            </p>
             <div class="container-fluid">
                 <div class="video-block section-padding">
                     <div class="row">
@@ -103,15 +92,12 @@
                                         Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
-                                            Rated</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
-                                            Viewed</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
-                                            &nbsp; Close</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace("#&sort=.*#", '&sort=title', $_SERVER['REQUEST_URI'])):  $_SERVER['REQUEST_URI'].('&sort=title') ?>"><i class="fas fa-fw fa-star"></i> &nbsp; Title</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace("#&sort=.*#", '&sort=length', $_SERVER['REQUEST_URI'])): $_SERVER['REQUEST_URI'].('&sort=length') ?>"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                            Length</a>                                        
                                     </div>
                                 </div>
-                                <h6>Videos</h6>
+                                <h6><b>Videos</b></h6>
                             </div>
                         </div>
 
@@ -131,13 +117,16 @@
                                 </div>
                                 <div class="video-card-body">
                                     <div class="video-title">
-                                        <a href="<?=home_url('scene/'.$scene->scene_identity)?>" class="ellipsis"><?=(strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title )?></a>
+                                        <a href="<?=home_url('scene/'.$scene->scene_identity)?>" class="ellipsis"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , (strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title  ) ) ?></a>
                                     </div>
-                                    <div class="video-page text-success">
-                                    <?=$studio->studio_nicename ? $studio->studio_nicename : $studio->studio_name ?> 
-                                    <a title="" data-placement="top" data-toggle="tooltip" href="#"
-                                            data-original-title=""><i
-                                                class="fas fa-check-circle text-success"></i></a>
+                                    <div class="" style="display:flex;justify-content: space-between;">
+                                        <a  href="<?=home_url('studios/'.$scene->studio_name)?>" style="color: #4eda92;">
+                                            <?=$studio->studio_nicename ? $studio->studio_nicename : $studio->studio_name ?> 
+                                            <span title="" data-placement="top" data-toggle="tooltip" href="#"   data-original-title="">
+                                                <i  class="fas fa-check-circle text-success"></i>
+                                        </span>
+                                        </a> 
+                                        <a   rel="noreferrer nofollow sponsored " target="_blank" href="https://<?=$scene->video_url?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
                                     </div>
                                     <div class="video-view">
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>
@@ -160,14 +149,24 @@
                     </div>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center pagination-sm mb-0">
-                            <li class="page-item disabled">
-                                <a tabindex="-1" href="#" class="page-link">Previous</a>
+                            <?php
+                            ?>
+                            <li class="page-item <?=($page_num<2)?"disabled":""?>">
+                                <a class="page-link" href="<?=($page_num >=2)? ("?page_n=".($page_num-1 )) :"?page_n=1" ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?> " tabindex="-1">Previous</a>
                             </li>
-                            <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">Next</a>
+                            
+                            <li class="page-item <?=($page_num<2)?"active disabled" :""?>">
+                                <a class="page-link" href="<?=($page_num >=2 )? "?page_n=".($page_num-1)   : '?page_n=1'   ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num >=2 )? ($page_num-1):1   ?></a>
+                            </li>
+                            <li class="page-item <?=($page_num>=2)?"active disabled" :""  ?>">
+                                <a class="page-link" href="?page_n=<?=($page_num>2)? ($page_num):2?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num>2)? ($page_num):2?></a>
+                            </li>
+                            <li class="page-item ">
+                                <a class="page-link" href="?page_n=<?=($page_num>2)?($page_num+1):3  ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num>2)?($page_num+1):3  ?></a>
+                            </li>
+                           
+                            <li class="page-item  <?=($page_num>=$max_page_num)?"disabled":""?>">
+                                <a class="page-link" href="<?=("?page_n=".($page_num+1)) ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>">Next</a>
                             </li>
                         </ul>
                     </nav>
@@ -179,21 +178,13 @@
                 <div class="container">
                     <div class="row no-gutters">
                         <div class="col-lg-6 col-sm-6">
-                            <p class="mt-1 mb-0">&copy; Copyright 2020 <strong class="text-dark">Vidoe</strong>. All
+                            <p class="mt-1 mb-0">&copy; Copyright 2020 <strong class="text-dark"></strong>. All
                                 Rights Reserved<br>
-                                <small class="mt-0 mb-0">Made with <i class="fas fa-heart text-danger"></i> by <a
-                                        class="text-primary" target="_blank" href="https://askbootstrap.com/">Ask
-                                        Bootstrap</a>
-                                </small>
+                                
                             </p>
                         </div>
                         <div class="col-lg-6 col-sm-6 text-right">
-                            <div class="app">
-                                <a href="#"><img alt=""
-                                        src="<?=plugins_url('wp-gallery-tube')?>/public/img/google.png"></a>
-                                <a href="#"><img alt=""
-                                        src="<?=plugins_url('wp-gallery-tube')?>/public/img/apple.png"></a>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>

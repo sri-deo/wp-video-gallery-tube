@@ -44,6 +44,7 @@
 				var attachment = mediaUploader.state().get('selection').first().toJSON();
 				$('#studio_logo').val(attachment.url);
 				$('#photo').val(attachment.url);
+				$('#pornstar_photo').val(attachment.url);
 				$('#preview-image-upload').attr("src", attachment.url)
 			  });
 			  mediaUploader.open();

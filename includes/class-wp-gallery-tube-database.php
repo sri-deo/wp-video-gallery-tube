@@ -83,9 +83,9 @@ class Wp_Gallery_Tube_Database {
             `id`           int NOT NULL AUTO_INCREMENT ,
             `name`         text NOT NULL ,
             `slug`         varchar(500) NOT NULL,
-            `photo`          text NULL ,
+            `photo`        text NULL ,
             `country`      varchar(100) NULL ,
-            `birth`        date NULL ,
+            `birth`        varchar(100) NULL ,
             `bio`          text NULL ,
             `height`       varchar(45) NULL ,
             `weight`       varchar(45) NULL ,
@@ -297,6 +297,11 @@ class Wp_Gallery_Tube_Database {
     }
 
     /****/
+    public function gallery_tube_get_tube_by_id($id){
+        global $wpdb;
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM ".$this->tubes_table.' WHERE id=%d', array($id) ) );
+    }
+
     public function gallery_tube_get_tube_by_identity($identity){
         global $wpdb;
         return $wpdb->get_row($wpdb->prepare( 'SELECT * FROM '.$this->tubes_table.' WHERE UPPER(scene_identity) = %s ;', strtoupper ($identity) )  );
@@ -328,7 +333,7 @@ class Wp_Gallery_Tube_Database {
 				$aColumns = array('id','photo', 'name', 'bio','country','birth','height','weight','aliases', 'date_created' ,'slug');
 				break;
 			case 'studios':
-				$aColumns = array('id', 'logo', 'studio_name',    'date_created', 'url');
+				$aColumns = array('id', 'logo', 'studio_nicename',    'date_created', 'url', 'studio_name');
 				break;
 			case 'tags':
 				$aColumns = array('id', 'name');

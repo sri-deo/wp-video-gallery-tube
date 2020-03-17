@@ -36,17 +36,88 @@ function deleteScene($id) {
     global $wpdb;
     if ($wpdb->get_row("SELECT * FROM ".$wpdb->prefix."gallery_tube  where id= ".$id." ;")) {
         return $wpdb->query("DELETE FROM ".$wpdb->prefix."gallery_tube WHERE id=".$id." ;");
-    }
+    } else return null;
+}
+
+function updateScene($data, $id) {
+    global $wpdb;
+    if ($wpdb->get_row("SELECT * FROM ".$wpdb->prefix."gallery_tube  where id= ".$id." ;")) {
+        return $wpdb->update($wpdb->prefix."gallery_tube", $data, array("id" => ($id) ) );
+    } else return null;
 }
 
 $success="";
 $error="";
 
 if (isset($_POST['save_affiliate'])) {
-    if (trim($_POST['save_affiliate'])) {
-        update_option("affiliate_code", trim($_POST['save_affiliate']));
-    }
+    $af_badoink_param = trim($_POST['af_badoink_param']);
+    $affiliate_code_badoink = trim($_POST['affiliate_code_badoink']);
+
+    $af_vrbanger_param = trim($_POST['af_vrbanger_param']);
+    $affiliate_code_vrbanger = trim($_POST['affiliate_code_vrbanger']);
+
+    $af_rjvr_param = trim($_POST['af_rjvr_param']);
+    $affiliate_code_rjvr = trim($_POST['affiliate_code_rjvr']);
+
+    $af_sexbabevr_param = trim($_POST['af_sexbabevr_param']);
+    $affiliate_code_sexbabevr = trim($_POST['affiliate_code_sexbabevr']);
+
+    $af_stasyqvr_param = trim($_POST['af_stasyqvr_param']);
+    $affiliate_code_stasyqvr = trim($_POST['affiliate_code_stasyqvr']);
+
+    $af_vrconk_param = trim($_POST['af_vrconk_param']);
+    $affiliate_code_vrconk = trim($_POST['affiliate_code_vrconk']);
+
+    update_option("af_badoink_param", $af_badoink_param);
+    update_option("affiliate_code_badoink", $affiliate_code_badoink);
+
+    update_option("af_vrbanger_param", $af_vrbanger_param);
+    update_option("affiliate_code_vrbanger", $affiliate_code_vrbanger);
+
+    update_option("af_rjvr_param", $af_rjvr_param);
+    update_option("affiliate_code_rjvr", $affiliate_code_rjvr);
+
+    update_option("af_sexbabevr_param", $af_sexbabevr_param);
+    update_option("affiliate_code_sexbabevr", $affiliate_code_sexbabevr);
+
+    update_option("af_stasyqvr_param", $af_stasyqvr_param);
+    update_option("affiliate_code_stasyqvr", $affiliate_code_stasyqvr);
+
+    update_option("af_vrconk_param", $af_vrconk_param);
+    update_option("affiliate_code_vrconk", $affiliate_code_vrconk);
+
 }
+
+
+if (isset($_POST['update_scene']) && isset($_POST['scene_id'])) {
+    $scene_id = intval($_POST['scene_id']);
+    $title = trim($_POST['scene_title']);
+    $video_length = $_POST['video_length'];
+    $description = trim($_POST['description']);
+    $video_url = trim($_POST['video_url']);
+    $fps = $_POST['fps'];
+    $degrees = $_POST['degrees'];
+
+
+    $res = updateScene(array(
+        'title' => $title,
+        'video_length' => $video_length,
+        'description' => $description,
+        'video_url' => $video_url,
+        'fps' => $fps,
+        'degrees' => $degrees
+    ), $scene_id);
+
+    if ($res) {
+        $success="Updated Scene Successfully !";
+    } else {
+        $error = "Failed to update Scene";
+    }
+
+
+
+}
+
 
 if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
     $res = deleteScene(intval($_POST['scene_id']));
@@ -58,28 +129,138 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
 }
 
 ?>
-
+<style>
+.card-custom {
+    max-width:100%;
+    margin-bottom:0px!important;
+}
+</style>
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
 <div class="container-fluid">
+    
     <div class="row">
+
         <div class="col-md-12">
             <div class="card" style="max-width:100%;">
+            <h2>Settings</h2>
                 <form action="" method="post">
                     <?php  if (!get_option("first_insert")) {  ?>
                     <input type="submit" value="Start First Raw Insert" name="sub" class="btn btn-warning">
                     <?php } ?>
                 </form>
                 <div></div>
-                <form action="">
-
-                    <div class="form-group">
-                      <label for="affilicate_code">Affiliate Code</label>
-                      <input type="test" value="<?=get_option('affiliate_code')?>" name="affilicate_code" id="affilicate_code" class="form-control" placeholder="Affiliate Code" aria-describedby="affiliate_help">
-                      <small id="affiliate_help" class="text-muted">Affiliate Code in each Scene Link</small>
+                <form action="" method="POST">
+                    <div class="row card card-custom">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="af_badoink_param"></label>
+                                <input type="test" value="<?=get_option('af_badoink_param')?>" name="af_badoink_param" id="af_badoink_param" class="form-control" placeholder="Affiliate Parameter Badoink" aria-describedby="affiliate_help">
+                                <small id="affiliate_help_badoink_param" class="text-muted">Affiliate Parameter in URL Badoink Source</small><br>
+                                <small>Preview : www.badoinkvr.com/video/example_video_url_xxx?<?=get_option('af_badoink_param')?>=<?=get_option('affiliate_code_badoink')?></small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="affiliate_code_badoink"></label>
+                                <input type="test" value="<?=get_option('affiliate_code_badoink')?>" name="affiliate_code_badoink" id="affiliate_code_badoink" class="form-control" placeholder="Affiliate Code Badoink" aria-describedby="affiliate_help">
+                                <small id="aff_badoink_help" class="text-muted">Affiliate Code in each Scene URL Badoink Source</small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-success" name="save_affiliate">
+                    <div class="row card card-custom">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="af_vrbanger_param"></label>
+                                <input type="test" value="<?=get_option('af_vrbanger_param')?>" name="af_vrbanger_param" id="af_vrbanger_param" class="form-control" placeholder="Affiliate Parameter VRBanger" aria-describedby="affiliate_help">
+                                <small id="affiliate_help_vrbanger_param" class="text-muted">Affiliate Parameter in URL VRBanger Source</small><br>
+                                <small>Preview : https://vrbangers.com/video/example_video_url_xxx?<?=get_option('af_vrbanger_param')?>=<?=get_option('affiliate_code_vrbanger')?></small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="affiliate_code_vrbanger"></label>
+                                <input type="test" value="<?=get_option('affiliate_code_vrbanger')?>" name="affiliate_code_vrbanger" id="affiliate_code_vrbanger" class="form-control" placeholder="Affiliate Code VRBanger" aria-describedby="affiliate_help">
+                                <small id="aff_vrbanger_help" class="text-muted">Affiliate Code in each Scene URL VRBanger Source</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row card card-custom">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="af_rjvr_param"></label>
+                                <input type="test" value="<?=get_option('af_rjvr_param')?>" name="af_rjvr_param" id="af_rjvr_param" class="form-control" placeholder="Affiliate Parameter RealJamVR" aria-describedby="affiliate_help">
+                                <small id="affiliate_help_rjvr_param" class="text-muted">Affiliate Parameter in URL RealJamVR Source</small><br>
+                                <small>Preview : https://www.realjamvr.com/virtualreality/scene/id/example_video_url_xxx?<?=get_option('af_rjvr_param')?>=<?=get_option('affiliate_code_rjvr')?></small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="affiliate_code_rjvr"></label>
+                                <input type="test" value="<?=get_option('affiliate_code_rjvr')?>" name="affiliate_code_rjvr" id="affiliate_code_rjvr" class="form-control" placeholder="Affiliate Code RealJamVR" aria-describedby="affiliate_help">
+                                <small id="aff_rjvr_help" class="text-muted">Affiliate Code in each Scene URL RealJamVR Source</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row card card-custom">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="af_sexbabevr_param"></label>
+                                <input type="test" value="<?=get_option('af_sexbabevr_param')?>" name="af_sexbabevr_param" id="af_sexbabevr_param" class="form-control" placeholder="Affiliate Parameter SexBabeVR" aria-describedby="affiliate_help">
+                                <small id="affiliate_help_sexbabevr_param" class="text-muted">Affiliate Parameter in URL SexBabeVR Source</small><br>
+                                <small>Preview : https://www.sexbabesvr.com/virtualreality/scene/id/example_video_url_xxx?<?=get_option('af_sexbabevr_param')?>=<?=get_option('affiliate_code_sexbabevr')?></small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="affiliate_code_sexbabevr"></label>
+                                <input type="test" value="<?=get_option('affiliate_code_sexbabevr')?>" name="affiliate_code_sexbabevr" id="affiliate_code_sexbabevr" class="form-control" placeholder="Affiliate Code SexBabeVR" aria-describedby="affiliate_help">
+                                <small id="aff_sexbabevr_help" class="text-muted">Affiliate Code in each Scene URL SexBabeVR Source</small>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row card card-custom">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="af_stasyqvr_param"></label>
+                                <input type="test" value="<?=get_option('af_stasyqvr_param')?>" name="af_stasyqvr_param" id="af_stasyqvr_param" class="form-control" placeholder="Affiliate Parameter StasyQVR" aria-describedby="affiliate_help">
+                                <small id="affiliate_help_stasyqvr_param" class="text-muted">Affiliate Parameter in URL StasyQVR Source</small><br>
+                                <small>Preview : https://www.stasyqvr.com/virtualreality/scene/id/example_video_url_xxx?<?=get_option('af_stasyqvr_param')?>=<?=get_option('affiliate_code_stasyqvr')?></small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="affiliate_code_stasyqvr"></label>
+                                <input type="test" value="<?=get_option('affiliate_code_stasyqvr')?>" name="affiliate_code_stasyqvr" id="affiliate_code_stasyqvr" class="form-control" placeholder="Affiliate Code StasyQVR" aria-describedby="affiliate_help">
+                                <small id="aff_stasyqvr_help" class="text-muted">Affiliate Code in each Scene URL StasyQVR Source</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row card card-custom">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="af_vrconk_param"></label>
+                                <input type="test" value="<?=get_option('af_vrconk_param')?>" name="af_vrconk_param" id="af_vrconk_param" class="form-control" placeholder="Affiliate Parameter VRConk" aria-describedby="affiliate_help">
+                                <small id="affiliate_help_vrconk_param" class="text-muted">Affiliate Parameter in URL VRConk Source</small><br>
+                                <small>Preview : https://vrconk.com/virtualreality/scene/id/example_video_url_xxx?<?=get_option('af_vrconk_param')?>=<?=get_option('affiliate_code_vrconk')?></small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="affiliate_code_vrconk"></label>
+                                <input type="test" value="<?=get_option('affiliate_code_vrconk')?>" name="affiliate_code_vrconk" id="affiliate_code_vrconk" class="form-control" placeholder="Affiliate Code VRConk" aria-describedby="affiliate_help">
+                                <small id="aff_vrconk_help" class="text-muted">Affiliate Code in each Scene URL VRConk Source</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row text-right">
+                        <div class="col-md-12">
+                            <input type="submit" value="Save" class="btn btn-success" name="save_affiliate">
+                        </div>
                     </div>
 
                 </form>
@@ -89,8 +270,8 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
 
                 <form action="" method="post">
                     <div class="form-group">
-                      <label for="">Csv File Data Import</label>
-                      <input type="file" name="csv_file_import" id="csv_file_import" class="form-control" placeholder="Csv File" aria-describedby="csv_help">
+                      <!-- <label for="">Csv File Data Import</label>
+                      <input type="file" name="csv_file_import" id="csv_file_import" class="form-control" placeholder="Csv File" aria-describedby="csv_help"> -->
                       
                     </div>
                 </form>
@@ -119,6 +300,66 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
     href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+
+
+<!-- Classic Modal -->
+<div class="modal fade" id="SceneDetail" tabindex="-1" role="dialog" aria-labelledby="SceneDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" action=""  id="scene-form" onsubmit="return confirm('Update Scene?');">
+
+                <input type="hidden" name="scene_id" id="scene_id" class="form-control" value="">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Scene</h4>
+                    
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Scene Title: </label>
+                        <input type="text" name="scene_title" id="scene_title" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Scene Image</label>
+                        <img src="" class="img-fluid " alt="scene image" id="scene_image" style="height:200px;width:auto;filter:blur(5px);">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Video Length (minutes)</label>
+                        <input type="text" name="video_length" id="video_length" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Description</label>
+                        <textarea name="description" id="description"  rows="5" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Release Date</label>
+                        <input type="text" name="release_date" id="release_date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Scene Original Url</label>
+                        <input type="text" name="video_url" id="video_url" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">FPS</label>
+                        <input type="text" name="fps"  id ="fps" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Degrees</label>
+                        <input type="text" name="degrees" id="degrees" class="form-control">
+                    </div>
+                    
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Update scene" name="update_scene" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="container-fluid row">
     <div class="col-md-12">
@@ -194,6 +435,39 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
 <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
 <script src="<?=plugin_dir_url( dirname( __FILE__ ) )?>/js/jasny-bootstrap.min.js"></script>
 
+
+<script>
+    <?php if ($error) { ?>
+
+        $.notify({
+            icon: "error",
+            message: "<?= $error ?>"
+
+        }, {
+            type: "danger",
+            timer: 10000,
+            placement: {
+                from: "top",
+                align: "center"
+            }
+        });
+
+    <?php } ?>
+    <?php if ($success) { ?>
+        $.notify({
+            icon: "check_circle",
+            message: "<?= $success ?>"
+
+        }, {
+            type: "success",
+            timer:5000,
+            placement: {
+                from: "top",
+                align: "center"
+            }
+        });
+    <?php } ?>
+</script>
 
 
 <script type="text/javascript">
@@ -296,4 +570,62 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
             })
         }
     })
+
+    $(document).on('click', '.view', function () {
+        let scene_id = $(this).data('id')
+        if (scene_id) {
+            ajax_get_tube(scene_id);
+        } else {
+            swal({
+                title: 'error!',
+                text: 'Failed to View Scene ',
+                type: 'error',
+                confirmButtonClass: "btn btn-success btn-fill",
+                buttonsStyling: false
+            })
+        }
+    })
+    function emptyScene(){
+        $('#scene_title').val("")
+        $('#scene_image').val("")
+        $('#video_length').val("")
+        $('#description').val("")
+        $('#release_date').val("")
+        $('#video_url').val("")
+        $('#fps').val("")
+        $('#degrees').val("")
+    }
+    function appendDataScene(scene){
+        console.log(scene)
+        $('#scene_id').val(scene['id'])
+        $('#scene_title').val(scene['title'])
+        $('#scene_image').attr("src", scene['src_image'])
+        $('#video_length').val(scene['video_length'])
+        $('#description').val(scene['description'])
+        $('#release_date').val(scene['releaseDate'])
+        $('#video_url').val(scene['video_url'])
+        $('#fps').val(scene['fps'])
+        $('#degrees').val(scene['degrees'])
+    }
+
+    function ajax_get_tube(id){
+        $.ajax({
+            type: "POST",
+            url: '<?=home_url('/wp-admin/admin-ajax.php?action=gallery_tube_get_tube_by_id')?>',
+            data: {
+                id: id
+            },
+            
+            success: function (response) {
+                emptyScene();
+                if (response)  {
+                    response = JSON.parse(response);
+                    appendDataScene(response);
+                    $("#SceneDetail").modal();
+                }
+            }
+        });
+    }
+    
+
 </script>

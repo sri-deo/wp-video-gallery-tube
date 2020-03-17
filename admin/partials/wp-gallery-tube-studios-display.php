@@ -223,6 +223,7 @@ if (isset($_POST['update_studio']) && isset($_POST['studio_id'])) {
                         o[1] = o[1] ?
                             `<img src="${o[1]}" style="height:40px;width:auto;">` :
                             `<img style="height:40px;width:auto;" src="<?=plugin_dir_url(dirname( __FILE__ )).'img/thumbnail-img.jpg'?>">`;
+                        o[2]  = o[2] ? o[2] : o[5]
                         return o;
                     })
 
@@ -249,7 +250,7 @@ if (isset($_POST['update_studio']) && isset($_POST['studio_id'])) {
 
             }, {
                 "targets": -1,
-                "data": [5],
+                "data": [6],
 
             }],
             "pagingType": "full_numbers",

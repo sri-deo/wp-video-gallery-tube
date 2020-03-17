@@ -135,7 +135,7 @@
                                 <div class="video-card-body">
                                     <div class="video-title">
                                         <a href="<?=home_url('scene/'.$scene->scene_identity)?>"
-                                            class="ellipsis"><?=(strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title )?></a>
+                                            class="ellipsis"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , (strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title  ) ) ?></a>
                                     </div>
                                     <div class="video-page text-success">
                                         <a href="#" style="    color: #4eda92;">

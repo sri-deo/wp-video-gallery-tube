@@ -4,11 +4,12 @@ function deletePornstar($id) {
     global $wpdb;
     if ($wpdb->get_row("SELECT * FROM ".$wpdb->prefix."gallery_pornstars  where id= ".$id." ;")) {
         return $wpdb->query("DELETE FROM ".$wpdb->prefix."gallery_pornstars WHERE id=".$id." ;");
-    }
+    } else return false;
 }
 
 function updatePornstar($id, $data) {
     global $wpdb;
+
     if ( $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."gallery_tube_pornstars  where id= ".$id." ;")) {        
         return $wpdb->update($wpdb->prefix."gallery_tube_pornstars", $data , array("id" => $id) );
     } else return false;
@@ -36,14 +37,16 @@ if (isset($_POST['update_pornstar']) && isset($_POST['pornstar_id'])) {
     $pornstar_height = trim($_POST['pornstar_height']);
     $pornstar_weight = trim($_POST['pornstar_weight']);
     $pornstar_aliases = trim($_POST['pornstar_aliases']);
+    $pornstar_birth = trim($_POST['pornstar_birth']);
 
-    $pornstar_logo = trim($_POST['pornstar_logo']);
+    $pornstar_photo = trim($_POST['pornstar_photo']);
 
     if ($pornstar_id && $pornstar_name) {
         $res = updatePornstar($pornstar_id, array( 'name' => $pornstar_name, 
-                                                'photo' => $pornstar_logo , 
+                                                'photo' => $pornstar_photo , 
                                                 'country' => $pornstar_country, 
                                                 'bio' => $pornstar_bio, 
+                                                'birth' => $pornstar_birth,
                                                 'height' => $pornstar_height,
                                                 'weight' => $pornstar_weight,
                                                 'aliases' => $pornstar_aliases
@@ -275,7 +278,7 @@ if (isset($_POST['update_pornstar']) && isset($_POST['pornstar_id'])) {
                 }
             },
             "order": [
-                [4, "desc"]
+                [0, "asc"]
             ],
             "columnDefs": [{
                 "targets": [0],
@@ -369,10 +372,27 @@ if (isset($_POST['update_pornstar']) && isset($_POST['pornstar_id'])) {
             
             pornstar_name = (ktable.row($(this).closest('tr')).data()[2]) ;
             pornstar_photo = (ktable.row($(this).closest('tr')).data()[1]) ;
+
+            pornstar_bio = (ktable.row($(this).closest('tr')).data()[3]) ;
+            pornstar_country = (ktable.row($(this).closest('tr')).data()[4]) ;
+            pornstar_birth = (ktable.row($(this).closest('tr')).data()[5]) ;
+            pornstar_height = (ktable.row($(this).closest('tr')).data()[6]) ;
+            pornstar_weight = (ktable.row($(this).closest('tr')).data()[7]) ;
+            pornstar_aliases = (ktable.row($(this).closest('tr')).data()[8]) ;
             
             $('#preview-image-upload').attr("src",$.parseHTML(pornstar_photo)[0].src)
             $('#pornstar_photo').val($.parseHTML(pornstar_photo)[0].src)
             $('#pornstar_name').val(pornstar_name);            
+            $('#pornstar_bio').val(pornstar_bio)
+            $('#pornstar_birth').val(pornstar_birth)
+            $('#pornstar_height').val(pornstar_height)
+            $('#pornstar_country').val(pornstar_country)
+            $('#pornstar_weight').val(pornstar_weight)
+            $('#pornstar_aliases').val(pornstar_aliases)
+            
+
+
+
 
             $('#pornStarDetail').modal();
 
