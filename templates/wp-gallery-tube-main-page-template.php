@@ -100,7 +100,7 @@ else {
 $studios = getStudios();
 $pornstars = getPornstars();
 $total_scenes = getTotalScenes();
-$max_page_num = $total_scenes/12 +1;
+$max_page_num = floor($total_scenes/12) +1;
 
 if ( false === ( $sceneHome_results = get_transient( 'SceneHome_results_'.$page_num ) ) ) {
     // It wasn't there, so regenerate the data and save the transient
@@ -191,8 +191,13 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                     <div class="row">
                         <div class="col-md-12">
                             <div class="main-title">
-                                
-                                <h6>Studios</h6>
+                                <div class="btn-group float-right right-action">
+                                    <a href="<?=home_url('studios')?>" class="right-action-link text-gray" >
+                                        View All
+                                    </a>
+                                   
+                                </div>
+                                <h3>Studios</h3>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -239,7 +244,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                                             &nbsp; Close</a>
                                     </div>
                                 </div> -->
-                                <h6>Featured Videos</h6>
+                                <h3>Featured Videos</h3>
                             </div>
                         </div>
 
@@ -275,7 +280,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                                         
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>
                                         <?=$scene->fps? ($scene->fps." FPS"):""?>
-                                        &nbsp;
+                                        <span></span>
                                         <span class="float-right">
                                             <?php 
                                            
@@ -300,26 +305,33 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                     </div>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center pagination-sm mb-0">
-                            <?php
                             
-                            
-                            ?>
                             <li class="page-item <?=($page_num<2)?"disabled":""?>">
-                                <a class="page-link" href="<?=($page_num >=2)? ("?page_n=".($page_num-1 )) :"?page_n=1" ?>" tabindex="-1">Previous</a>
+                                <a class="page-link" href="<?=($page_num >=2)? ("?page_n=".($page_num-1 )) :"?page_n=1" ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?> " tabindex="-1">Previous</a>
                             </li>
-                            
+                            <?php
+                            if ($max_page_num >0) {
+                            ?>
                             <li class="page-item <?=($page_num<2)?"active disabled" :""?>">
-                                <a class="page-link" href="<?=($page_num >=2 )? "?page_n=".($page_num-1)   : home_url('gallery')   ?>"><?=($page_num >=2 )? ($page_num-1):1   ?></a>
+                                <a class="page-link" href="<?=($page_num >=2 )? "?page_n=".($page_num-1)   : '?page_n=1'   ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num >=2 )? ( $page_num <= ($max_page_num-2)? ($page_num-1): ($max_page_num-2)   ):1   ?></a>
                             </li>
-                            <li class="page-item <?=($page_num>=2)?"active disabled" :""  ?>">
-                                <a class="page-link" href="?page_n=<?=($page_num>2)? ($page_num):2?>"><?=($page_num>2)? ($page_num):2?></a>
+                            <?php } ?>
+                            <?php
+                            if ($max_page_num >1) {
+                            ?>
+                            <li class="page-item <?=($page_num>=2 && $page_num<$max_page_num)?"active disabled" :""  ?>">
+                                <a class="page-link" href="?page_n=<?=($page_num>2)? ( ($page_num<$max_page_num-1)? $page_num :($max_page_num-1)  ):2?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num>2)? ( ($page_num< ($max_page_num-1) )? $page_num :($max_page_num-1)  ):2?></a>
                             </li>
-                            <li class="page-item ">
-                                <a class="page-link" href="?page_n=<?=($page_num>2)?($page_num+1):3  ?>"><?=($page_num>2)?($page_num+1):3  ?></a>
+                            <?php } ?>
+                            <?php
+                            if ($max_page_num >2) {
+                            ?>
+                            <li class="page-item <?=($page_num>=$max_page_num)?"active disabled" :""  ?>">
+                                <a class="page-link" href="?page_n=<?=($page_num>2)?( ($page_num<$max_page_num)?($page_num+1):$max_page_num   ):3  ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num>2)?( ($page_num<$max_page_num)?($page_num+1):$max_page_num   ):3  ?></a>
                             </li>
-                           
+                            <?php } ?>
                             <li class="page-item  <?=($page_num>=$max_page_num)?"disabled":""?>">
-                                <a class="page-link" href="<?=("?page_n=".($page_num+1)) ?>">Next</a>
+                                <a class="page-link" href="<?=("?page_n=".($page_num+1)) ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>">Next</a>
                             </li>
                         </ul>
                     </nav>
@@ -329,21 +341,13 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                     <div class="row">
                         <div class="col-md-12">
                             <div class="main-title">
-                                <!-- <div class="btn-group float-right right-action">
-                                    <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
+                            <div class="btn-group float-right right-action">
+                                    <a href="<?=home_url('pornstars')?>" class="right-action-link text-gray" >
+                                        View All
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
-                                            Rated</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
-                                            Viewed</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
-                                            &nbsp; Close</a>
-                                    </div>
-                                </div> -->
-                                <h6>Popular Porn Stars</h6>
+                                   
+                                </div>
+                                <h3>Popular Porn Stars</h3>
                             </div>
                         </div>
 

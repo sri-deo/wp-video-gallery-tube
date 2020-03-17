@@ -66,7 +66,7 @@
             <div class="single-channel-nav">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="channel-brand" >
-                        Display results for tag:  "<?=$tag_name?>"
+                        Display results for tag:  "<?=urldecode($tag_name)?>"
                     </a>
                     
                 </nav>
@@ -82,18 +82,14 @@
                                         Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
-                                            Rated</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
-                                            Viewed</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
-                                            &nbsp; Close</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=title","?sort=title"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=title' ) : ($_SERVER['REQUEST_URI'].'?sort=title') )  ?>"><i class="fas fa-fw fa-star"></i> &nbsp; Title</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=length","?sort=length"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=length') : ($_SERVER['REQUEST_URI'].'?sort=length') )  ?>"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                            Length</a>                                        
                                     </div>
                                 </div>
                                 <h6>Videos</h6>
                             </div>
                         </div>
-
 
                         <?php if ($tag->scenes && count($tag->scenes)) {
                             foreach ($tag->scenes as $key => $scene) {
@@ -125,6 +121,7 @@
                                     <div class="video-view">
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>
                                         <?=$scene->fps? ($scene->fps." FPS"):""?>
+                                        <span></span>
                                         <span class="float-right">
                                         <?php 
                                         
@@ -143,14 +140,33 @@
                     </div>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center pagination-sm mb-0">
-                            <li class="page-item disabled">
-                                <a tabindex="-1" href="#" class="page-link">Previous</a>
+                            
+                            <li class="page-item <?=($page_num<2)?"disabled":""?>">
+                                <a class="page-link" href="<?=($page_num >=2)? ("?page_n=".($page_num-1 )) :"?page_n=1" ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?> " tabindex="-1">Previous</a>
                             </li>
-                            <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">Next</a>
+                            <?php
+                            if ($max_page_num >0) {
+                            ?>
+                            <li class="page-item <?=($page_num<2)?"active disabled" :""?>">
+                                <a class="page-link" href="<?=($page_num >=2 )? "?page_n=".($page_num-1)   : '?page_n=1'   ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num >=2 )? ( $page_num <= ($max_page_num-2)? ($page_num-1): ($max_page_num-2)   ):1   ?></a>
+                            </li>
+                            <?php } ?>
+                            <?php
+                            if ($max_page_num >1) {
+                            ?>
+                            <li class="page-item <?=($page_num>=2 && $page_num<$max_page_num)?"active disabled" :""  ?>">
+                                <a class="page-link" href="?page_n=<?=($page_num>2)? ( ($page_num<$max_page_num-1)? $page_num :($max_page_num-1)  ):2?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num>2)? ( ($page_num< ($max_page_num-1) )? $page_num :($max_page_num-1)  ):2?></a>
+                            </li>
+                            <?php } ?>
+                            <?php
+                            if ($max_page_num >2) {
+                            ?>
+                            <li class="page-item <?=($page_num>=$max_page_num)?"active disabled" :""  ?>">
+                                <a class="page-link" href="?page_n=<?=($page_num>2)?( ($page_num<$max_page_num)?($page_num+1):$max_page_num   ):3  ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>"><?=($page_num>2)?( ($page_num<$max_page_num)?($page_num+1):$max_page_num   ):3  ?></a>
+                            </li>
+                            <?php } ?>
+                            <li class="page-item  <?=($page_num>=$max_page_num)?"disabled":""?>">
+                                <a class="page-link" href="<?=("?page_n=".($page_num+1)) ?><?=isset($_GET['sort'])?'&sort='.$_GET['sort']:'' ?>">Next</a>
                             </li>
                         </ul>
                     </nav>

@@ -914,6 +914,7 @@ body.sidebar-toggled .gallery-tube-bs  footer.sticky-footer {
   font-size: 10px;
   font-weight: 500;
   margin: 2px 0 0;
+  min-height: 20px;
 }
 .gallery-tube-bs .video-card {
   background: #fff none repeat scroll 0 0;
@@ -992,13 +993,13 @@ body.sidebar-toggled .gallery-tube-bs  footer.sticky-footer {
 }
 .gallery-tube-bs .channels-card-image img {
   background: #fff none repeat scroll 0 0;
-  border-radius: 50px;
+  border-radius: 50%;
   box-shadow: 0 0 2px #ccc;
-  height: 80px;
+  height: 120px;
   margin: 1px 0 8px;
   object-fit: scale-down;
   transform: scale(1);
-  width: 80px;
+  width: 120px;
 }
 .gallery-tube-bs .channels-card-image-btn {
   margin: 3px 0 7px;
