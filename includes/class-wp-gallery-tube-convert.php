@@ -106,7 +106,7 @@ class Wp_Gallery_Tube_Convert {
                 'fps'           => isset($scene['fps'])?($scene['fps']?$scene['fps']:''):'',
                 'degrees'       => isset($scene['degrees'])?($scene['degrees']?$scene['degrees']:''):'',
                 'src_image'     => isset($scene['posterImage'])?($scene['posterImage']?$scene['posterImage']:''):'',
-
+                'site_src'      => 'badoink',
                 'studio'        => $brand,
                 'pornstar'      => (is_array($scene['pornStars'])?$scene['pornStars']:explode(',',$scene['pornStars']) ),
                 'tags'          => (is_array($scene['tags'])?$scene['tags']:explode(',',$scene['tags'])),
@@ -129,7 +129,7 @@ class Wp_Gallery_Tube_Convert {
                 'fps'           => isset($scene['fps'])?($scene['fps']?$scene['fps']:''):'',
                 'src_image'     => isset($scene['Poster'])?($scene['Poster']?$scene['Poster']:''):'',
                 'degrees'       => $scene['FOV']?$scene['FOV'][0]:'',
-
+                'site_src'      => 'vrbanger',
                 'studio'        => 'vrbanger',
                 'pornstar'      => ($scene['Pornstars']),
                 'tags'          => ($scene['Tags']),
@@ -154,7 +154,7 @@ class Wp_Gallery_Tube_Convert {
                 'fps'           => isset($scene['fps'])?($scene['fps']?$scene['fps']:''):'',
                 'degrees'       => isset($scene['degrees'])?($scene['degrees']?$scene['degrees']:''):'',
                 'src_image'     => isset($scene['ThumbURL'])?($scene['ThumbURL']?$scene['ThumbURL']:''):'',
-
+                'site_src'      => $brand,
                 'studio'        => $brand,
                 'pornstar'      => (is_array($scene['Pornstars'])?$scene['Pornstars']:explode(',',$scene['Pornstars']) ),
                 'tags'          => (is_array($scene['Tags'])?$scene['Tags']:explode(',',$scene['Tags'])),

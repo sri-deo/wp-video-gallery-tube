@@ -61,14 +61,11 @@
 
         </ul>
         <div class="single-channel-page" id="content-wrapper">
-            <div class="single-channel-image">
-                <img class="img-fluid" alt="" src="<?=plugins_url('wp-gallery-tube')?>/public/img/channel-banner.png" style="max-height:200px;">
-                <div class="channel-profile">
-                    <img class="channel-profile-img" alt="studio logo" src="<?= $pornstar->photo ? $pornstar->photo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>">
-                    
-                </div>
-            </div>
+            
+           
             <div class="box" style="margin:10px 0px;">
+                <img class="channel-profile-img" alt="studio logo" src="<?= $pornstar->photo ? $pornstar->photo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>">
+
                <?php if ($pornstar->country){ ?>
                <h6>Country of Origin: </h6>
                <p><?=$pornstar->country?></p>
@@ -91,7 +88,7 @@
                     <a class="channel-brand" href="<?= home_url('pornstars/'.$pornstar->slug) ?>">
                     <?=$pornstar->name ?>
                     <span title="" data-placement="top"
-                            data-toggle="tooltip" data-original-title="Verified"><i
+                            data-toggle="tooltip" data-original-title=""><i
                                 class="fas fa-check-circle text-success"></i></span></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -155,7 +152,7 @@
                                                 <i  class="fas fa-check-circle text-success"></i>
                                             </span>
                                         </a> 
-                                        <a   rel="noreferrer nofollow sponsored " target="_blank" href="https://<?=$scene->video_url?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
+                                        <a   rel="noreferrer nofollow sponsored " target="_blank" href="<?=(strpos($scene->video_url, "http")!==-1 )?("https://".$scene->video_url):$scene->video_url  ?><?=get_option('af_'.$scene->site_src.'_param')?("?".get_option('af_'.$scene->site_src.'_param')."=".get_option('affiliate_code_'.$scene->site_src)?get_option('affiliate_code_'.$scene->site_src):""   ):""  ?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
                                     </div>
                                     <div class="video-view">
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>

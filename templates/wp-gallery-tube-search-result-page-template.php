@@ -57,7 +57,7 @@
                         <?php if ($searchedPornstar && count($searchedPornstar)) {   ?>
                         <div class="col-md-12">
                             <div class="main-title">
-                                <h6>Pornstar Results: </h6>
+                                <h3>Pornstar Results: </h3>
                             </div>
                         </div>
 
@@ -90,7 +90,7 @@
                         <?php  if ($searchedTags && count($searchedTags)) {      ?>
                         <div class="col-md-12">
                             <div class="main-title">
-                                <h6>Tags Results: </h6>
+                                <h3>Tags Results: </h3>
                             </div>
                         </div>
 
@@ -115,7 +115,7 @@
                         ?>
                         <div class="col-md-12">
                             <div class="main-title">
-                                <h6>Scenes Results: </h6>
+                                <h3>Scenes Results: </h3>
                             </div>
                         </div>
 
@@ -126,7 +126,8 @@
                             <div class="video-card preview-video">
                                 <div class="video-card-image">
                                     <a class="view-lightbox"
-                                        href="<?=home_url('scene/'.$scene->scene_identity)?>"><b>VIEW</b></a>
+                                        href="<?=home_url('scene/'.$scene->scene_identity)?>"><b>VIEW</b>
+                                    </a>
                                     <a href="<?=home_url('scene/'.$scene->scene_identity)?>"><img class="img-fluid"
                                             src="<?=($scene->src_image?$scene->src_image:(plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg'))?>"
                                             alt="previewimg"></a>
@@ -137,19 +138,32 @@
                                         <a href="<?=home_url('scene/'.$scene->scene_identity)?>"
                                             class="ellipsis"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , (strlen($scene->title) > 50 ? substr($scene->title,0,50)."..." : $scene->title  ) ) ?></a>
                                     </div>
-                                    <div class="video-page text-success">
-                                        <a href="#" style="    color: #4eda92;">
-                                            <?=$scene->studio_nicename? $scene->studio_nicename: $scene->studio_name ?>
-                                            <a title="" data-placement="top" data-toggle="tooltip" href="#"
-                                                data-original-title=""><i
-                                                    class="fas fa-check-circle text-success"></i></a>
-                                        </a>
+                                    <div class="" style="display:flex;justify-content: space-between;">
+                                        <a  href="<?=home_url('scene/'.$scene->studio_name)?>" style="color: #4eda92;">
+                                            <?=$scene->studio_nicename ? $scene->studio_nicename : $scene->studio_name ?> 
+                                            <span title="" data-placement="top" data-toggle="tooltip" href="#"   data-original-title="">
+                                                <i  class="fas fa-check-circle text-success"></i></span>
+                                        </a> 
+                                        <a   rel="noreferrer nofollow sponsored " target="_blank" href="https://<?=$scene->video_url?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
                                     </div>
                                     <div class="video-view">
 
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>
                                         <?=$scene->fps? ($scene->fps." FPS"):""?>
-                                        &nbsp;
+                                        <span></span>
+                                        <span class="float-right">
+                                            <?php 
+                                           
+                                            $pornstars_view = array();
+                                            if ($scene->pornstars && count($scene->pornstars)) {
+                                                foreach ($scene->pornstars as $key => $pornstar) {
+                                                   $pornstars_view[] = '<a href="/pornstars/'.$pornstar->slug.'">'.$pornstar->name.'</a>';
+                                                }
+                                            }
+                                            echo implode(",", $pornstars_view);
+
+                                            ?>
+                                        </span>
 
                                     </div>
                                 </div>
@@ -183,18 +197,18 @@
             </div>
             <!-- /.container-fluid -->
             <!-- Sticky Footer -->
-            <footer class="sticky-footer">
-                <div class="container">
+            <footer class="sticky-footer ml-0">
+                <div class="">
                     <div class="row no-gutters">
                         <div class="col-lg-6 col-sm-6">
-                            <p class="mt-1 mb-0"><strong class="text-dark"></strong>.
-                                <small class="mt-0 mb-0">
-                                </small>
+                            <p class="mt-1 mb-0">&copy; Copyright 2020 <strong class="text-dark"></strong>. All
+                                Rights Reserved<br>
+                               
                             </p>
                         </div>
                         <div class="col-lg-6 col-sm-6 text-right">
                             <div class="app">
-
+                                
                             </div>
                         </div>
                     </div>

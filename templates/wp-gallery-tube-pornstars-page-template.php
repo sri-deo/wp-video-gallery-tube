@@ -324,11 +324,12 @@ if ($pornstar) {
             </div>
             <!-- /.container-fluid -->
             <!-- Sticky Footer -->
-            <footer class="sticky-footer">
-                <div class="container">
+            <footer class="sticky-footer ml-0">
+                <div class="">
                     <div class="row no-gutters">
                         <div class="col-lg-6 col-sm-6">
-                            <p class="mt-1 mb-0"><strong class="text-dark"></strong>.
+                            <p class="mt-1 mb-0">&copy; Copyright 2020 <strong class="text-dark"></strong>. All
+                                Rights Reserved<br>
                                
                             </p>
                         </div>

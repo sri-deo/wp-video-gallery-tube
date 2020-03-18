@@ -59,8 +59,8 @@ if (isset($_POST['save_affiliate'])) {
     $af_rjvr_param = trim($_POST['af_rjvr_param']);
     $affiliate_code_rjvr = trim($_POST['affiliate_code_rjvr']);
 
-    $af_sexbabevr_param = trim($_POST['af_sexbabevr_param']);
-    $affiliate_code_sexbabevr = trim($_POST['affiliate_code_sexbabevr']);
+    $af_sexbabevr_param = trim($_POST['af_sexbabesvr_param']);
+    $affiliate_code_sexbabevr = trim($_POST['affiliate_code_sexbabesvr']);
 
     $af_stasyqvr_param = trim($_POST['af_stasyqvr_param']);
     $affiliate_code_stasyqvr = trim($_POST['affiliate_code_stasyqvr']);
@@ -77,8 +77,8 @@ if (isset($_POST['save_affiliate'])) {
     update_option("af_rjvr_param", $af_rjvr_param);
     update_option("affiliate_code_rjvr", $affiliate_code_rjvr);
 
-    update_option("af_sexbabevr_param", $af_sexbabevr_param);
-    update_option("affiliate_code_sexbabevr", $affiliate_code_sexbabevr);
+    update_option("af_sexbabesvr_param", $af_sexbabevr_param);
+    update_option("affiliate_code_sexbabesvr", $affiliate_code_sexbabevr);
 
     update_option("af_stasyqvr_param", $af_stasyqvr_param);
     update_option("affiliate_code_stasyqvr", $affiliate_code_stasyqvr);
@@ -114,10 +114,7 @@ if (isset($_POST['update_scene']) && isset($_POST['scene_id'])) {
         $error = "Failed to update Scene";
     }
 
-
-
 }
-
 
 if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
     $res = deleteScene(intval($_POST['scene_id']));
@@ -205,16 +202,16 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
                     <div class="row card card-custom">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="af_sexbabevr_param"></label>
-                                <input type="test" value="<?=get_option('af_sexbabevr_param')?>" name="af_sexbabevr_param" id="af_sexbabevr_param" class="form-control" placeholder="Affiliate Parameter SexBabeVR" aria-describedby="affiliate_help">
+                                <label for="af_sexbabesvr_param"></label>
+                                <input type="test" value="<?=get_option('af_sexbabesvr_param')?>" name="af_sexbabesvr_param" id="af_sexbabesvr_param" class="form-control" placeholder="Affiliate Parameter SexBabeVR" aria-describedby="affiliate_help">
                                 <small id="affiliate_help_sexbabevr_param" class="text-muted">Affiliate Parameter in URL SexBabeVR Source</small><br>
-                                <small>Preview : https://www.sexbabesvr.com/virtualreality/scene/id/example_video_url_xxx?<?=get_option('af_sexbabevr_param')?>=<?=get_option('affiliate_code_sexbabevr')?></small>
+                                <small>Preview : https://www.sexbabesvr.com/virtualreality/scene/id/example_video_url_xxx?<?=get_option('af_sexbabesvr_param')?>=<?=get_option('affiliate_code_sexbabesvr')?></small>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="affiliate_code_sexbabevr"></label>
-                                <input type="test" value="<?=get_option('affiliate_code_sexbabevr')?>" name="affiliate_code_sexbabevr" id="affiliate_code_sexbabevr" class="form-control" placeholder="Affiliate Code SexBabeVR" aria-describedby="affiliate_help">
+                                <label for="affiliate_code_sexbabesvr"></label>
+                                <input type="test" value="<?=get_option('affiliate_code_sexbabesvr')?>" name="affiliate_code_sexbabesvr" id="affiliate_code_sexbabesvr" class="form-control" placeholder="Affiliate Code SexBabeVR" aria-describedby="affiliate_help">
                                 <small id="aff_sexbabevr_help" class="text-muted">Affiliate Code in each Scene URL SexBabeVR Source</small>
                             </div>
                         </div>

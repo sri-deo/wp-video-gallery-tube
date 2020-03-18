@@ -2,63 +2,83 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
- #page-top img.img-fluid {
-     display: inherit;
- }
- #page-top ul.sidebar {
-     margin: 0;
- }
- #page-top {
-     background: #fafafa!important;
-     font-size: 13px;
- }
+#page-top img.img-fluid {
+    display: inherit;
+}
 
- #page-top nav.navbar.navbar-expand.navbar-light.bg-white.static-top.osahan-nav.sticky-top, #page-top nav.navbar.navbar-expand.navbar-light.bg-light.static-top.osahan-nav.sticky-top {
+#page-top ul.sidebar {
+    margin: 0;
+}
+
+#page-top {
+    background: #fafafa !important;
+    font-size: 13px;
+}
+
+#page-top nav.navbar.navbar-expand.navbar-light.bg-white.static-top.osahan-nav.sticky-top,
+#page-top nav.navbar.navbar-expand.navbar-light.bg-light.static-top.osahan-nav.sticky-top {
     background: linear-gradient(135deg, #ff516b 0%, #826cfd 100%);
 }
+
 #page-top .gallery-tube-bs .row {
-    max-width:100%;
+    max-width: 100%;
 }
- .video-card {
+
+#page-top form.d-none.d-md-inline-block.form-inline.osahan-navbar-search {
+    margin-left: 20px;
+}
+
+.video-card {
     /* background: #1c1c1c none repeat scroll 0 0; */
     box-shadow: none;
- }
- .video-card-image {
-     box-shadow: none;
- }
- #page-top .sidebar li {
-     margin :0;
-     line-height: inherit;
- }
- .ellipsis {
+}
+
+.video-card-image {
+    box-shadow: none;
+}
+
+#page-top .sidebar li {
+    margin: 0;
+    line-height: inherit;
+}
+
+.ellipsis {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
- }
- #page-top .preview-video img.img-fluid, #page-top .related-scene img.img-fluid {
-     height: 200px;
+}
+
+#page-top .preview-video img.img-fluid,
+#page-top .related-scene img.img-fluid {
+    height: 200px;
     filter: blur(9px);
- }
- #page-top .preview-img img {
+}
+
+#page-top .preview-img img {
     filter: blur(15px);
     max-height: 315px;
     margin: 0 auto;
- }
- #page-top .single-video.preview-img {
-     background: #fff;
-     padding: 30px;
- }
- .gallery-tube-bs .video-page {
-     font-size: 12px;
- }
- .gallery-tube-bs .video-view {
-     font-size: 12px;
- }
- .view-lightbox {
+}
+
+#page-top .single-video.preview-img {
+    background: #fff;
+    padding: 30px;
+}
+
+.gallery-tube-bs .video-page {
+    font-size: 12px;
+}
+
+.gallery-tube-bs .video-view {
+    font-size: 12px;
+}
+
+.view-lightbox {
     opacity: 0;
     position: absolute;
- }
- .video-card:hover .view-lightbox {
+}
+
+.video-card:hover .view-lightbox {
     /* background: #000 none repeat scroll 0 0; */
     border-radius: 2px;
     bottom: 0;
@@ -72,8 +92,9 @@
     top: 0;
     transition-duration: 0.4s;
     z-index: 999;
- }
- .view-lightbox b {
+}
+
+.view-lightbox b {
     font-size: 14px;
     bottom: 0;
     height: 26px;
@@ -84,11 +105,9 @@
     top: 0;
     width: 86px;
     border: 1px solid #aaa;
-    border-radius: 0px;    
- }
- .gallery-tube-bs .tags span a {
-     margin-bottom: 5px;
- }
+    border-radius: 0px;
+}
 
- 
-   
+.gallery-tube-bs .tags span a {
+    margin-bottom: 5px;
+}

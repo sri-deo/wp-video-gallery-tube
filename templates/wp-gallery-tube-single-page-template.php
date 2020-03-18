@@ -129,19 +129,17 @@ wp_head();
             <div class="container-fluid pb-0">
                 <div class="video-block section-padding">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-9">
                             <div class="single-video-left">
                                 <div class="single-video-title box mb-3" style="margin-top:30px;">
                                     <h2>
                                         <a href="<?= home_url('studios/'.$tube->studio_name) ?>"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , $tube->title ) ?></a>
-                                    <a  rel="noreferrer nofollow sponsored " target="_blank"  href="https://<?=$tube->video_url?><?=get_option('affiliate_code')?("?af_code=".get_option('affiliate_code')):""  ?>" class="float-right badge badge-info">VIEW UNCENSORED VIDEO</a>
+                                    <a  rel="noreferrer nofollow sponsored " target="_blank"  href="<?=(strpos($tube->video_url, "http")!==-1 )?("https://".$tube->video_url):$tube->video_url  ?><?=get_option('af_'.$tube->site_src.'_param')?("?".get_option('af_'.$tube->site_src.'_param')."=".get_option('affiliate_code_'.$tube->site_src)?get_option('affiliate_code_'.$tube->site_src):""   ):""  ?>" class="float-right badge badge-info">VIEW UNCENSORED VIDEO</a>
                                 </h2>
                                 <div class="single-video preview-img">
-                                    <img src="<?=esc_url($tube->src_image? $tube->src_image : "")    ?>" alt="thumbnail-image" srcset="" height="315">
-                                    
+                                    <img src="<?=esc_url($tube->src_image? $tube->src_image : "")    ?>" alt="thumbnail-image" srcset="" height="315">                                    
                                 </div>
                                 
-                                  
                                 </div>
                                 <div class="single-video-author box mb-3">
                                     <div class="float-right">
@@ -149,7 +147,7 @@ wp_head();
                                             View Studio
                                         </a> 
                                     </div>
-                                    <img class="img-fluid" src="<?= $tube->logo ? $tube->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>" alt="studio logo">
+                                    <img class="img-fluid" style="width:auto;border-radius:0px;" src="<?= $tube->logo ? $tube->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>" alt="studio logo">
                                     <p><a href="<?= home_url('studios/'.$tube->studio_name) ?>">
                                     <strong><?=$tube->studio_nicename ? $tube->studio_nicename : $tube->studio_name ?></strong>
                                     </a> <span title=""
@@ -189,7 +187,7 @@ wp_head();
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="single-video-right">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -201,7 +199,7 @@ wp_head();
                                         </div> -->
                                         <div class="main-title">
                                             
-                                            <h6>Related Scenes</h6>
+                                            <h3>Related Scenes</h3>
                                         </div>
                                     </div>
                                     <div class="col-md-12 related-scene">
@@ -225,12 +223,14 @@ wp_head();
                                                 <div class="video-title">
                                                     <a href="<?=home_url('scene/'.$related_scene->scene_identity)?>"><?=(strlen($related_scene->title) > 50 ? substr($related_scene->title,0,50)."..." : $related_scene->title )?></a>
                                                 </div>
-                                                <div class="video-page text-success">
-                                                <?=$related_scene->studio_nicename? $related_scene->studio_nicename: $related_scene->studio_name ?>    
-                                                 <a title="" data-placement="top" data-toggle="tooltip"
-                                                        href="#" data-original-title="Verified"><i
-                                                            class="fas fa-check-circle text-success"></i></a>
-                                                </div>
+
+                                                <a href="<?=home_url('studios/'.$related_scene->studio_name)?>" style="color:#4eda92;">
+                                                    <?=$related_scene->studio_nicename? $related_scene->studio_nicename: $related_scene->studio_name ?>    
+                                                    <a title="" data-placement="top" data-toggle="tooltip" href="#" data-original-title="" >
+                                                        <i  class="fas fa-check-circle text-success"></i>
+                                                    </a>
+                                                </a>
+
                                                 <div class="video-view">
                                                     <?php 
                                                         $pornstars_view = array();
@@ -239,8 +239,7 @@ wp_head();
                                                                $pornstars_view[] = '<a href="/pornstars/'.$pornstar->slug.'">'.$pornstar->name.'</a>';
                                                             }
                                                         }
-                                                        echo implode(", ", $pornstars_view);
-                                                    
+                                                        echo implode(", ", $pornstars_view);                                                    
                                                     ?>
                                                 </div>
                                             </div>
@@ -264,15 +263,18 @@ wp_head();
             </div>
             <!-- /.container-fluid -->
             <!-- Sticky Footer -->
-            <footer class="sticky-footer">
-                <div class="container">
+            <footer class="sticky-footer ml-0">
+                <div class="">
                     <div class="row no-gutters">
                         <div class="col-lg-6 col-sm-6">
-                            
+                            <p class="mt-1 mb-0">&copy; Copyright 2020 <strong class="text-dark"></strong>. All
+                                Rights Reserved<br>
+                               
+                            </p>
                         </div>
                         <div class="col-lg-6 col-sm-6 text-right">
                             <div class="app">
-                               
+                                
                             </div>
                         </div>
                     </div>

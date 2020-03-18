@@ -61,11 +61,18 @@ function searchScene($searchString){
     global $wpdb;
     $searchString = "%".$wpdb->esc_like(strtoupper ($searchString))."%";
     $searchStringStudio = $wpdb->esc_like(strtoupper ($searchString))."%";
-    return  $wpdb->get_results( $wpdb->prepare( "SELECT A.id, A.title, A.video_length, A.video_url,A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
+    $res =   $wpdb->get_results( $wpdb->prepare( "SELECT A.id, A.title, A.video_length, A.video_url,A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
                                                 FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
                                                 WHERE (A.title) LIKE %s OR (A.description) LIKE %s OR (A.releaseDate) LIKE %s OR (B.studio_name) LIKE %s     LIMIT 12; " ,
                                                 array($searchString, $searchString, $searchString, $searchStringStudio) 
                                             ) );   
+    if ($res && count($res)) {
+        foreach ($res as $key => $tube) {
+            $t   = $wpdb->get_results("SELECT A.name, A.slug FROM ".$wpdb->prefix."gallery_tube_pornstars A LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_star B ON A.id=B.pornstar_id WHERE B.tube_id=".$tube->id );
+            $res[$key]->pornstars  = $t; 
+        }
+    }
+    return $res;
 }
 
 $sceneHome_results = null;
@@ -385,9 +392,21 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
             </div>
             <!-- /.container-fluid -->
             <!-- Sticky Footer -->
-            <footer class="sticky-footer">
-                <div class="container">
-
+            <footer class="sticky-footer ml-0">
+                <div class="">
+                    <div class="row no-gutters">
+                        <div class="col-lg-6 col-sm-6">
+                            <p class="mt-1 mb-0">&copy; Copyright 2020 <strong class="text-dark"></strong>. All
+                                Rights Reserved<br>
+                               
+                            </p>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 text-right">
+                            <div class="app">
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </footer>
         </div>
