@@ -20,9 +20,9 @@ function getStudios($page=0, $sort=0){
     
     global $wpdb;
     if ($sort==0) {
-        return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON b.studio=A.id GROUP BY A.id ORDER BY studio_nicename ASC ;");
+        return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON B.studio=A.id GROUP BY A.id ORDER BY studio_nicename ASC ;");
     } else if ($sort==1) {
-        return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON b.studio=A.id GROUP BY A.id ORDER BY count_scene DESC ;");
+        return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON B.studio=A.id GROUP BY A.id ORDER BY count_scene DESC ;");
     }
 }
 
@@ -269,10 +269,7 @@ if ($studio_name) {
                 <div class="">
                     <div class="row no-gutters">
                         <div class="col-lg-6 col-sm-6">
-                            <p class="mt-1 mb-0">&copy; Copyright 2020 <strong class="text-dark"></strong>. All
-                                Rights Reserved<br>
-                               
-                            </p>
+                            
                         </div>
                         <div class="col-lg-6 col-sm-6 text-right">
                             <div class="app">

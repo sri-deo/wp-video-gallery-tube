@@ -291,10 +291,10 @@ class Wp_Gallery_Tube_Admin {
 			$tube_id = $this->dataImporter->gallery_tube_insert_tubes($datas_import);
 
 			if ($tube_id ) {
-
-				$this->loopInsertScenePornstar($tube_id, $datas_import['pornstar']);
-	
-				$this->loopInsertSceneTag($tube_id, $datas_import['tags']);
+				if ($datas_import['pornstar']!="-")
+					$this->loopInsertScenePornstar($tube_id, $datas_import['pornstar']);
+				if ( $datas_import['tags'])
+					$this->loopInsertSceneTag($tube_id, $datas_import['tags']);
 
 			}
 
@@ -304,15 +304,17 @@ class Wp_Gallery_Tube_Admin {
 		if ($pornstars && count($pornstars)) {
 
 			foreach ($pornstars as $key => $value) {
-	
-				$pornstar_id = $this->dataImporter->gallery_tube_insert_pornstars(array(
-					'name' => $value,
-					'slug' => sanitize_title($value)
-				));
-				$this->dataImporter->gallery_tube_insert_scene_pornstar(array(
-					'tube_id' 		=>  $tube_id,
-					'pornstar_id' 	=> $pornstar_id
-				));
+				if ($value) {
+					
+					$pornstar_id = $this->dataImporter->gallery_tube_insert_pornstars(array(
+						'name' => $value,
+						'slug' => sanitize_title($value)
+					));
+					$this->dataImporter->gallery_tube_insert_scene_pornstar(array(
+						'tube_id' 		=>  $tube_id,
+						'pornstar_id' 	=> $pornstar_id
+					));
+				}
 			}
 		}
 	}

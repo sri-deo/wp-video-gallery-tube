@@ -136,7 +136,7 @@ wp_head();
                                         <a href="<?= home_url('studios/'.$tube->studio_name) ?>"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , $tube->title ) ?></a>
                                     <a  rel="noreferrer nofollow sponsored " target="_blank"  href="<?=(strpos($tube->video_url, "http")!==false )?$tube->video_url:("https://".$tube->video_url)  ?><?=get_option('af_'.$tube->site_src.'_param')?("?".get_option('af_'.$tube->site_src.'_param')."=". (get_option('affiliate_code_'.$tube->site_src)?get_option('affiliate_code_'.$tube->site_src):"")   ):""  ?>" class="float-right badge badge-info">VIEW UNCENSORED VIDEO</a>
                                 </h2>
-                                <div class="single-video preview-img">
+                                <div class="single-video preview-img text-center">
                                     <img src="<?=esc_url($tube->src_image? $tube->src_image : "")    ?>" alt="thumbnail-image" srcset="" height="315">                                    
                                 </div>
                                 
@@ -147,11 +147,13 @@ wp_head();
                                             View Studio
                                         </a> 
                                     </div>
+                                    <a href="<?= home_url('studios/'.$tube->studio_name) ?>">
                                     <img class="img-fluid" style="width:auto;border-radius:0px;" src="<?= $tube->logo ? $tube->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>" alt="studio logo">
+                                    </a>
                                     <p><a href="<?= home_url('studios/'.$tube->studio_name) ?>">
                                     <strong><?=$tube->studio_nicename ? $tube->studio_nicename : $tube->studio_name ?></strong>
                                     </a> <span title=""
-                                            data-placement="top" data-toggle="tooltip" data-original-title="Verified"><i
+                                            data-placement="top" data-toggle="tooltip" data-original-title=""><i
                                                 class="fas fa-check-circle text-success"></i></span></p>
                                     <small>&nbsp;</small>
                                 </div>
@@ -267,10 +269,7 @@ wp_head();
                 <div class="">
                     <div class="row no-gutters">
                         <div class="col-lg-6 col-sm-6">
-                            <p class="mt-1 mb-0">&copy; Copyright 2020 <strong class="text-dark"></strong>. All
-                                Rights Reserved<br>
-                               
-                            </p>
+                            
                         </div>
                         <div class="col-lg-6 col-sm-6 text-right">
                             <div class="app">

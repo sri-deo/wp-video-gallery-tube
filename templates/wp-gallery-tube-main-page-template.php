@@ -22,7 +22,7 @@ function getStudios(){
 }
 function getPornstars(){
     global $wpdb;
-    return $wpdb->get_results("SELECT A.id, A.name ,A.slug ,COUNT(C.id) as num_scene
+    return $wpdb->get_results("SELECT A.id, A.name ,A.slug, A.photo ,COUNT(C.id) as num_scene
                             FROM ".$wpdb->prefix."gallery_tube_pornstars A LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_star B 
                             ON B.pornstar_id = A.id 
                             LEFT JOIN ".$wpdb->prefix."gallery_tube C ON C.id= B.tube_id  
@@ -286,7 +286,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                                                 <i  class="fas fa-check-circle text-success"></i></span>
                                         </a> 
 
-                                        <a   rel="noreferrer nofollow sponsored " target="_blank" href="<?=(strpos($scene->video_url, "http")!==false )?$scene->video_url:("https://".$scene->video_url)  ?><?=get_option('af_'.$scene->site_src.'_param')?("?".get_option('af_'.$scene->site_src.'_param')."=".(get_option('affiliate_code_'.$scene->site_src)?get_option('affiliate_code_'.$scene->site_src):"")   ):""  ?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
+                                        <a   rel="noreferrer nofollow sponsored " target="_blank" href="<?=(strpos($scene->video_url, "http")!==false )?$scene->video_url:("https://".$scene->video_url)  ?><?=get_option('af_'.$scene->site_src.'_param')?("?".get_option('af_'.$scene->site_src.'_param')."=".(get_option('affiliate_code_'.$scene->site_src)?get_option('affiliate_code_'.$scene->site_src):"")   ):""  ?>" class="btn btn-info btn-outline btn-sm">VIEW UNSENSORED VERSION</a>
                                     </div>
                                     <div class="video-view">
                                         
