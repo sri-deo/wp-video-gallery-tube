@@ -186,7 +186,7 @@ if ($pornstar) {
         <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
                 src="<?=$site_logo[0]? $site_logo[0]: (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
-        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('gallery')?>">
+        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('library')?>">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
@@ -202,7 +202,7 @@ if ($pornstar) {
         <!-- Sidebar -->
         <ul class="sidebar navbar-nav">
             <li class="nav-item ">
-                <a class="nav-link" href="<?=home_url('gallery')?>">
+                <a class="nav-link" href="<?=home_url('library')?>">
                     <i class="fas fa-vr-cardboard"></i>
                     <span>VR Videos</span>
                 </a>

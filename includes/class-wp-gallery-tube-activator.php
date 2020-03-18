@@ -62,7 +62,7 @@ class Wp_Gallery_Tube_Activator {
 		$gallery_page = array(			
 			'page_template' => 'wp-gallery-tube-main-page-template.php', //Sets the template for the page.
 			'comment_status' => [ 'closed' ], // 'closed' means no comments.
-			'post_name' => 'gallery', // The name (slug) for your post
+			'post_name' => 'library', // The name (slug) for your post
 			'post_status' => 'publish' , //Set the status of the new post.
 			'post_title' => 'Gallery Tube Page', //The title of your post.
 			'post_type' =>  'page' //Sometimes you want to post a page.					

@@ -155,7 +155,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
         <!-- Sidebar -->
         <ul class="sidebar navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="<?=home_url('gallery')?>">
+                <a class="nav-link" href="<?=home_url('library')?>">
                     <i class="fas fa-vr-cardboard"></i>
                     <span>VR Videos</span>
                 </a>
