@@ -116,7 +116,8 @@
                                                 <i  class="fas fa-check-circle text-success"></i>
                                             </span>
                                         </a> 
-                                        <a  rel="noreferrer nofollow sponsored " target="_blank" href="<?=(strpos($scene->video_url, "http")!==-1 )?("https://".$scene->video_url):$scene->video_url  ?><?=get_option('af_'.$scene->site_src.'_param')?("?".get_option('af_'.$scene->site_src.'_param')."=".get_option('affiliate_code_'.$scene->site_src)?get_option('affiliate_code_'.$scene->site_src):""   ):""  ?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
+                                        
+                                        <a  rel="noreferrer nofollow sponsored " target="_blank" href="<?=(strpos($scene->video_url, "http")!== false )?$scene->video_url:("https://".$scene->video_url)  ?><?=get_option('af_'.$scene->site_src.'_param')?("?".get_option('af_'.$scene->site_src.'_param')."=". (get_option('affiliate_code_'.$scene->site_src)?get_option('affiliate_code_'.$scene->site_src):"" )  ):""  ?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
                                     </div>
                                     <div class="video-view">
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>

@@ -22,7 +22,11 @@ function getStudios(){
 }
 function getPornstars(){
     global $wpdb;
-    return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_pornstars LIMIT 12;");
+    return $wpdb->get_results("SELECT A.id, A.name ,A.slug ,COUNT(C.id) as num_scene
+                            FROM ".$wpdb->prefix."gallery_tube_pornstars A LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_star B 
+                            ON B.pornstar_id = A.id 
+                            LEFT JOIN ".$wpdb->prefix."gallery_tube C ON C.id= B.tube_id  
+                             GROUP BY A.id ORDER BY num_scene  DESC  LIMIT 12");
 }
 function getTotalScenes(){
     global $wpdb;
@@ -31,7 +35,7 @@ function getTotalScenes(){
 function getSceneHome($page){
     $page = $page-1;
     global $wpdb;
-    $res = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.video_url, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
+    $res = $wpdb->get_results("SELECT A.id, A.title, A.video_length, A.video_url, A.site_src, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
                                 FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
                                  ORDER BY A.id ASC LIMIT ".($page*12)." , 12 
                                 " );
@@ -61,7 +65,7 @@ function searchScene($searchString){
     global $wpdb;
     $searchString = "%".$wpdb->esc_like(strtoupper ($searchString))."%";
     $searchStringStudio = $wpdb->esc_like(strtoupper ($searchString))."%";
-    $res =   $wpdb->get_results( $wpdb->prepare( "SELECT A.id, A.title, A.video_length, A.video_url,A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
+    $res =   $wpdb->get_results( $wpdb->prepare( "SELECT A.id, A.title, A.video_length, A.video_url,A.fps,A.site_src, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name
                                                 FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
                                                 WHERE (A.title) LIKE %s OR (A.description) LIKE %s OR (A.releaseDate) LIKE %s OR (B.studio_name) LIKE %s     LIMIT 12; " ,
                                                 array($searchString, $searchString, $searchString, $searchStringStudio) 
@@ -113,7 +117,7 @@ if ( false === ( $sceneHome_results = get_transient( 'SceneHome_results_'.$page_
     // It wasn't there, so regenerate the data and save the transient
 
      $sceneHome_results = getSceneHome($page_num);
-     set_transient( 'SceneHome_results_'.$page_num, $sceneHome_results, WEEK_IN_SECONDS );
+     set_transient( 'SceneHome_results_'.$page_num, $sceneHome_results, DAY_IN_SECONDS );
 }
 
 $custom_logo_id = get_theme_mod( 'custom_logo' );
@@ -263,7 +267,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                         <div class="col-xl-3 col-sm-6 mb-3">
                             <div class="video-card preview-video">
                                 <div class="video-card-image">
-                                    <a class="view-lightbox" href="<?=home_url('scene/'.$scene->scene_identity)?>"><b>VIEW</b></a>
+                                    <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
                                     <a href="<?=home_url('scene/'.$scene->scene_identity)?>"><img class="img-fluid"
                                             src="<?=($scene->src_image?$scene->src_image:(plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg'))?>"
                                             alt="previewimg"></a>
@@ -281,7 +285,8 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                                             <span title="" data-placement="top" data-toggle="tooltip" href="#"   data-original-title="">
                                                 <i  class="fas fa-check-circle text-success"></i></span>
                                         </a> 
-                                        <a   rel="noreferrer nofollow sponsored " target="_blank" href="https://<?=$scene->video_url?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
+
+                                        <a   rel="noreferrer nofollow sponsored " target="_blank" href="<?=(strpos($scene->video_url, "http")!==false )?$scene->video_url:("https://".$scene->video_url)  ?><?=get_option('af_'.$scene->site_src.'_param')?("?".get_option('af_'.$scene->site_src.'_param')."=".(get_option('affiliate_code_'.$scene->site_src)?get_option('affiliate_code_'.$scene->site_src):"")   ):""  ?>" class="btn btn-info btn-outline ">VIEW UNSENSORED VERSION</a>
                                     </div>
                                     <div class="video-view">
                                         
@@ -370,9 +375,11 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                                 <div class="channels-card-image">
                                     <a href="<?= home_url('pornstars/'.$pornstar->slug) ?>"><img class="img-fluid"
                                             src="<?=$pornstar->photo?$pornstar->photo:(plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>" alt=""></a>
-                                    <div class="channels-card-image-btn"><button type="button"
+                                    <div class="channels-card-image-btn">
+                                        <a type="button" href="<?= home_url('pornstars/'.$pornstar->slug) ?>"
                                             class="btn btn-outline-danger btn-sm">View
-                                            </button></div>
+                                            </a>
+                                        </div>
                                 </div>
                                 <div class="channels-card-body">
                                     <div class="channels-title">
@@ -396,10 +403,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                 <div class="">
                     <div class="row no-gutters">
                         <div class="col-lg-6 col-sm-6">
-                            <p class="mt-1 mb-0">&copy; Copyright 2020 <strong class="text-dark"></strong>. All
-                                Rights Reserved<br>
-                               
-                            </p>
+                           
                         </div>
                         <div class="col-lg-6 col-sm-6 text-right">
                             <div class="app">

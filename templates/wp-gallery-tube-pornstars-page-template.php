@@ -53,7 +53,7 @@ function getPornstar($slug, $page=0, $sort=0) {
             $sort = "A.video_length * 1 ";
         }
         
-        $pornstar->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length,A.video_url, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
+        $pornstar->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length,A.video_url,A.site_src, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
                                         FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id
                                         LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_star C ON C.tube_id = A.id
                                         

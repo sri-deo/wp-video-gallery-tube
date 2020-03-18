@@ -238,7 +238,7 @@ class Wp_Gallery_Tube_Admin {
 		$this->json_data_path_badoink = array(
 			'18vr',
 			'babevr',
-			'bcvr',
+			'bdvr',
 			'kinkvr',
 			'vrcx'
 		);

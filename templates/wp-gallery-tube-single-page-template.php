@@ -16,7 +16,7 @@ function hoursandmins($time, $format = '%02d:%02d'){
 
 function getScene($identity){
     global $wpdb;
-    $tube = $wpdb->get_row($wpdb->prepare("SELECT A.id, A.title, A.description, A.video_length,A.video_url,A.releaseDate, A.fps, A.degrees,A.studio, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
+    $tube = $wpdb->get_row($wpdb->prepare("SELECT A.id, A.title, A.description, A.video_length,A.video_url,A.releaseDate,A.site_src, A.fps, A.degrees,A.studio, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
                             FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
                             WHERE A.scene_identity=%s", array($identity)  ) );
     
@@ -134,7 +134,7 @@ wp_head();
                                 <div class="single-video-title box mb-3" style="margin-top:30px;">
                                     <h2>
                                         <a href="<?= home_url('studios/'.$tube->studio_name) ?>"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , $tube->title ) ?></a>
-                                    <a  rel="noreferrer nofollow sponsored " target="_blank"  href="<?=(strpos($tube->video_url, "http")!==-1 )?("https://".$tube->video_url):$tube->video_url  ?><?=get_option('af_'.$tube->site_src.'_param')?("?".get_option('af_'.$tube->site_src.'_param')."=".get_option('affiliate_code_'.$tube->site_src)?get_option('affiliate_code_'.$tube->site_src):""   ):""  ?>" class="float-right badge badge-info">VIEW UNCENSORED VIDEO</a>
+                                    <a  rel="noreferrer nofollow sponsored " target="_blank"  href="<?=(strpos($tube->video_url, "http")!==false )?$tube->video_url:("https://".$tube->video_url)  ?><?=get_option('af_'.$tube->site_src.'_param')?("?".get_option('af_'.$tube->site_src.'_param')."=". (get_option('affiliate_code_'.$tube->site_src)?get_option('affiliate_code_'.$tube->site_src):"")   ):""  ?>" class="float-right badge badge-info">VIEW UNCENSORED VIDEO</a>
                                 </h2>
                                 <div class="single-video preview-img">
                                     <img src="<?=esc_url($tube->src_image? $tube->src_image : "")    ?>" alt="thumbnail-image" srcset="" height="315">                                    

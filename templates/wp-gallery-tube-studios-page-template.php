@@ -40,7 +40,7 @@ function getStudio($studio_name,$page=0, $sort=0) {
             $sort = "A.video_length * 1 ";
         }
 
-        $studio->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length,A.video_url, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
+        $studio->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length,A.video_url,A.site_src, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
                                         FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
                                         WHERE A.studio = ".$studio->id."
                                         ORDER BY $sort ASC LIMIT ".($page*12)." , 12 ");
