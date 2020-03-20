@@ -1,5 +1,5 @@
-(function( $ ) {
-	'use strict';
+//(function( $ ) {
+	//'use strict';
 
 	/**
 	 * All of the code for your admin-facing JavaScript source
@@ -26,32 +26,38 @@
 		* Although scripts in the WordPress core, Plugins and Themes may be
 		* practising this, we should strive to set a better example in our own work.
 		*/
-		$(function() {
-			var mediaUploader;
-
-			$(document).on('click','#wp_gallery_upload_image_btn', function(e) {
-			  e.preventDefault();
-				if (mediaUploader) {
-				mediaUploader.open();
-				return;
-			  }
-			  mediaUploader = wp.media.frames.file_frame = wp.media({
+		var mediaUploader;
+		jQuery(function() {
+			mediaUploader = wp.media.frames.file_frame = wp.media({
 				title: 'Choose Image',
 				button: {
 				text: 'Choose Image'
 			  }, multiple: false });
+			jQuery(document).on('click','#wp_gallery_upload_image_btn', function(e) {
+			  e.preventDefault();
+				if (mediaUploader) {
+				mediaUploader.open();
+				
+				return;
+			  }
+			  
 			  mediaUploader.on('select', function() {
 				var attachment = mediaUploader.state().get('selection').first().toJSON();
-				$('#studio_logo').val(attachment.url);
-				$('#photo').val(attachment.url);
-				$('#pornstar_photo').val(attachment.url);
-				$('#preview-image-upload').attr("src", attachment.url)
+				jQuery('#studio_logo').val(attachment.url);
+				jQuery('#photo').val(attachment.url);
+				jQuery('#pornstar_photo').val(attachment.url);
+				jQuery('#preview-image-upload').attr("src", attachment.url)
+
+				//jQuery('#studioDetail').modal('show');
 			  });
+			  
+
 			  mediaUploader.open();
+			  
 			});
 		});
 	
 
 
 	
-})( jQuery );
+//})( jQuery );

@@ -179,7 +179,7 @@ if ($tag) {
         <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
                 src="<?=$site_logo[0]? $site_logo[0]: (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
-        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('library')?>">
+        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" style="margin:0;width:100%;" action="<?=home_url('library')?>">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">

@@ -335,6 +335,10 @@ if (isset($_POST['update_pornstar']) && isset($_POST['pornstar_id'])) {
                 searchPlaceholder: "Search records",
             }
         });
+
+        mediaUploader.on('close', function(){
+            $('#pornStarDetail').modal('show');
+        })
     });
     
     $(document).on('click', '.delete', function () {
@@ -406,4 +410,9 @@ if (isset($_POST['update_pornstar']) && isset($_POST['pornstar_id'])) {
             })
         }
     })
+
+    $(document).on('click','#wp_gallery_upload_image_btn', function(){
+        $('#pornStarDetail').modal('hide');
+    })
+
 </script>

@@ -17,7 +17,7 @@
         <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
                 src="<?=$site_logo[0]? $site_logo[0]: (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
-        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" method="get" action="<?=home_url('library')?>">
+        <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" style="margin:0;width:100%;" method="get" action="<?=home_url('library')?>">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
@@ -117,7 +117,7 @@
                                             </span>
                                         </a> 
                                         
-                                        <a  rel="noreferrer nofollow sponsored " target="_blank" href="<?=(strpos($scene->video_url, "http")!== false )?$scene->video_url:("https://".$scene->video_url)  ?><?=get_option('af_'.$scene->site_src.'_param')?("?".get_option('af_'.$scene->site_src.'_param')."=". (get_option('affiliate_code_'.$scene->site_src)?get_option('affiliate_code_'.$scene->site_src):"" )  ):""  ?>" class="btn btn-info btn-outline btn-sm">VIEW UNSENSORED VERSION</a>
+                                        <a  rel="noreferrer nofollow sponsored " target="_blank" href="<?=(strpos($scene->video_url, "http")!== false )?$scene->video_url:("https://".$scene->video_url)  ?><?=get_option('af_'.$scene->site_src.'_param')?("?".get_option('af_'.$scene->site_src.'_param')."=". (get_option('affiliate_code_'.$scene->site_src)?get_option('affiliate_code_'.$scene->site_src):"" )  ):""  ?>" class="btn btn-info btn-outline btn-sm">VIEW UNCENSORED</a>
                                     </div>
                                     <div class="video-view">
                                         <?=$scene->degrees? ($scene->degrees. '&deg;') : ""?>

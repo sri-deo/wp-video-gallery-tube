@@ -264,6 +264,12 @@ if (isset($_POST['update_studio']) && isset($_POST['studio_id'])) {
                 searchPlaceholder: "Search records",
             }
         });
+
+
+        mediaUploader.on('close', function(){
+            $('#studioDetail').modal('show');
+        })
+
     });
     
     $(document).on('click', '.delete', function () {
@@ -318,4 +324,13 @@ if (isset($_POST['update_studio']) && isset($_POST['studio_id'])) {
             })
         }
     })
+
+    $(document).on('click','#wp_gallery_upload_image_btn', function(){
+        $('#studioDetail').modal('hide');
+    })
+
+
+
+   
+
 </script>
