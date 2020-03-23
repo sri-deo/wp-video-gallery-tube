@@ -375,6 +375,7 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
                                 <th>ID</th>
                                 <th class="disabled-sorting">Preview Image</th>
                                 <th>Identity</th>
+                                <th>Studio</th>
                                 <th>Release Date</th>
                                 <th>Video Length</th>
                                 <th>Date Created</th>
@@ -386,6 +387,7 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
                                 <th>ID</th>
                                 <th class="disabled-sorting">Preview Image</th>
                                 <th>Identity</th>
+                                <th>Studio</th>
                                 <th>Release Date</th>
                                 <th>Video Length</th>
                                 <th>Date Created</th>
@@ -489,37 +491,41 @@ if (isset($_POST['delete_scene']) && isset($_POST['scene_id'])) {
                 }
             },
             "order": [
-                [5, "desc"]
+                [0, "desc"]
             ],
             "columnDefs": [{
                 "targets": [0],
-
+                "data":[0],
                 "searchable": false
             }, {
                 "targets": [1],
-
+                "data":[1],
                 "searchable": false,
 
             }, {
                 "targets": [2],
-
+                "data":[2],
                 "searchable": true,
 
             }, {
                 "targets": [3],
-
+                "data":[6],
                 "searchable": true,
 
             }, {
                 "targets": [4],
-
+                "data":[3]
             }, {
                 "targets": [5],
+                "data":[4]
 
+            },{
+                "targets": [6],
+                "data":[5]
 
             }, {
                 "targets": -1,
-                "data": [6],
+                "data": [7],
 
             }],
             "pagingType": "full_numbers",

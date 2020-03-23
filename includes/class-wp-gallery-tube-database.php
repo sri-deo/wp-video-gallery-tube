@@ -324,10 +324,10 @@ class Wp_Gallery_Tube_Database {
 		global $wpdb;
 		
 		$user = wp_get_current_user();
-		
+		$tubes_columns = array("id", "src_image", "scene_identity",  "releaseDate",  "video_length", "date_created", "studio_name");
 		switch ($type) {
 			case 'tubes':
-				$aColumns = array('id', 'src_image', 'scene_identity',  'releaseDate',  'video_length', 'date_created');
+				$aColumns = array("$this->tubes_table`.`id", "$this->tubes_table`.`src_image", "$this->tubes_table`.`scene_identity",  "$this->tubes_table`.`releaseDate",  "$this->tubes_table`.`video_length", "$this->tubes_table`.`date_created", "$this->studios_table`.`studio_name");
 				break;
 			case 'pornstars':
 				$aColumns = array('id','photo', 'name', 'bio','country','birth','height','weight','aliases', 'date_created' ,'slug');
@@ -357,7 +357,7 @@ class Wp_Gallery_Tube_Database {
 
 			$sOrder = " ORDER BY  ";
 			if ( $aColumns[intval($post_data['order'][0]['column'])]   ) {
-				$sOrder .= $aColumns[intval($post_data['order'][0]['column'])];
+				$sOrder .= '`'.$aColumns[intval($post_data['order'][0]['column'])]. '`';
 			} 
 			if (isset($post_data['order'][0]['dir'])) {
 				if (in_array(trim($post_data['order'][0]['dir']), $aasort)) {
@@ -365,12 +365,15 @@ class Wp_Gallery_Tube_Database {
 				}
 			}
 		}
-		
+        
+        $sJoin = " JOIN $this->studios_table  ON `$this->studios_table`.`id`= `$this->tubes_table`.`studio` ";
+
 		$sWhere = ' WHERE 1  ';
 		
 		if (isset($post_data['search']['value']) && $post_data['search']['value'] != "") {
 			$sWhere .= " AND (";
 			for ($i = 0; $i < count($aColumns); $i++) {
+                
 				$sWhere .= "`" . $aColumns[$i] . "` LIKE '%" . esc_sql($post_data['search']['value']) . "%' OR ";
 			}
 			$sWhere = substr_replace($sWhere, "", -3);
@@ -378,13 +381,13 @@ class Wp_Gallery_Tube_Database {
 		}
 		switch ($type) {
 			case 'tubes':
-				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->tubes_table $sWhere $sOrder $sLimit ";
+				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->tubes_table $sJoin $sWhere $sOrder $sLimit ";
 				break;
 			case 'pornstars':
 				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->pornstars_table $sWhere $sOrder $sLimit ";
 				break;
 			case 'studios':
-				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->studios_table $sWhere $sOrder $sLimit ";
+				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->studios_table  $sWhere $sOrder $sLimit ";
 				break;
 			case 'tags':
 				$sQuery = " SELECT SQL_CALC_FOUND_ROWS `" . str_replace(" , ", " ", implode("`, `", $aColumns)) . "` FROM $this->tags_table $sWhere $sOrder $sLimit ";
@@ -427,12 +430,20 @@ class Wp_Gallery_Tube_Database {
 		$outdata = array();
 		if (count($rResult)) {
 			foreach ($rResult as  $result) {
-				$row = array();
+                $row = array();
 				for ($i = 0; $i < count($aColumns); $i++) {	
-
-					$row[] = $result[$aColumns[$i]];					
+                    if ($type=="tubes") {
+                        $row[] = $result[$tubes_columns[$i]];
+                    } else {
+                        $row[] = $result[$aColumns[$i]];					
+                    }
                 }
-                $row[] = '<a class="btn btn-info btn-sm view " data-id="'.$result[$aColumns[0]].'" >View</a> <a class="btn btn-danger btn-sm delete " data-id="'.$result[$aColumns[0]].'" >Delete</a>';					
+                if ($type=="tubes") {
+                    $row[] = '<a class="btn btn-info btn-sm view " data-id="'.$result[$tubes_columns[0]].'" >View</a> <a class="btn btn-danger btn-sm delete " data-id="'.$result[$tubes_columns[0]].'" >Delete</a>';					
+                } else {
+
+                    $row[] = '<a class="btn btn-info btn-sm view " data-id="'.$result[$aColumns[0]].'" >View</a> <a class="btn btn-danger btn-sm delete " data-id="'.$result[$aColumns[0]].'" >Delete</a>';					
+                }
 				$outdata[] = $row;
 			}
 		}
