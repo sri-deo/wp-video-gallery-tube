@@ -284,4 +284,5 @@ class Wp_Gallery_Tube_Public {
 		return $query_vars;
 	}
 
+
 }

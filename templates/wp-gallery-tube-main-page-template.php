@@ -98,7 +98,12 @@ if (isset($_GET['page_n']) && intval($_GET['page_n'])) {
     
 }
 
-
+?>
+<meta charset="<?php bloginfo( 'charset' ); ?>">
+<meta name="viewport" content="width=device-width, minimum-scale=1">
+<meta name="theme-color" content="#000000">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<?php 
 wp_head();
 
 if ($searchString) {
@@ -132,7 +137,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
 <article id="page-top" class="gallery-tube-bs">
     <nav class="navbar navbar-expand navbar-light bg-white static-top osahan-nav sticky-top">
         &nbsp;&nbsp;
-        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
+        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle" aria-label="sidebar">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
         <a class="navbar-brand mr-1" href="/">
@@ -143,7 +148,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
             <div class="input-group">
                 <input type="text" name="q" class="form-control" value="" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
-                    <button class="btn btn-light" type="submit">
+                    <button class="btn btn-light" type="submit" aria-label="search">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -175,7 +180,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
             <li class="nav-item">
                 <a class="nav-link" href="<?=home_url('tags')?>">
                     <i class="fas fa-fw fa-list-alt"></i>
-                    <span>Categories</span>
+                    <span>Tags</span>
                 </a>
             </li>
 
@@ -280,7 +285,7 @@ $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
                                     </div>
                                     
                                     <div class="" style="display:flex;justify-content: space-between;">
-                                        <a  href="<?=home_url('scene/'.$scene->studio_name)?>" style="color: #4eda92;">
+                                        <a  href="<?=home_url('studios/'.$scene->studio_name)?>" style="color: #4eda92;">
                                             <?=$scene->studio_nicename ? $scene->studio_nicename : $scene->studio_name ?> 
                                             <span title="" data-placement="top" data-toggle="tooltip" href="#"   data-original-title="">
                                                 <i  class="fas fa-check-circle text-success"></i></span>

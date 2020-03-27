@@ -265,10 +265,36 @@ if (isset($_POST['update_studio']) && isset($_POST['studio_id'])) {
             }
         });
 
+        var mediaUploader;
 
-        mediaUploader.on('close', function(){
-            $('#studioDetail').modal('show');
-        })
+        $(document).on('click','#wp_gallery_upload_image_btn', function(e) {
+            e.preventDefault();
+                if (mediaUploader) {
+                mediaUploader.open();
+                return;
+            }
+            mediaUploader = wp.media.frames.file_frame = wp.media({
+                title: 'Choose Image',
+                button: {
+                text: 'Choose Image'
+            }, multiple: false });
+            mediaUploader.on('select', function() {
+                var attachment = mediaUploader.state().get('selection').first().toJSON();
+                $('#studio_logo').val(attachment.url);
+                $('#photo').val(attachment.url);
+                $('#pornstar_photo').val(attachment.url);
+                $('#preview-image-upload').attr("src", attachment.url)
+                $('#studioDetail').modal('show')
+            });
+            mediaUploader.open();
+        });
+        if (mediaUploader) {
+
+            mediaUploader.on('close', function(){
+                $('#studioDetail').modal('show');
+            })
+        }
+       
 
     });
     
@@ -329,7 +355,8 @@ if (isset($_POST['update_studio']) && isset($_POST['studio_id'])) {
         $('#studioDetail').modal('hide');
     })
 
-
+    
+		
 
    
 

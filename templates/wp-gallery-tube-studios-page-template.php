@@ -19,11 +19,26 @@ function hoursandmins($time, $format = '%02d:%02d'){
 function getStudios($page=0, $sort=0){
     
     global $wpdb;
-    if ($sort==0) {
+
+    switch ($sort) {
+        case 0:
+            return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON B.studio=A.id GROUP BY A.id ORDER BY studio_name ASC ;");
+            break;
+        case 1 :
+            return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON B.studio=A.id GROUP BY A.id ORDER BY studio_name DESC ;");
+            break;
+        case 2:
+            return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON B.studio=A.id GROUP BY A.id ORDER BY count_scene DESC ;");
+            break;
+        case 3:
+            return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON B.studio=A.id GROUP BY A.id ORDER BY count_scene ASC ;");
+            break;
+        
+        default:
         return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON B.studio=A.id GROUP BY A.id ORDER BY studio_nicename ASC ;");
-    } else if ($sort==1) {
-        return $wpdb->get_results("SELECT A.*, COUNT(B.id) as count_scene  FROM ".$wpdb->prefix."gallery_tube_studios A LEFT JOIN ".$wpdb->prefix."gallery_tube B ON B.studio=A.id GROUP BY A.id ORDER BY count_scene DESC ;");
+            break;
     }
+    
 }
 
 function getStudio($studio_name,$page=0, $sort=0) {
@@ -34,16 +49,30 @@ function getStudio($studio_name,$page=0, $sort=0) {
     $studio =  $wpdb->get_row($wpdb->prepare("SELECT * FROM ".$wpdb->prefix."gallery_tube_studios WHERE studio_name=%s   ;" , array($studio_name)));
 
     if ($studio) {
-        if ($sort==0) {
-            $sort=" A.title ";
-        } else if ($sort==1) {
-            $sort = "A.video_length * 1 ";
+        switch ($sort) {
+            case 0:
+                $sort=" A.title ASC";
+                break;
+            case 1:
+                $sort=" A.title DESC";
+                break;
+            case 2:
+                $sort = "A.video_length * 1 DESC";
+                break;
+            case 3:
+                $sort = "A.video_length * 1 ASC";
+                break;
+            
+            default:
+                $sort=" A.title ASC";
+                break;
         }
+        
 
         $studio->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length,A.video_url,A.site_src, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
                                         FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
                                         WHERE A.studio = ".$studio->id."
-                                        ORDER BY $sort ASC LIMIT ".($page*12)." , 12 ");
+                                        ORDER BY $sort  LIMIT ".($page*12)." , 12 ");
                                         
         if ($studio->scenes && count($studio->scenes)) {
             foreach ($studio->scenes as $key => $tube) {            
@@ -75,11 +104,17 @@ if (isset($_GET['sort'])) {
 if ($studio_name) {
 
     switch ($sort) {
-        case 'title':
+        case 'title-a-z':
             $sort=0;
             break;
-        case 'length':
+        case 'title-z-a':
             $sort=1;
+            break;
+        case 'length-high':
+            $sort=2;
+            break;
+        case 'length-low':
+            $sort=3;
             break;
         
         default:
@@ -119,11 +154,17 @@ if ($studio_name) {
 
     
     switch ($sort) {
-        case 'name':
+        case 'name-a-z':
             $sort = 0;
             break;
-        case 'scenes':
+        case 'name-z-a':
             $sort = 1;
+            break;
+        case 'scenes-high':
+            $sort = 2;
+            break;
+        case 'scenes-low':
+            $sort = 3;
             break;
         
         default:
@@ -138,7 +179,12 @@ if ($studio_name) {
 
 $custom_logo_id = get_theme_mod( 'custom_logo' );
 $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
-
+?>
+<meta charset="<?php bloginfo( 'charset' ); ?>">
+<meta name="viewport" content="width=device-width, minimum-scale=1">
+<meta name="theme-color" content="#000000">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<?php 
 wp_head();
 ?>
 
@@ -154,7 +200,7 @@ if ($studio_name) {
 <article id="page-top" class="gallery-tube-bs">
     <nav class="navbar navbar-expand navbar-light bg-white static-top osahan-nav sticky-top">
         &nbsp;&nbsp;
-        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
+        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle" aria-label="sidebar">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
         <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
@@ -164,7 +210,7 @@ if ($studio_name) {
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
-                    <button class="btn btn-light" type="submit">
+                    <button class="btn btn-light" type="submit" aria-label="search">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -196,7 +242,7 @@ if ($studio_name) {
             <li class="nav-item">
                 <a class="nav-link" href="<?=home_url('tags')?>">
                     <i class="fas fa-fw fa-list-alt"></i>
-                    <span>Categories</span>
+                    <span>Tags</span>
                 </a>
             </li>
 
@@ -214,10 +260,14 @@ if ($studio_name) {
                                         Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="?sort=name"><i class="fas fa-fw fa-star"></i> &nbsp; 
+                                        <a class="dropdown-item" href="?sort=name-a-z"><i class="fas fa-fw fa-star"></i> &nbsp; 
                                             Name A-Z</a>
-                                        <a class="dropdown-item" href="?sort=scenes"><i class="fas fa-fw fa-signal"></i> &nbsp;
-                                            Total Scenes</a>
+                                        <a class="dropdown-item" href="?sort=name-z-a"><i class="fas fa-fw fa-star"></i> &nbsp; 
+                                            Name Z-A</a>
+                                        <a class="dropdown-item" href="?sort=scenes-high"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                            Higher Scenes First</a>
+                                        <a class="dropdown-item" href="?sort=scenes-low"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                            Lower Scenes First</a>
                                         
                                     </div>
                                 </div>

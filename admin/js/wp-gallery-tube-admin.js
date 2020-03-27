@@ -26,7 +26,7 @@
 		* Although scripts in the WordPress core, Plugins and Themes may be
 		* practising this, we should strive to set a better example in our own work.
 		*/
-		var mediaUploader;
+		/* var mediaUploader;
 		jQuery(function() {
 			mediaUploader = wp.media.frames.file_frame = wp.media({
 				title: 'Choose Image',
@@ -40,9 +40,16 @@
 				
 				return;
 			  }
-			  
+			  mediaUploader = wp.media.frames.file_frame = wp.media({
+				title: 'Choose Image',
+				button: {
+				text: 'Choose Image'
+			  }, multiple: false });
+
+			  console.log(mediaUploader);
 			  mediaUploader.on('select', function() {
 				var attachment = mediaUploader.state().get('selection').first().toJSON();
+				console.log(attachment)
 				jQuery('#studio_logo').val(attachment.url);
 				jQuery('#photo').val(attachment.url);
 				jQuery('#pornstar_photo').val(attachment.url);
@@ -55,7 +62,7 @@
 			  mediaUploader.open();
 			  
 			});
-		});
+		}); */
 	
 
 

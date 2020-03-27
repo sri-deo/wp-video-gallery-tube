@@ -19,16 +19,31 @@ function hoursandmins($time, $format = '%02d:%02d'){
 }
 function getTags($page=0, $sort=0){
     global $wpdb;
-    if ($sort==0) {
-        return $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."gallery_tube_tags ORDER BY name ASC;");
-    } else if ($sort == 1) {
-        return $wpdb->get_results("SELECT A.id, A.name ,COUNT(C.id) as num_scene
-                                    FROM ".$wpdb->prefix."gallery_tube_tags A LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_tag B 
-                                        ON B.tag_id = A.id 
-                                    LEFT JOIN ".$wpdb->prefix."gallery_tube C ON C.id= B.tube_id  GROUP BY A.id ORDER BY num_scene DESC;"                                
-                                );
 
-    }
+    switch ($sort) {
+        case 0:
+            $sort =' A.name ASC ';
+            break;
+        case 1:
+            $sort =' A.name DESC ';
+            break;
+        case 2:
+            $sort = ' num_scene DESC ';
+            break;
+        case 3:
+            $sort = ' num_scene ASC ';
+            break;
+        
+        default:
+            $sort =' A.name ASC ';
+            break;
+    }   
+
+    return  $wpdb->get_results("SELECT A.id, A.name ,COUNT(C.id) as num_scene
+                            FROM ".$wpdb->prefix."gallery_tube_tags A LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_tag B 
+                            ON B.tag_id = A.id 
+                            LEFT JOIN ".$wpdb->prefix."gallery_tube C ON C.id= B.tube_id  GROUP BY A.id ORDER BY $sort;"                                
+);
 }
 
 function getTag($tag, $page =0, $sort=0) {
@@ -40,14 +55,20 @@ function getTag($tag, $page =0, $sort=0) {
         $page = $page-1;
         switch ($sort) {
             case 0:
-                $sort= " A.title ";
+                $sort= " A.title ASC ";
                 break;
             case 1:
-                $sort= " A.video_length * 1";
+                $sort= " A.title DESC ";
+                break;
+            case 2:
+                $sort= " A.video_length * 1 DESC ";
+                break;
+            case 3:
+                $sort= " A.video_length * 1 ASC ";
                 break;
             
             default:
-                $sort= " A.title ";
+                $sort= " A.title ASC ";
                 break;
         }
         
@@ -56,7 +77,7 @@ function getTag($tag, $page =0, $sort=0) {
                                         LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_tag C ON C.tube_id = A.id
                                         
                                         WHERE  C.tag_id = ".$tag->id." 
-                                        ORDER BY $sort ASC LIMIT ".($page*12)." , 12");
+                                        ORDER BY $sort  LIMIT ".($page*12)." , 12");
 
         
         
@@ -98,11 +119,17 @@ if (isset($_GET['sort'])) {
 if ($tag_name){    
      
     switch ($sort) {
-        case 'title':
+        case 'title-a-z':
             $sort=0;
             break;
-        case 'length':
+        case 'title-z-a':
             $sort=1;
+            break;
+        case 'length-high':
+            $sort=2;
+            break;                
+        case 'length-low':
+            $sort=3;
             break;                
         default:
             $sort=0;
@@ -138,11 +165,17 @@ if ($tag_name){
         $sort = trim($_GET['sort']);
         
         switch ($sort) {
-            case 'name':
+            case 'name-a-z':
                 $sort=0;
                 break;
-            case 'scenes':
+            case 'name-z-a':
                 $sort=1;
+                break;
+            case 'scenes-high':
+                $sort=2;
+                break;
+            case 'scenes-low':
+                $sort=3;
                 break;
             
             default:
@@ -156,7 +189,14 @@ if ($tag_name){
 
 $custom_logo_id = get_theme_mod( 'custom_logo' );
 $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+?>
+<meta charset="<?php bloginfo( 'charset' ); ?>">
+<meta name="viewport" content="width=device-width, minimum-scale=1">
+<meta name="theme-color" content="#000000">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<meta name="robots" content="noindex, nofollow" />
 
+<?php 
 wp_head();
 
 
@@ -173,7 +213,7 @@ if ($tag) {
 <article id="page-top" class="gallery-tube-bs">
     <nav class="navbar navbar-expand navbar-light bg-white static-top osahan-nav sticky-top">
         &nbsp;&nbsp;
-        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
+        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle" aria-label="sidebar">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
         <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
@@ -183,7 +223,7 @@ if ($tag) {
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
-                    <button class="btn btn-light" type="submit">
+                    <button class="btn btn-light" type="submit" aria-label="search">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -215,7 +255,7 @@ if ($tag) {
             <li class="nav-item active">
                 <a class="nav-link" href="<?=home_url('tags')?>">
                     <i class="fas fa-fw fa-list-alt"></i>
-                    <span>Categories</span>
+                    <span>Tags</span>
                 </a>
             </li>
 
@@ -233,9 +273,10 @@ if ($tag) {
                                         Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="?sort=name"><i class="fas fa-fw fa-star"></i> &nbsp;Alphabet A-Z</a>
-                                        <a class="dropdown-item" href="?sort=scenes"><i class="fas fa-fw fa-signal"></i> &nbsp;
-                                            Scenes</a>
+                                        <a class="dropdown-item" href="?sort=name-a-z"><i class="fas fa-fw fa-star"></i> &nbsp; Alphabet A-Z</a>
+                                        <a class="dropdown-item" href="?sort=name-z-a"><i class="fas fa-fw fa-star"></i> &nbsp; Alphabet Z-A</a>
+                                        <a class="dropdown-item" href="?sort=scenes-high"><i class="fas fa-fw fa-signal"></i> &nbsp; Most Scenes First</a>
+                                        <a class="dropdown-item" href="?sort=scenes-low"><i class="fas fa-fw fa-signal"></i> &nbsp; Least Scenes First</a>
                                         
                                     </div>
                                 </div>
@@ -253,9 +294,11 @@ if ($tag) {
                         <div class="col-xl-2 col-sm-6 mb-3 text-center">
                             <a href="<?=home_url('tags/'.trim($tag->name))?>">
                                 <div class="box">
-                                <?=$tag->name?>
+                                <b><?=$tag->name?></b>
+                                <div>
+                                <?=$tag->num_scene?> Scenes
                                 </div>
-                                <?=$tag->num_scene?>
+                                </div>
                             </a>
                             
                         </div>

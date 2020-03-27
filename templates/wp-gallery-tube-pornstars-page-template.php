@@ -20,20 +20,31 @@ function getPornstars($page= 0, $sort=0){
 
     global $wpdb;
     $page = $page-1;
-    if ($sort ==0 ) {
-        return $wpdb->get_results("SELECT A.*, COUNT(C.id) as num_scene 
+    switch ($sort) {
+        case 0:
+            $sort = ' A.slug ASC ';
+            break;
+        case 1:
+            $sort = ' A.slug DESC ';
+            break;
+        case 2:
+            $sort = ' num_scene  DESC ';
+            break;
+        case 3:
+            $sort = ' num_scene  ASC ';
+            break;
+        
+        default:
+            $sort = ' A.slug ASC ';
+            break;
+    }
+   
+    return $wpdb->get_results("SELECT A.slug, A.id, A.name, A.photo , COUNT(C.id) as num_scene 
                                     FROM ".$wpdb->prefix."gallery_tube_pornstars  A LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_star B 
                                     ON B.pornstar_id = A.id 
                                     LEFT JOIN ".$wpdb->prefix."gallery_tube C ON C.id= B.tube_id  
-                                    GROUP BY A.id  ORDER BY A.slug ASC LIMIT ".($page*12)." , 12 ;");
-    } else if ($sort ==1) {
-        return $wpdb->get_results("SELECT A.id, A.name ,A.slug ,COUNT(C.id) as num_scene
-                                    FROM ".$wpdb->prefix."gallery_tube_pornstars A LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_star B 
-                                    ON B.pornstar_id = A.id 
-                                    LEFT JOIN ".$wpdb->prefix."gallery_tube C ON C.id= B.tube_id  
-                                    GROUP BY A.id ORDER BY num_scene  DESC  LIMIT ".($page*12)." , 12  ;"                                
-                                );
-    }
+                                    GROUP BY A.id  ORDER BY $sort LIMIT ".($page*12)." , 12 ;");
+    
 }
 function getTotalPornStars() {
     global $wpdb;
@@ -46,11 +57,30 @@ function getPornstar($slug, $page=0, $sort=0) {
     
     if ($pornstar) { 
         $page = $page-1;
-
+        
         if ($sort==0) {
             $sort=" A.title ";
         } else if ($sort==1) {
             $sort = "A.video_length * 1 ";
+        }
+
+        switch ($sort) {
+            case 0:
+                $sort=" A.title ASC ";
+                break;
+            case 1:
+                 $sort=" A.title DESC ";
+                break;
+            case 2:
+                $sort = "A.video_length * 1 DESC ";
+                break;
+            case 3:
+                $sort = "A.video_length * 1 ASC ";
+                break;       
+            
+            default:
+                 $sort=" A.title ASC ";
+                break;
         }
         
         $pornstar->scenes = $wpdb->get_results("SELECT A.id, A.title, A.video_length,A.video_url,A.site_src, A.fps, A.degrees, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
@@ -58,7 +88,7 @@ function getPornstar($slug, $page=0, $sort=0) {
                                         LEFT JOIN ".$wpdb->prefix."gallery_tube_scene_star C ON C.tube_id = A.id
                                         
                                         WHERE  C.pornstar_id = ".$pornstar->id." 
-                                        ORDER BY $sort ASC LIMIT ".($page*12)." , 12 ;");
+                                        ORDER BY $sort  LIMIT ".($page*12)." , 12 ;");
 
         if ($pornstar->scenes && count($pornstar->scenes))         {
             foreach ($pornstar->scenes as $key => $scene   ) {
@@ -99,11 +129,17 @@ $pornstar=null;
 if ($pornstar_slug){
        
     switch ($sort) {
-        case 'title':
+        case 'title-a-z':
             $sort=0;
             break;
-        case 'length':
+        case 'title-z-a':
             $sort=1;
+            break;
+        case 'length-high':
+            $sort=2;
+            break;
+        case 'length-low':
+            $sort=3;
             break;
         
         default:
@@ -134,11 +170,17 @@ if ($pornstar_slug){
 } else {
 
     switch ($sort) {
-        case 'name':
+        case 'name-a-z':
             $sort=0;
             break;
-        case 'scenes':
+        case 'name-z-a':
             $sort=1;
+            break;
+        case 'scenes-high':
+            $sort=2;
+            break;        
+        case 'scenes-low':
+            $sort=3;
             break;        
         default:
             $sort=0;
@@ -163,7 +205,12 @@ if ($pornstar_slug){
 
 $custom_logo_id = get_theme_mod( 'custom_logo' );
 $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
-
+?>
+<meta charset="<?php bloginfo( 'charset' ); ?>">
+<meta name="viewport" content="width=device-width, minimum-scale=1">
+<meta name="theme-color" content="#000000">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<?php 
 wp_head();
 
 ?>
@@ -180,7 +227,7 @@ if ($pornstar) {
 <article id="page-top" class="gallery-tube-bs">
     <nav class="navbar navbar-expand navbar-light bg-white static-top osahan-nav sticky-top">
         &nbsp;&nbsp;
-        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
+        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle" aria-label="sidebar">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
         <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
@@ -190,7 +237,7 @@ if ($pornstar) {
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
-                    <button class="btn btn-light" type="submit">
+                    <button class="btn btn-light" type="submit" aria-label="search">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -222,7 +269,7 @@ if ($pornstar) {
             <li class="nav-item">
                 <a class="nav-link" href="<?=home_url('tags')?>">
                     <i class="fas fa-fw fa-list-alt"></i>
-                    <span>Categories</span>
+                    <span>Tags</span>
                 </a>
             </li>
 
@@ -240,9 +287,10 @@ if ($pornstar) {
                                         Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=name","?sort=name"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=name' ) : ($_SERVER['REQUEST_URI'].'?sort=name') )  ?>"><i class="fas fa-fw fa-star"></i> &nbsp; Name</a>
-                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=scenes","?sort=scenes"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=scenes') : ($_SERVER['REQUEST_URI'].'?sort=scenes') )  ?>"><i class="fas fa-fw fa-signal"></i> &nbsp;
-                                            Total Scenes</a>   
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=name-a-z","?sort=name-a-z"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=name-a-z' ) : ($_SERVER['REQUEST_URI'].'?sort=name-a-z') )  ?>"><i class="fas fa-fw fa-star"></i> &nbsp; Name A-Z</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=name-z-a","?sort=name-z-a"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=name-z-a' ) : ($_SERVER['REQUEST_URI'].'?sort=name-z-a') )  ?>"><i class="fas fa-fw fa-star"></i> &nbsp; Name Z-A</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=scenes-high","?sort=scenes-high"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=scenes-high') : ($_SERVER['REQUEST_URI'].'?sort=scenes-high') )  ?>"><i class="fas fa-fw fa-signal"></i> &nbsp; Most Scenes First</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=scenes-low","?sort=scenes-low"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=scenes-low') : ($_SERVER['REQUEST_URI'].'?sort=scenes-low') )  ?>"><i class="fas fa-fw fa-signal"></i> &nbsp; Least Scenes First</a>
                                        
                                     </div>
                                 </div>

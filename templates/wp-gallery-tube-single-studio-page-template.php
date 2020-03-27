@@ -11,7 +11,7 @@
 <article id="page-top" class="gallery-tube-bs">
     <nav class="navbar navbar-expand navbar-light bg-white static-top osahan-nav sticky-top">
         &nbsp;&nbsp;
-        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
+        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle" aria-label="sidebar">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
         <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
@@ -21,7 +21,7 @@
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
-                    <button class="btn btn-light" type="submit">
+                    <button class="btn btn-light" type="submit" aria-label="search">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -53,7 +53,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="<?=home_url('tags')?>">
                     <i class="fas fa-fw fa-list-alt"></i>
-                    <span>Categories</span>
+                    <span>Tags</span>
                 </a>
             </li>
 
@@ -63,7 +63,7 @@
             <p style="padding:10px;"></p>
             <div class="single-channel-nav">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <img class="channel-profile-img" alt="studio logo" src="<?= $studio->logo ? $studio->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>">
+                    <img class="channel-profile-img" style="width:auto;" alt="studio logo" src="<?= $studio->logo ? $studio->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>">
                     
                     <a class="channel-brand" href="<?= home_url('studios/'.$studio->studio_name) ?>">
                     <?=$studio->studio_nicename ? $studio->studio_nicename : $studio->studio_name ?>
@@ -92,9 +92,10 @@
                                         Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=title","?sort=title"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=title' ) : ($_SERVER['REQUEST_URI'].'?sort=title') )  ?>"><i class="fas fa-fw fa-star"></i> &nbsp; Title</a>
-                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=length","?sort=length"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=length') : ($_SERVER['REQUEST_URI'].'?sort=length') )  ?>"><i class="fas fa-fw fa-signal"></i> &nbsp;
-                                            Length</a>                                        
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=title-a-z","?sort=title-a-z"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=title-a-z' ) : ($_SERVER['REQUEST_URI'].'?sort=title-a-z') )  ?>"><i class="fas fa-fw fa-star"></i> &nbsp; Title A-Z</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=title-z-a","?sort=title-z-a"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=title-z-a' ) : ($_SERVER['REQUEST_URI'].'?sort=title-z-a') )  ?>"><i class="fas fa-fw fa-star"></i> &nbsp; Title Z-A</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=length-high","?sort=length-high"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=length-high') : ($_SERVER['REQUEST_URI'].'?sort=length-high') )  ?>"><i class="fas fa-fw fa-signal"></i> &nbsp; Longer Duration First</a>
+                                        <a class="dropdown-item" href="<?=isset($_GET['sort'])?(preg_replace(array("#\&sort=([A-Za-z]+)\S*#","#\?sort=([A-Za-z]+)\S*#"), array("&sort=length-low","?sort=length-low"), $_SERVER['REQUEST_URI'])):  ( isset($_GET['page_n']) ? ($_SERVER['REQUEST_URI'].'&sort=length-low') : ($_SERVER['REQUEST_URI'].'?sort=length-low') )  ?>"><i class="fas fa-fw fa-signal"></i> &nbsp; Shorter Duration First</a>
                                     </div>
                                 </div>
                                 <h6><b>Videos</b></h6>

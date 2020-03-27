@@ -16,7 +16,7 @@ function hoursandmins($time, $format = '%02d:%02d'){
 
 function getScene($identity){
     global $wpdb;
-    $tube = $wpdb->get_row($wpdb->prepare("SELECT A.id, A.title, A.description, A.video_length,A.video_url,A.releaseDate,A.site_src, A.fps, A.degrees,A.studio, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
+    $tube = $wpdb->get_row($wpdb->prepare("SELECT A.id, A.title, A.description, A.video_length,A.video_url,A.releaseDate, A.date_created,  A.site_src, A.fps, A.degrees,A.studio, A.scene_identity, A.src_image, B.studio_nicename, B.studio_name, B.logo
                             FROM ".$wpdb->prefix."gallery_tube A JOIN ".$wpdb->prefix."gallery_tube_studios B ON A.studio = B.id 
                             WHERE A.scene_identity=%s", array($identity)  ) );
     
@@ -69,7 +69,13 @@ add_action( 'pre_get_document_title', 'wp_gallery_tube_dynamic_title');
 
 $custom_logo_id = get_theme_mod( 'custom_logo' );
 $site_logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
-
+?>
+<meta charset="<?php bloginfo( 'charset' ); ?>">
+<meta name="viewport" content="width=device-width, minimum-scale=1">
+<meta name="theme-color" content="#000000">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<meta name="description" content="SEXTECHGUIDE is where sex and technology meet. We provide sextech news, interactive device reviews, features, opinion, deals and a whole lot more for people interested in the overlap of sex and technology.">
+<?php 
 wp_head();
 
 
@@ -78,17 +84,17 @@ wp_head();
 <article id="page-top" class="gallery-tube-bs">
     <nav class="navbar navbar-expand navbar-light bg-light static-top osahan-nav sticky-top">
         &nbsp;&nbsp;
-        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle">
+        <button class="btn btn-link btn-sm text-secondary order-1 order-sm-0" id="sidebarToggle" aria-label="sidebar">
             <i class="fas fa-bars"></i>
         </button> &nbsp;&nbsp;
-        <a class="navbar-brand mr-1" href="/"><img class="img-fluid" alt=""
+        <a class="navbar-brand mr-1" aria-label="sidebar-toggle"   href="/"><img class="img-fluid" alt=""
                 src="<?=$site_logo[0]? $site_logo[0]: (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"></a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline  osahan-navbar-search" style="margin:0;width:100%;" method="get" action="<?=home_url('library')?>">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search for Pornstars, Tags, Studios ... ">
                 <div class="input-group-append">
-                    <button class="btn btn-light" type="submit">
+                    <button class="btn btn-light" type="submit" aria-label="search">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -100,27 +106,27 @@ wp_head();
         <!-- Sidebar -->
         <ul class="sidebar navbar-nav ">
             <li class="nav-item active">
-                <a class="nav-link" href="<?=home_url('library')?>">
+                <a class="nav-link" href="<?=home_url('library')?>" aria-label="VR Videos">
                     <i class="fas fa-vr-cardboard"></i>
                     <span>VR Videos</span>
                 </a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" href="<?=home_url('studios')?>">
+                <a class="nav-link" href="<?=home_url('studios')?>" aria-label="Studios">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Studios</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?=home_url('pornstars')?>">
+                <a class="nav-link" href="<?=home_url('pornstars')?>" aria-label="Porn stars">
                     <i class="fas fa-fw fa-user-alt"></i>
                     <span>Porn Stars</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?=home_url('tags')?>">
+                <a class="nav-link" href="<?=home_url('tags')?>" aria-label="Tags">
                     <i class="fas fa-fw fa-list-alt"></i>
-                    <span>Categories</span>
+                    <span>Tags</span>
                 </a>
             </li>
 
@@ -132,10 +138,10 @@ wp_head();
                         <div class="col-md-9">
                             <div class="single-video-left">
                                 <div class="single-video-title box mb-3" style="margin-top:30px;">
-                                    <h2>
-                                        <a href="<?= home_url('studios/'.$tube->studio_name) ?>"><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , $tube->title ) ?></a>
                                     <a  rel="noreferrer nofollow sponsored " target="_blank"  href="<?=(strpos($tube->video_url, "http")!==false )?$tube->video_url:("https://".$tube->video_url)  ?><?=get_option('af_'.$tube->site_src.'_param')?("?".get_option('af_'.$tube->site_src.'_param')."=". (get_option('affiliate_code_'.$tube->site_src)?get_option('affiliate_code_'.$tube->site_src):"")   ):""  ?>" class="float-right badge badge-info">VIEW UNCENSORED VIDEO</a>
-                                </h2>
+                                    <h2>
+                                        <a href="<?= home_url('studios/'.$tube->studio_name) ?>" aria-label="View Scene"  ><?= str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , $tube->title ) ?></a>
+                                    </h2>
                                 <div class="single-video preview-img text-center">
                                     <img src="<?=esc_url($tube->src_image? $tube->src_image : "")    ?>" alt="thumbnail-image" srcset="" height="315">                                    
                                 </div>
@@ -143,14 +149,14 @@ wp_head();
                                 </div>
                                 <div class="single-video-author box mb-3">
                                     <div class="float-right">
-                                        <a class="btn btn-danger" href="<?= home_url('studios/'.$tube->studio_name) ?>">
+                                        <a class="btn btn-danger" href="<?= home_url('studios/'.$tube->studio_name) ?>" aria-label="View Studio">
                                             View Studio
                                         </a> 
                                     </div>
-                                    <a href="<?= home_url('studios/'.$tube->studio_name) ?>">
+                                    <a href="<?= home_url('studios/'.$tube->studio_name) ?>" aria-label="Studio Link">
                                     <img class="img-fluid" style="width:auto;border-radius:0px;" src="<?= $tube->logo ? $tube->logo:   (plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg') ?>" alt="studio logo">
                                     </a>
-                                    <p><a href="<?= home_url('studios/'.$tube->studio_name) ?>">
+                                    <p><a href="<?= home_url('studios/'.$tube->studio_name) ?>" aria-label="View Studio">
                                     <strong><?=$tube->studio_nicename ? $tube->studio_nicename : $tube->studio_name ?></strong>
                                     </a> <span title=""
                                             data-placement="top" data-toggle="tooltip" data-original-title=""><i
@@ -164,8 +170,7 @@ wp_head();
                                    
                                     <h6>Starring:</h6>
                                     <p>
-                                        <?php 
-                                        
+                                        <?php                                         
                                             $p = array();
                                             foreach ($tube->pornstars as $key => $pornstar) {
                                                 $p[] = '<a href="'.home_url('pornstars/'.$pornstar->slug).'">'.$pornstar->name.'</a>';    
@@ -174,7 +179,7 @@ wp_head();
                                         ?>
                                     </p>
                                     <h6>Description :</h6>
-                                    <p><?=$tube->description?> </p>
+                                    <p><?php echo   str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , $tube->description );?> </p>
                                     <h6>Released: <?=$tube->releaseDate?></h6>
                                     <h6>Tags :</h6>
                                     <p class="tags mb-0">
@@ -216,24 +221,23 @@ wp_head();
 
                                         <div class="video-card video-card-list">
                                             <div class="video-card-image">
-                                                <a class="play-icon" href="<?=home_url('scene/'.$related_scene->scene_identity)?>"><i class="fas fa-play-circle"></i></a>
-                                                <a href="<?=home_url('scene/'.$related_scene->scene_identity)?>"><img class="img-fluid" src="<?=($related_scene->src_image?$related_scene->src_image:(plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg'))?>" alt=""></a>
+                                                <a class="play-icon" aria-label="Vierw Scene"  href="<?=home_url('scene/'.$related_scene->scene_identity)?>"><i class="fas fa-play-circle"></i></a>
+                                                <a href="<?=home_url('scene/'.$related_scene->scene_identity)?>" aria-label="View Scene">
+                                                <img class="img-fluid" style="width:100%;height:auto;" src="<?=($related_scene->src_image?$related_scene->src_image:(plugins_url('wp-gallery-tube').'/public/img/thumbnail-img.jpg'))?>" alt=""></a>
                                                 <div class="time"><?=hoursandmins($related_scene->video_length, '%02d:%02d')?></div>
                                             </div>
                                             <div class="video-card-body">
                                                 
                                                 <div class="video-title">
-                                                    <a href="<?=home_url('scene/'.$related_scene->scene_identity)?>"><?=(strlen($related_scene->title) > 50 ? substr($related_scene->title,0,50)."..." : $related_scene->title )?></a>
+                                                    <a href="<?=home_url('scene/'.$related_scene->scene_identity)?>" aria-label="View Scene"><?=(strlen($related_scene->title) > 50 ? substr($related_scene->title,0,50)."..." : $related_scene->title )?></a>
+                                                </div>
+                                                <div class="related-studio">
+                                                    <a href="<?=home_url('studios/'.$related_scene->studio_name)?>" style="color:#4eda92;" aria-label="View Studio" >
+                                                        <?=$related_scene->studio_nicename? $related_scene->studio_nicename: $related_scene->studio_name ?> 
+                                                    </a>
                                                 </div>
 
-                                                <a href="<?=home_url('studios/'.$related_scene->studio_name)?>" style="color:#4eda92;">
-                                                    <?=$related_scene->studio_nicename? $related_scene->studio_nicename: $related_scene->studio_name ?>    
-                                                    <a title="" data-placement="top" data-toggle="tooltip" href="#" data-original-title="" >
-                                                        <i  class="fas fa-check-circle text-success"></i>
-                                                    </a>
-                                                </a>
-
-                                                <div class="video-view">
+                                                <div class="video-view related-ps">
                                                     <?php 
                                                         $pornstars_view = array();
                                                         if ($related_scene->pornstars && count($related_scene->pornstars)) {
@@ -289,7 +293,39 @@ wp_head();
     </a>
     
 </article>
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Article",
+  "name" : "<?=$tube->title ?>",
+  "author" : {
+    "@type" : "Person",
+    "name" : "<?=$tube->studio_name?>"
+  },
+  "datePublished" : "<?=(new DateTime($tube->releaseDate))->format(DateTime::ATOM)?>",
+  "image" : "https://staging.sextechguide.com/wp-content/uploads/stg-white-250.png",
+  "articleSection" : "Specs : <?=$tube->degrees? ($tube->degrees) : ""?> <?=$tube->fps? ($tube->fps." FPS."):""?>. Starring: <?php                                         
+                                            $p = array();
+                                            foreach ($tube->pornstars as $key => $pornstar) {
+                                                $p[] = $pornstar->name;    
+                                            }
+                                            echo implode (", ", $p);
+                                        ?>",
+  "articleBody" : "Description : <?=str_replace( ["cock","fuck", "dick", "pussy","anal"], ["c*ck", "f*ck","d*ck", "p*ssy","an*l"]  , $tube->description )?>",
+  "url": "<?=((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]")?>",
+  "headline": "<?=$tube->title ?>",
+  "publisher": {
+      "@type": "Organization",
+     "name": "<?=get_bloginfo('name')?>",
+     "logo" : {
+        "@type": "ImageObject",
+        "url": "<?=$site_logo[0]? $site_logo[0]: (plugins_url('wp-gallery-tube').'/public/img/site-logo.png') ?>"
+     }
+    },
+  "dateModified": "<?=(new DateTime($tube->date_created))->format(DateTime::ATOM)?>"
 
+}
+</script>
 <?php
 
 wp_footer();

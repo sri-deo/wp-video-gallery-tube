@@ -174,6 +174,9 @@ class Wp_Gallery_Tube {
 	private function define_public_hooks() {
 
 		$plugin_public = new Wp_Gallery_Tube_Public( $this->get_plugin_name(), $this->get_version() );
+
+		
+		
 		// enqueue style and scripts
 		add_action( 'wp_enqueue_scripts', array( $plugin_public, 'enqueue_styles') );
 		add_action( 'wp_enqueue_scripts', array( $plugin_public, 'enqueue_scripts') );
@@ -186,6 +189,8 @@ class Wp_Gallery_Tube {
 		add_filter('theme_page_templates', array( $plugin_public, 'wp_gallery_tube_add_interface_page_filter'), 10, 4);
 		add_filter('template_include', array( $plugin_public, 'wp_gallery_tube_load_interface_page_template') );
 
+
+		//
 	}
 
 	
